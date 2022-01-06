@@ -1,0 +1,7 @@
+{
+  "name": "clickinn-agents",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
