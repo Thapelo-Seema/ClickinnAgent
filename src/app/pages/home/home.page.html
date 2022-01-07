@@ -3,17 +3,17 @@
     <ion-grid>
       <ion-row>
         <ion-col>
-          <ion-chip>
+          <ion-chip tappable (click)="gotoProfile()">
             <ion-avatar>
-              <img src="../../../assets/shapes.svg" />
+              <img src="{{user?.photoURL}}" (load)="updateDisplayPicLoaded()" [hidden]="!displayPicLoaded">
+			        <img src="https://ionic-docs-demo.herokuapp.com/assets/avatar.svg" [hidden]="displayPicLoaded">
             </ion-avatar>
             <ion-label color="light">
-              Thapelo
+              {{user.firstname}}
             </ion-label>
           </ion-chip>
         </ion-col>
-        <ion-col>
-          
+        <ion-col>  
         </ion-col>
         <ion-col>
             <h6>online</h6>
@@ -22,13 +22,11 @@
         </ion-col>
       </ion-row>
     </ion-grid>
-    
-    
   </ion-toolbar>
-  <ion-toolbar color="slightgray">
+  <ion-toolbar>
     <ion-row>
       <ion-col>
-        <ion-tab-button>
+        <ion-tab-button (click)="gotoUpload()">
           <ion-icon color="thapsblue" name="cloud-upload-outline"></ion-icon>
           <ion-label color="thapsblue"><b>Upload</b></ion-label>
         </ion-tab-button>
@@ -49,7 +47,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content color="light">
   
   <ion-card>
     <ion-item>
@@ -77,7 +75,7 @@
       </ion-col>
     </ion-row>
   </ion-card>
-  <ion-card color="thapslightblue" class="ion-no-padding">
+  <ion-card tappable (click)="gotoProfile()" color="thapslightblue" class="ion-no-padding">
     <ion-row class="ion-no-padding">
       <ion-col size="2" class="ion-no-padding">
         <ion-item color="thapslightblue">

@@ -1,9 +1,559 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>upload-listing</ion-title>
+  <ion-toolbar color="thapsblue">
+  	<ion-buttons slot="start">
+      <ion-back-button>
+      </ion-back-button>
+    </ion-buttons>
+	<!--Copy-->
+    <ion-title>Room Upload</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="ion-no-padding" color="light">
+	<ion-grid class="ion-no-padding">
+		<ion-row class="ion-no-padding">
+			<ion-col size-xs="0" size-md="3">
+			</ion-col>
+			<ion-col size-xs="12" size-md="6" class="ion-no-padding">
+				<!-- <ion-chip color="warning" *ngIf="agentMode">
+				  <ion-icon name="person-circle-outline"></ion-icon>
+				  <ion-label>Agent Mode</ion-label>
+				</ion-chip> -->
+        <ion-card *ngIf="pageActive == 1">
+					<!-- <h1 class="ion-text-center ion-padding main-header2"><b>ROOM DETAILS</b></h1> -->
+					<ion-item lines="none" class="ion-padding">
+						<ion-icon color="teal" class="my-icon" name="business-outline"></ion-icon>
+						<ion-label style="font-size: 1.4em" color="thapsblue" class="ion-text-wrap ion-padding">
+							<h2>Describe the room you are uploading, and tell us how much it is</h2>
+						</ion-label>
+					</ion-item>
+          <ion-card-content>
+					<ion-grid>
+            <ion-row>
+              <ion-col>
+                <h2>Room Type *</h2>
+                <ion-item lines="none" color="light">
+                    <ion-select [(ngModel)]="room.room_type" okText="Okay" cancelText="Dismiss" value="single room">
+                      <ion-select-option value="bachelor">
+                        Bachelor Apartment
+                      </ion-select-option>
+                      <ion-select-option value="cottage">
+                        Cottage
+                      </ion-select-option>
+                      <ion-select-option value="ensuite single">
+                        Ensuite Single Room
+                      </ion-select-option>
+                      <ion-select-option value="single room">
+                        Single Room
+                      </ion-select-option>
+                      <ion-select-option value="two sharing room">
+                        Two Sharing Room
+                      </ion-select-option>
+                      <ion-select-option value="ensuite two sharing">
+                        Ensuite Two Sharing Room
+                      </ion-select-option>
+                      <ion-select-option value="three sharing room">
+                        Three Sharing Room
+                      </ion-select-option>
+                      <ion-select-option value="ensuite three sharing">
+                        Ensuite Three Sharing Room
+                      </ion-select-option>
+                    </ion-select>
+                </ion-item>
+                </ion-col>
+                </ion-row>
+                <ion-row>
+                  <ion-col>
+                <ion-item lines="none">
+                  <ion-label class="ion-text-wrap">
+                    Is It Fully Furnished?
+                  </ion-label>
+                  <ion-checkbox [(ngModel)]="room.furnished" slot="start">
+                  </ion-checkbox>
+                </ion-item>
+                </ion-col>
+                </ion-row>
+                <ion-row>
+                  <ion-col>
+                <ion-item lines="none">
+                  <ion-label class="ion-text-wrap">
+                    Is It NSFAS Accredited?
+                  </ion-label>
+                  <ion-checkbox slot="start" [(ngModel)]="room.accredited">
+                  </ion-checkbox>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                <h2>Monthly Rent *</h2>
+                <ion-item lines="none" color="light">
+                    <ion-input type="number" [(ngModel)]="room.rent">
+                    </ion-input>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                <h2>Deposit *</h2>
+                <ion-item lines="none" color="light">
+                    <ion-input type="number" [(ngModel)]="room.deposit">
+                    </ion-input>
+                </ion-item>
+                <!-- <ion-item  lines="none" color="light">
+                  <ion-label position="stacked">
+                    How Many Other Similar Rooms ?
+                  </ion-label>
+                  <ion-input type="number" [(ngModel)]="property.rooms.backrooms">
+                  </ion-input>
+                </ion-item> -->
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                <ion-item class="item-content" lines="none">
+                  <ion-label class="ion-text-right">
+                    <h5>Room Available</h5>
+                    <ion-toggle color="success" [(ngModel)]="room.available">
+                    </ion-toggle>
+                  </ion-label>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                <ion-item lines="none">
+                  <ion-icon color="warning" class="my-icon" name="rocket-outline"></ion-icon>
+                  <ion-label style="font-size: 1.4em" color="thapsblue" class="ion-text-wrap ion-padding">
+                    <h2>Upload pictures and 30 second video (optional) of the {{room.room_type}}</h2>
+                  </ion-label>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+            <ion-row class="ion-text-center">
+              <ion-col>
+                <ion-card tappable color="light" *ngIf="room.pictures.length == 0" (click)="selectRoomPics()">
+                  <ion-card-content>
+                    <div class="ion-text-center">
+                      <ion-icon class="my-icon" name="images-outline"></ion-icon>
+                    </div>
+                    <ion-item lines="none" color="light">
+                        <ion-label>
+                          <h1 class="ion-text-wrap ion-text-center">
+                             <b>Browse For Pictures</b>
+                          </h1>
+                          </ion-label>
+                     </ion-item>
+                     <input type="file" hidden="hidden" #room_pics accept="image/*" (change)="updateRoomPics($event)" multiple="true">
+                   </ion-card-content>
+                 </ion-card>
+                 <div *ngIf="room.pictures.length > 0">
+                   <!-- <h1>Room pictures</h1> -->
+                   <ion-button mode="ios" (click)="addMoreRoomPics()">
+                     Add More
+                   </ion-button>
+                   <input type="file" hidden="hidden" #more_room_pics accept="image/*" (change)="updateMoreRoomPics($event)" multiple="true">
+                   <ion-list>
+                     <ion-card *ngFor="let pic of room.pictures; let i = index">
+                    <ion-progress-bar value="{{pic?.progress}}">
+                      </ion-progress-bar>
+                       <ion-item>
+                      <ion-avatar slot="start">
+                          <img src="{{pic?.url}}" (load)="updateRoomPicsLoaded(i)" 
+                          [hidden]="!pic.loaded">
+                          <img src="../../../assets/imgs/genPlaceholder.png" [hidden]="pic?.loaded">
+                        </ion-avatar>
+                      <h3>{{pic?.name}}</h3>
+                      <ion-button fill="clear" slot="end" 
+                      color="danger" (click)="deleteRoomPic(i)">
+                    <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+                      </ion-button>
+                    </ion-item>
+                  </ion-card>
+                   </ion-list>
+                 </div>
+              </ion-col>
+              <ion-col>
+                <ion-card tappable color="light" *ngIf="room.video == null" (click)="selectRoomVideo()">
+                  <ion-card-content>
+                    <div class="ion-text-center">
+                      <ion-icon name="videocam-outline" class="my-icon"></ion-icon>
+                    </div>
+                    <ion-item lines="none" color="light">
+                        <ion-label>
+                          <h1 class="ion-text-wrap ion-text-center">
+                             <b>Browse For Video</b>
+                          </h1>
+                          </ion-label>
+                     </ion-item>
+                     <input type="file" hidden="hidden" #room_video accept="video/*" (change)="updateRoomVideo($event)" multiple="false">
+                   </ion-card-content>
+                 </ion-card>
+                 <div *ngIf="room.video != null">
+                   <!-- <h1>Room pictures</h1> -->
+                   <!-- <ion-button mode="ios" (click)="addMoreRoomPics()">
+                     Change Video
+                   </ion-button> -->
+                    <ion-card>
+                      <ion-progress-bar value="{{room.video.progress}}">
+                      </ion-progress-bar>
+                      <ion-card-title color="dark">
+                        <video controls preload="true" width="100%" height="200px">
+                          <source [src]="room.video.url" type="video/mp4"/>
+                        </video>
+                      </ion-card-title>
+                      <ion-card-content>
+                        <ion-item lines="none">
+                          <h3 class="ion-text-center main-header10 ion-text-wrap">
+                            {{room.video.name}}
+                          </h3>
+                          <ion-button fill="clear" slot="end" 
+                          color="danger" (click)="deleteRoomVideo()">
+                            <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+                          </ion-button>
+                        </ion-item>
+                      </ion-card-content>
+                    </ion-card>    
+                 </div>
+              </ion-col>
+            </ion-row>
+					</ion-grid>
+          </ion-card-content>
+					<div class="ion-text-center" style="margin-bottom: 50px;">
+						<ion-button color="thapsblue" (click)="nextPage()">
+              Next &nbsp; &nbsp; <ion-icon name="arrow-forward-outline" color="light"></ion-icon>
+            </ion-button>
+					</div>
+				</ion-card>
 
+				<ion-card *ngIf="pageActive == 2">
+					<!-- <h1 class="ion-text-center ion-padding"><b>ROOM LOCATION DETAILS</b></h1> -->
+					<ion-item lines="none" class="ion-padding">
+						<ion-icon color="danger" class="my-icon" name="location-outline"></ion-icon>
+						<ion-label style="font-size: 1.4em" class="ion-text-wrap" color="thapsblue">
+							<h2>Tell us more about where the {{room.room_type}} is located </h2>
+						</ion-label>
+					</ion-item>
+					<ion-card-content>
+						<ion-grid>
+              <ion-row class="ion-padding-bottom"> 
+                <ion-col class="ion-text-center ion-margin-bottom">
+                  <ion-button expand="block" (click)="getPropertyList()" color="thapsblue">
+                    Select Existing Property &nbsp; &nbsp; <ion-icon name="pin-outline" color="light"></ion-icon>
+                  </ion-button>
+                  <ion-list *ngIf="propertyList.length > 0">
+                    <ion-item button class="ion-padding" *ngFor="let prop of propertyList" (click)="selectProperty(prop)">
+                      {{prop?.address.house_number}} {{prop?.address.street}}, {{prop?.address.neighbourhood}}
+                    </ion-item>
+                  </ion-list>
+                </ion-col>
+              </ion-row>
+							<ion-row>
+								<ion-col>
+									<h2>Property Address *</h2>
+                  <ion-searchbar type="search" [(ngModel)]="property.address.place_name" 
+                      placeholder="e.g. 34 Collins Street, Melville" (ionInput)="getPredictions($event)" mode="ios">
+                  </ion-searchbar>
+                  <div *ngIf="predictionLoading" class="ion-text-center" style="background: rgba(0, 0, 0, 0.8);padding-top: 5px; padding-bottom: 5px;  text-align: center; z-index: 1">
+                    <ion-spinner name="ios"></ion-spinner> &nbsp;&nbsp;
+                    Loading predictions...
+                  </div>
+                  <ion-list *ngIf="predictions">
+                    <ion-item button class="ion-padding" *ngFor="let pred of predictions" (click)="selectPlace(pred)">{{pred?.description}}
+                    </ion-item>
+                  </ion-list>
+						    </ion-col>
+							</ion-row>
+							<ion-row>
+								<ion-col>
+									<h2 class="ion-text-wrap">Landmarks within 5 min walk *</h2>
+									<ion-item lines="none" color="light">
+									    <ion-select [(ngModel)]="property.nearby_landmarks" okText="Okay" cancelText="Dismiss" multiple="true">
+									      <ion-select-option *ngFor="let nby of nearbys" value="{{nby}}">
+									      	{{nby}}
+									      </ion-select-option>
+									    </ion-select>
+									</ion-item>
+								</ion-col>
+							</ion-row>
+							<ion-row>
+								<ion-col>
+									<h2>Property Type *</h2>
+									<ion-item lines="none" color="light">
+									    <ion-select [(ngModel)]="property.property_type" 
+									    okText="Okay" cancelText="Dismiss" value="house">
+									      <ion-select-option value="house">
+									      	House
+									      </ion-select-option>
+									      <ion-select-option value="complex">
+									      	Complex
+									      </ion-select-option>
+									      <ion-select-option value="flats">
+									      	Flats
+									      </ion-select-option>
+									    </ion-select>
+									</ion-item>
+								</ion-col>
+							</ion-row>
+							<ion-row>
+								<ion-col>
+									<h2>Genders Accepted *</h2>
+									<ion-item lines="none" color="light">
+									    <ion-select [(ngModel)]="property.genders_housed" 
+									    okText="Okay" cancelText="Dismiss" value="mixed">
+									      <ion-select-option value="female">
+									      	Female Only
+									      </ion-select-option>
+									      <ion-select-option value="male">
+									      	Male Only
+									      </ion-select-option>
+									      <ion-select-option value="mixed">
+									      	Mixed Genders
+									      </ion-select-option>
+									    </ion-select>
+									</ion-item>
+								</ion-col>
+							</ion-row>
+							<ion-row>
+								<ion-col>
+									<h2 class="ion-text-wrap">Do you require booking deposits ? *
+									</h2>
+									<ion-item class="ion-text-wrap" color="light" lines="none">
+									    <ion-select okText="Okay" cancelText="Dismiss" 
+									     [(ngModel)]="property.deposit_specifics">
+										    	<ion-select-option class="ion-text-wrap" value="no deposit">
+										    	 	No 
+										    	</ion-select-option>
+										    	<ion-select-option value="required">
+										    	 	Yes 
+										    	</ion-select-option>
+										    	<ion-select-option value="depends">
+										    	 	Depends
+										    	</ion-select-option>
+									    </ion-select>
+									</ion-item>
+								</ion-col>
+							</ion-row>
+							<ion-row>
+								<ion-col>
+									<ion-item lines="none"class="ion-margin-vertical ion-padding">
+                    <ion-icon color="teal" class="my-icon" name="checkmark-circle-outline"></ion-icon>
+                    <ion-label style="font-size: 1.4em" class="ion-text-wrap" color="thapsblue">
+                      <h2>Check all the amenities that apply to the property</h2>
+                    </ion-label>
+                  </ion-item>
+								</ion-col>
+							</ion-row>
+							<ion-row>
+								<ion-col>
+									<h2>Property is NSFAS Accredited</h2>
+									<ion-item lines="none">
+							            <ion-checkbox slot="start" [(ngModel)]="property.accredited">
+							            </ion-checkbox>
+							        </ion-item>
+							    </ion-col>
+							</ion-row>
+							<ion-row>
+								<ion-col>
+									<h2>Property has Wi-Fi</h2>
+									<ion-item lines="none">
+							            <ion-checkbox slot="start" [(ngModel)]="property.wifi">
+							            </ion-checkbox>
+							        </ion-item>
+							    </ion-col>
+							</ion-row>
+							<ion-row>
+								<ion-col>
+									<h2>Property has laundry facilities</h2>
+									<ion-item lines="none">
+							            <ion-checkbox slot="start" [(ngModel)]="property.laundry">
+							            </ion-checkbox>
+							        </ion-item>
+							    </ion-col>
+							</ion-row>
+							<ion-row>
+								<ion-col>
+									<h2>Property has TV room</h2>
+									<ion-item lines="none">
+							            <ion-checkbox slot="start" [(ngModel)]="property.tv_room">
+							            </ion-checkbox>
+							        </ion-item>
+							    </ion-col>
+							</ion-row>
+							<ion-row>
+								<ion-col>
+									<h2>Property has swimming pool</h2>
+									<ion-item lines="none">
+				            			<ion-checkbox slot="start" [(ngModel)]="property.pool" ></ion-checkbox>
+				        			</ion-item>
+				        		</ion-col>
+				        	</ion-row>
+				        	<ion-row>
+				        		<ion-col>
+				        			<h2>Property has gym</h2>
+							        <ion-item lines="none">
+							            <ion-checkbox slot="start"  [(ngModel)]="property.gym"></ion-checkbox>
+							        </ion-item>
+							    </ion-col>
+							</ion-row>
+							<ion-row>
+								<ion-col>
+									<h2>Property has security</h2>
+				        			<ion-item lines="none">
+				            			<ion-checkbox slot="start" [(ngModel)]="property.security">
+				            			</ion-checkbox>
+				        			</ion-item>
+				        		</ion-col>
+				        	</ion-row>
+				        	<ion-row>
+				        		<ion-col>
+				        			<h2>Property has parking</h2>
+							        <ion-item lines="none">
+							            <ion-checkbox slot="start" [(ngModel)]="property.parking">
+							            </ion-checkbox>
+							        </ion-item>
+							    </ion-col>
+							</ion-row>
+							<ion-row>
+				        		<ion-col>
+				        			<h2>Electricity included in rent</h2>
+				        			<ion-item lines="none">
+				            			<ion-checkbox [(ngModel)]="property.electricity_inclusive_in_rent" slot="start">
+				            			</ion-checkbox>
+				        			</ion-item>
+				        		</ion-col>
+				        	</ion-row>
+				        	<ion-row>
+				        		<ion-col>
+				        			<h2>Other Amenities</h2>
+							        <ion-item color="light" lines="none">
+							            <ion-textarea [(ngModel)]="property.other_amenities">
+							            </ion-textarea>
+							        </ion-item>
+							    </ion-col>
+							</ion-row>
+              <ion-row>
+								<ion-col>
+									<ion-item lines="none" class="ion-padding">
+                    <ion-icon color="teal" class="my-icon" name="rocket-outline"></ion-icon>
+                    <ion-label style="font-size: 1.4em" color="thapsblue" class="ion-text-wrap ion-padding">
+                      <h2>Upload pictures and 30 second video (optional) of the {{property.property_type}}</h2>
+                    </ion-label>
+                  </ion-item>
+								</ion-col>
+							</ion-row>
+              <ion-row>
+                <ion-col size-xs="12" size-md="6">
+                  <ion-card color="light" *ngIf="(property.shared_area_pics.length == 0)">
+                    <ion-card-content>
+                      <div class="ion-text-center">
+                        <ion-icon class="my-icon" name="images-outline"></ion-icon>
+                      </div>
+                      <ion-item lines="none" color="light" button (click)="selectSharedAreaPics()">
+                        <ion-label>
+                          <h1 class="ion-text-wrap ion-text-center">
+                              <b>Browse For Pictures</b>
+                          </h1>
+                        </ion-label>
+                      </ion-item>
+                      <input type="file" hidden="hidden" #shared_area_pics accept="image/*" (change)="updateSharedAreaPics($event)" multiple="true">
+                    </ion-card-content>
+                  </ion-card>
+                  <div *ngIf="property.shared_area_pics.length > 0">
+                    <!-- <h1>Shared Areas pictures</h1> -->
+                    <ion-button mode="ios" (click)="addMoreSharedAreaPics()">Add More</ion-button>
+                    <input type="file" hidden="hidden" #more_shared_area_pics accept="image/*" (change)="updateMoreSharedAreaPics($event)" multiple="true">
+                    <ion-list>
+                      <ion-card *ngFor="let pic of property.shared_area_pics; let i = index">
+                        <ion-progress-bar value="{{pic?.progress}}"></ion-progress-bar>
+                        <ion-item>
+                          <ion-avatar slot="start">
+                            <img src="{{pic?.url}}" (load)="updateSharedAreaPicsLoaded(i)" [hidden]="!pic.loaded">
+                            <img src="../../../assets/imgs/genPlaceholder.png" [hidden]="pic.loaded" >
+                          </ion-avatar>
+                          <h3>{{pic?.name}}</h3>
+                          <ion-button fill="clear" mode="ios" color="danger" (click)="deleteSharedAreaPic(i)">
+                            <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+                          </ion-button>
+                        </ion-item>
+                      </ion-card>
+                    </ion-list>
+                  </div>
+                </ion-col>
+                <ion-col size-xs="12" size-md="6">
+                  <ion-card color="light" *ngIf="property.video == null">
+                    <ion-card-content>
+                      <div class="ion-text-center">
+                        <ion-icon name="videocam-outline" class="my-icon"></ion-icon>
+                      </div>
+                      <ion-item lines="none" color="light" button (click)="selectPropertyVideo()">
+                        <ion-label>
+                          <h1 class="ion-text-wrap ion-text-center">
+                              <b>Browse For Video</b>
+                          </h1>
+                        </ion-label>
+                      </ion-item>
+                      <input type="file" hidden="hidden" #property_video accept="video/*" (change)="updatePropertyVideo($event)" multiple="false">
+                    </ion-card-content>
+                  </ion-card>
+                  <div *ngIf="property.video != null">
+                    <!-- <h1>Room pictures</h1> -->
+                    <!-- <ion-button mode="ios" (click)="addMoreRoomPics()">
+                      Change Video
+                    </ion-button> -->
+                     <ion-card>
+                       <ion-progress-bar value="{{property.video.progress}}">
+                       </ion-progress-bar>
+                       <ion-card-title color="dark">
+                         <video controls preload="true" width="100%" height="200px">
+                           <source [src]="property.video.url" type="video/mp4"/>
+                         </video>
+                       </ion-card-title>
+                       <ion-card-content>
+                         <ion-item lines="none">
+                           <h3 class="ion-text-center main-header10 ion-text-wrap">
+                             {{property.video.name}}
+                           </h3>
+                           <ion-button fill="clear" slot="end" 
+                           color="danger" (click)="deletePropertyVideo()">
+                             <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+                           </ion-button>
+                         </ion-item>
+                       </ion-card-content>
+                     </ion-card>    
+                  </div>
+                </ion-col>
+              </ion-row>
+						</ion-grid>
+						<div *ngIf="pageActive == 2" class="ion-text-center">
+							<ion-button (click)="prevPage()" color="teal" style="margin-bottom: 30px;">
+								Back
+							</ion-button>
+							<ion-item *ngIf="property.num_pics_downloaded < property.num_pics_uploaded">
+					          <ion-label>Loading Pictures</ion-label>
+					          <ion-spinner></ion-spinner>
+					    </ion-item>
+							<ion-button (click)="saveAndUpload()" style="margin-bottom: 30px;" color="thapsblue"
+              *ngIf="!uploadingProperty && mode == 'upload' && !(property.num_pics_downloaded < property.num_pics_uploaded)">
+								Save & Upload 
+								<ion-icon slot="end" name="paper-plane-outline" color="light">
+								</ion-icon>
+							</ion-button>
+              <ion-button (click)="saveAndUploadEditted()" style="margin-bottom: 30px;" color="thapsblue"
+              *ngIf="!uploadingProperty && mode == 'edit' && !(property.num_pics_downloaded < property.num_pics_uploaded)">
+								Save & Upload 
+								<ion-icon slot="end" name="paper-plane-outline" color="light">
+								</ion-icon>
+							</ion-button>
+							<ion-progress-bar *ngIf="showUploadProgressBar" type="determinate" 
+							value="{{uploadProgressPercentage}}">
+							</ion-progress-bar>
+						</div>
+					</ion-card-content>
+				</ion-card>
+			</ion-col>
+			<ion-col size-xs="0" size-md="3">
+			</ion-col>
+		</ion-row>
+	</ion-grid>
 </ion-content>

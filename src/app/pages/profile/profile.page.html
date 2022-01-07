@@ -1,9 +1,144 @@
+
 <ion-header>
-  <ion-toolbar>
-    <ion-title>profile</ion-title>
+  <ion-toolbar color="dark">
+    <ion-buttons slot="start" *ngIf="showBackButton">
+      <ion-back-button auto-hide="false"></ion-back-button>
+    </ion-buttons>
+    <ion-title class="main-header4 ion-text-center">Agent Profile</ion-title>
   </ion-toolbar>
 </ion-header>
-
 <ion-content>
+  <div class="header-background">
+    <!-- <img [src]="speaker?.profilePic" [alt]="speaker?.name"> -->
+    <ion-avatar class="profile">
+      <img src="{{profilePicture?.url}}" (load)="updateProfilePicLoaded()" 
+			[hidden]="!profilePicture.loaded">
+			<img src="https://ionic-docs-demo.herokuapp.com/assets/avatar.svg" [hidden]="profilePicture?.loaded">
+    </ion-avatar>
+    <h2>{{user.firstname}} {{user.lastname}}</h2>
+    <ion-buttons>
+      <ion-button (click)="selectProfilePic()" fill="solid" color="medium" >update picture</ion-button>
+      <input type="file" hidden="hidden" #profile_pic accept="image/*" (change)="updateProfilePic($event)" multiple="false">
+    </ion-buttons>
+  </div>
+  <ion-grid fixed class="ion-no-padding">
+    <div class="login-form">
+      <ion-text color="dark">
+        <h1 *ngIf="!profileComplete"  class="ion-margin-bottom main-header1 ion-text-center">
+            <b color="orange">Please complete your profile before continuing.</b>
+        </h1>
+        <h1 *ngIf="profileComplete" class="ion-margin-bottom main-header10 ion-text-center">
+          Update your profile.
+      </h1>
+    </ion-text>
+    <form [formGroup]="profileForm" novalidate>
+      <ion-card class="checkout-card">
+        <ion-item lines="none">
+          <h1 class="main-header5">Personal Details</h1>
+        </ion-item>
+      <ion-radio-group class="ion-margin-top ion-padding">
+        <!-- ############ -->
+        <ion-item  class="roundedInput8px margin-bottom-10">
+          <ion-label>
+            <ion-icon name="person-outline" color="medium"></ion-icon>
+          </ion-label>
+          <ion-input  type="text" placeholder="firstname" formControlName="firstname"  
+          [value]="user.firstname" >
+          </ion-input>
+        </ion-item>
+        <ion-text color="danger">
+          <p *ngIf="!profileForm.controls.firstname.valid && profileForm.controls.firstname.touched">
+              <ion-icon name="information-circle-outline"></ion-icon> Firstname field must be at least 3
+                characters long!
+          </p>
+        </ion-text>
+        <!-- ############ -->
+        <ion-item  class="roundedInput8px margin-bottom-10">
+          <ion-label>
+            <ion-icon name="people-outline" color="medium"></ion-icon>
+          </ion-label>
+          <ion-input type="text" placeholder="lastname" formControlName="lastname"   
+          [value]="user.lastname"></ion-input>
+        </ion-item>
+        <ion-text color="danger">
+          <p *ngIf="!profileForm.controls.lastname.valid && profileForm.controls.lastname.touched">
+              <ion-icon name="information-circle-outline"></ion-icon> Lastname field must be at least 3 characters
+              long!
+          </p>
+        </ion-text>
+        <!-- ############ -->
+        <ion-item  class="roundedInput8px margin-bottom-10">
+          <ion-label>
+            <ion-icon name="mail-outline" color="medium"></ion-icon>
+            </ion-label>
+          <ion-input type="text" placeholder="email" formControlName="email" [value]="user.email" >
+          </ion-input>
+        </ion-item>
+        <ion-text color="danger">
+          <p *ngIf="!profileForm.controls.email.valid && profileForm.controls.email.touched">
+              <ion-icon name="information-circle-outline"></ion-icon> Username must be e-mail!
+          </p>
+        </ion-text>
+        <!-- ############ -->
+        <ion-item  class="roundedInput8px margin-bottom-10">
+          <ion-label>
+            <ion-icon name="call-outline" color="medium"></ion-icon>
+            </ion-label>
+          <ion-input  inputmode="tel" type="tel" minlength="10" maxlength="10" placeholder="contact no" formControlName="phone" [value]="user.phoneNumber">
+          </ion-input>
+        </ion-item>
+        <ion-text color="danger">
+          <p *ngIf="!profileForm.controls.phone.valid && profileForm.controls.phone.touched">
+              <ion-icon name="information-circle-outline"></ion-icon> 
+              Invalid cell phone number !
+          </p>
+        </ion-text>
+        <ion-item  class="roundedInput8px margin-bottom-10">
+          <ion-label>
+            <ion-icon name="finger-print-outline" color="medium"></ion-icon>
+          </ion-label>
+          <ion-input inputmode="tel" type="tel" minlength="13" maxlength="13" placeholder="ID number" formControlName="idNumber" [value]="user.idNumber">
+          </ion-input>
+        </ion-item>
+        <ion-text color="danger">
+          <p *ngIf="!profileForm.controls.idNumber.valid && profileForm.controls.idNumber.touched">
+              <ion-icon name="information-circle-outline"></ion-icon> Invalid ID number !
+          </p>
+        </ion-text>
+      </ion-radio-group>
+      </ion-card>
 
+      <ion-card class="checkout-card">
+      <ion-item lines="none">
+        <h1 class="main-header5">Location Details</h1>
+      </ion-item>
+      <ion-radio-group>
+        <ion-item  class="roundedInput8px ion-padding-top ion-padding-bottom margin-top-15">
+          <ion-label>
+            <ion-icon name="location-outline" color="medium"></ion-icon>
+          </ion-label>
+          <ion-input type="text" placeholder="Property Address" [(ngModel)]="userAddress" 
+          [ngModelOptions]="{standalone: true}" (ionInput)="getAddressPredictions($event)" ></ion-input>
+        </ion-item>
+        <ion-item *ngFor="let prediction of addressPredictions">
+          <ion-label (click)="addressSelected(prediction)" >
+            <h3>{{prediction.structured_formatting.main_text}}</h3>
+            <p>{{prediction.structured_formatting.secondary_text}}</p>
+          </ion-label>
+        </ion-item>
+        
+      </ion-radio-group>
+      </ion-card>
+
+      <div class="ion-margin-vertical ion-padding">
+        <ion-button mode="ios" color="orange" expand="block" class="ion-margin-top"  (click)="save()">
+          Update Profile
+        </ion-button>
+        <ion-button mode="ios" color="orange" fill="outline" expand="block" class="ion-margin-top"  (click)="logout()">
+            Cancel
+        </ion-button>
+      </div>  
+    </form>
+    </div>
+  </ion-grid>
 </ion-content>
