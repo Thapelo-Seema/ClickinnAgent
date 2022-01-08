@@ -16,20 +16,20 @@ export class UserService {
   //takes a user object as a parameter and returns a void promise on completion 
   //Uses the uid generated during user registration
   createUser(user: User):Promise<void>{
-    return this.afs.collection('Users').doc(user.uid).set(user);
+    return this.afs.collection('Agents').doc(user.uid).set(user);
   }
 
   //Function that updates the details of a particular user
   //Takes a user object as a parameter and returns a void promise on completion
   updateUser(user: User):Promise<void>{
-    return this.afs.collection('Users').doc(user.uid).update(user);
+    return this.afs.collection('Agents').doc(user.uid).update(user);
     //return this.afs.collection('Users').doc(user.uid).set(user);
   }
 
   //Function for retrieving a user object
   //Takes the user id (uid) as a parameter and returns a User Observable
   getUser(uid: string):Observable<User>{
-    return this.afs.collection('Users').doc<User>(uid).valueChanges();
+    return this.afs.collection('Agents').doc<User>(uid).valueChanges();
   }
 
   signupUser(firstname, lastname, phone, username, password): Promise<any>{

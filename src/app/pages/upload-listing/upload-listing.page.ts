@@ -103,9 +103,9 @@ export class UploadListingPage implements OnInit {
           this.user = user_obj;
           //set id of ulpoader
           this.property.uploader_id = this.user.uid;
-          this.property.uploader_contact_number = this.user.phoneNumber;
+          this.property.uploader_contact_number = this.user.phone_number;
           //determine whether user is agent or landlord and update ownership details in property
-          if(this.user.role == "landlord"){
+          if(this.user.user_type == "landlord"){
             //Add this user as the landlord of this property
             this.property.landlord_id = this.user.uid;
           }
@@ -119,7 +119,7 @@ export class UploadListingPage implements OnInit {
   }
 
   getPropertyList(){
-    if(this.user.role == "landlord"){
+    if(this.user.user_type == "landlord"){
       this.ppty_svc.getLandlordProperties(this.user.uid)
       .pipe(take(1))
       .subscribe(pptys =>{

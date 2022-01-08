@@ -1,34 +1,36 @@
-//import { Landlord } from './landlord.model';
-//import { Tenant } from './tenant.model';
-
+import { BankingDetails } from '../models/banking-details.model';
 import { Address } from "./address.model";
 import { FileUpload } from "./file-upload.model";
 
 export interface User{
 	account_balance: number;
 	address?: Address;
+	agents: any[];
+	agreed_to_terms: boolean;
+	banking_details: BankingDetails;
+	business_areas: any[];
 	contracts: any[];
-	displayName: string; 
+	current_job: string;
+	display_name: string; 
 	dob: Date;
 	email: string;
 	firstname: string;
-	fcm_tokens: string;
+	fcm_token: string;
 	firstime: boolean;
-	gender: string;
-	//is_host: boolean; 					//'host' is used in previous version (replaced by 'role')
+	gender: string;					//'host' is used in previous version (replaced by 'role')
 	id_no: string;
 	id_doc?: FileUpload;
 	is_on_WhatsApp: boolean;     	 	//indication of whether the contact number is on WhatsApp
 	lastname: string;
 	liked_apartments: string[];
+	landlords: any[];
 	occupation: string;
-	phoneNumber: string;
+	phone_number: string;
+	photo: FileUpload;
 	photoURL: string;
 	rating: number;
 	online: boolean;
-	hometown?: string;
-	//user_type: string;
-	role: string;
-	//threads?: any; no longer in use
+	user_type: string;
+	typing: boolean;
 	uid: string;
 }

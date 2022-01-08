@@ -152,7 +152,7 @@ export class SignupPage implements OnInit {
   bindFormToUser(){
     this.user.firstname = this.registerForm.value.firstname; 
     this.user.lastname = this.registerForm.value.lastname
-    this.user.phoneNumber = this.registerForm.value.phone;
+    this.user.phone_number = this.registerForm.value.phone;
     this.user.email = this.registerForm.value.username;
   }
 

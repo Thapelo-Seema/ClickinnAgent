@@ -10,30 +10,36 @@ export class ObjectInitService {
 
   userInit(){
     let user: User = {
+      agents: [],
+      agreed_to_terms: false,
+      banking_details: null,
+      business_areas: [],
+      current_job: "",
       firstime: true,
       firstname: "",
       lastname: "",
+      landlords: [],
       uid: "",
       account_balance: 0,
 	    address: null,
 	    contracts: [],
-	    displayName: "", 
+	    display_name: "", 
 	    dob: null,
 	    email: "",
-	    fcm_tokens: "",
+	    fcm_token: "",
 	    gender: "",
-      //is_host: boolean; 					//'host' is used in previous version (replaced by 'role')
       id_no: "",
+      id_doc: null,
       is_on_WhatsApp: false,     	 	//indication of whether the contact number is on WhatsApp
 	    liked_apartments: [],
       occupation: "",
-      phoneNumber: "",
+      phone_number: "",
+      photo: null,
       photoURL: "",
       rating: 0,
       online: false,
-      hometown: "",
-      //user_type: string;
-      role: ""
+      typing: false,
+      user_type: "" 
     }
     return user;
   }

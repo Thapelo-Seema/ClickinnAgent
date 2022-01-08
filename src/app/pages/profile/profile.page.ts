@@ -2,7 +2,6 @@ import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from "@angular/router";
 import { ModalController, NavController } from "@ionic/angular";
 import { User } from '../../models/user.model';
-//import { ServiceProvider } from '../../models/service_provider.model';
 import { UserService } from '../../services/user.service';
 import {take} from 'rxjs/operators';
 import { FormBuilder, FormGroup ,Validators } from '@angular/forms';
@@ -10,10 +9,6 @@ import { UsersService } from '../../object-init/users.service';
 import { IonicComponentService } from '../../services/ionic-component.service';
 import { Observable } from 'rxjs';
 import { MapsService } from '../../services/maps.service';
-//import { Agent } from '../../models/agent.model';
-//import { PaymentMethodPage } from '../payment-method/payment-method.page';
-//import { Card } from '../../models/card.model';
-//import { PaymentService } from '../../services/payment.service';
 import { ValidationService } from '../../services/validation.service';
 import { FileUpload } from '../../models/file-upload.model';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
@@ -64,7 +59,6 @@ export class ProfilePage implements OnInit {
     private ionicComponentService: IonicComponentService,
     public  formBuilder: FormBuilder,
     private userInitSvc: UsersService
-    //private paymentService: PaymentService
   ) { 
 
     this.user = this.userInitSvc.defaultUser();
@@ -91,8 +85,6 @@ export class ProfilePage implements OnInit {
     this.ionicComponentService.presentTimeoutLoading(1000,true);
     console.log(this.userID);
     this.initializeViewForUpdate();
-    //console.log(this.activatedRoute.snapshot)
-    //setTimeout(() => this.initializeProfileView(), 3000)
   }
 
   selectProfilePic(){
@@ -112,15 +104,14 @@ export class ProfilePage implements OnInit {
     let file = event.target.files[0];
     
     //Deals with initial upload but does not take into account multiple attempts, where array keeps growing
-    
-      this.id_doc = {
-         file: file,
-         path: "IdDocuments",
-         url: "",
-         name: file.name,
-         progress: 0,
-         loaded: false
-      }
+    this.id_doc = {
+        file: file,
+        path: "IdDocuments",
+        url: "",
+        name: file.name,
+        progress: 0,
+        loaded: false
+    }
     this.uploadID();
   }
 
@@ -310,7 +301,7 @@ export class ProfilePage implements OnInit {
     this.user.firstname = this.profileForm.value.firstname;
     this.user.lastname = this.profileForm.value.lastname;
     this.user.email = this.profileForm.value.email;
-    this.user.phoneNumber = this.profileForm.value.phone;
+    this.user.phone_number = this.profileForm.value.phone;
     this.user.id_no = this.profileForm.value.idNumber;
   }
 
