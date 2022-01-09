@@ -5,6 +5,7 @@ import { UsersService } from '../../object-init/users.service';
 import { UserService } from '../../services/user.service';
 import { take } from 'rxjs/operators';
 import { AuthService } from '../../services/auth.service';
+import { IonicComponentService } from '../../services/ionic-component.service';
 
 
 @Component({
@@ -21,7 +22,8 @@ export class HomePage implements OnInit {
     private user_init_svc: UsersService,
     private user_svc: UserService,
     private activatedRoute: ActivatedRoute,
-    private auth_svc: AuthService
+    private auth_svc: AuthService,
+    private ionic_component_svc: IonicComponentService
   ) {
       this.user = this.user_init_svc.defaultUser();
    }
@@ -64,6 +66,22 @@ export class HomePage implements OnInit {
 
   updateDisplayPicLoaded(){
     this.displayPicLoaded = true;
+  }
+
+  updateOnlineStatus(event){
+    this.ionic_component_svc.presentLoading();
+    if(this.user.online != event.detail.checked){
+      this.user.online = event.detail.checked;
+      this.user_svc.updateUser(this.user)
+      .then(() =>{
+        this.ionic_component_svc.dismissLoading().catch(err =>{});
+      })
+      .catch(err =>{
+        console.log(err);
+      })
+    }else{
+      this.ionic_component_svc.dismissLoading().catch(err =>{});
+    }
   }
 
 }

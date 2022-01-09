@@ -17,6 +17,7 @@ import { LocationGraphService } from '../../services/location-graph.service';
 import { ToastController } from '@ionic/angular';
 //import { UploadSuccessPage } from '../../modals/upload-success/upload-success.page';
 import { MapsService } from '../../services/maps.service';
+import { IonicComponentService } from '../../services/ionic-component.service';
 
 @Component({
   selector: 'app-upload-listing',
@@ -67,7 +68,8 @@ export class UploadListingPage implements OnInit {
     private room_svc: RoomService,
     public modalCtrl: ModalController,
     public toastController: ToastController,
-    public maps_svc: MapsService
+    public maps_svc: MapsService,
+    private ionic_component_svc: IonicComponentService
   ) {
     //initialize user, property and rooms
     this.user = this.user_init_svc.defaultUser();
@@ -244,9 +246,11 @@ export class UploadListingPage implements OnInit {
           this.room_svc.createRoom(this.room)
           .then(() =>{
             //present room uploaded toast
+            this.ionic_component_svc.presentToast("Room created on database", 2000);
           })
           .catch(err =>{
             //present err modal
+            this.ionic_component_svc.presentToast("Error creating room on database", 2000);
           })
         }
       }

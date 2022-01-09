@@ -17,7 +17,7 @@
         </ion-col>
         <ion-col>
             <h6>online</h6>
-            <ion-toggle>
+            <ion-toggle checked="user.online" color="success" (ionChange)="updateOnlineStatus($event)">
             </ion-toggle>
         </ion-col>
       </ion-row>

@@ -15,12 +15,7 @@
 			<ion-col size-xs="0" size-md="3">
 			</ion-col>
 			<ion-col size-xs="12" size-md="6" class="ion-no-padding">
-				<!-- <ion-chip color="warning" *ngIf="agentMode">
-				  <ion-icon name="person-circle-outline"></ion-icon>
-				  <ion-label>Agent Mode</ion-label>
-				</ion-chip> -->
         <ion-card *ngIf="pageActive == 1">
-					<!-- <h1 class="ion-text-center ion-padding main-header2"><b>ROOM DETAILS</b></h1> -->
 					<ion-item lines="none" class="ion-padding">
 						<ion-icon color="teal" class="my-icon" name="business-outline"></ion-icon>
 						<ion-label style="font-size: 1.4em" color="thapsblue" class="ion-text-wrap ion-padding">
@@ -100,13 +95,13 @@
                     <ion-input type="number" [(ngModel)]="room.deposit">
                     </ion-input>
                 </ion-item>
-                <!-- <ion-item  lines="none" color="light">
+                <ion-item  lines="none" color="light">
                   <ion-label position="stacked">
-                    How Many Other Similar Rooms ?
+                    How Many Other Same Type Rooms ?
                   </ion-label>
                   <ion-input type="number" [(ngModel)]="property.rooms.backrooms">
                   </ion-input>
-                </ion-item> -->
+                </ion-item>
               </ion-col>
             </ion-row>
             <ion-row>
@@ -161,7 +156,7 @@
                       <ion-avatar slot="start">
                           <img src="{{pic?.url}}" (load)="updateRoomPicsLoaded(i)" 
                           [hidden]="!pic.loaded">
-                          <img src="../../../assets/imgs/genPlaceholder.png" [hidden]="pic?.loaded">
+                          <img src="../../../assets/imgs/plain-gray-background.jpeg" [hidden]="pic?.loaded">
                         </ion-avatar>
                       <h3>{{pic?.name}}</h3>
                       <ion-button fill="clear" slot="end" 
@@ -469,7 +464,7 @@
                         <ion-item>
                           <ion-avatar slot="start">
                             <img src="{{pic?.url}}" (load)="updateSharedAreaPicsLoaded(i)" [hidden]="!pic.loaded">
-                            <img src="../../../assets/imgs/genPlaceholder.png" [hidden]="pic.loaded" >
+                            <img src="../../../assets/imgs/plain-gray-background.jpeg" [hidden]="pic.loaded" >
                           </ion-avatar>
                           <h3>{{pic?.name}}</h3>
                           <ion-button fill="clear" mode="ios" color="danger" (click)="deleteSharedAreaPic(i)">
@@ -497,10 +492,6 @@
                     </ion-card-content>
                   </ion-card>
                   <div *ngIf="property.video != null">
-                    <!-- <h1>Room pictures</h1> -->
-                    <!-- <ion-button mode="ios" (click)="addMoreRoomPics()">
-                      Change Video
-                    </ion-button> -->
                      <ion-card>
                        <ion-progress-bar value="{{property.video.progress}}">
                        </ion-progress-bar>
