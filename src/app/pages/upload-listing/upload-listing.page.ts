@@ -78,7 +78,9 @@ export class UploadListingPage implements OnInit {
    }
 
    ngOnInit(){
+    //If there's a room id we assume edit mode otherwise upload mode
     if(this.actRoute.snapshot.params.room_id){
+      console.log("Edit mode");
       this.mode = "edit";
       this.room_svc.getRoom(this.actRoute.snapshot.params.room_id)
       .pipe(take(1))
@@ -95,6 +97,7 @@ export class UploadListingPage implements OnInit {
         })
       }
     }else{
+      console.log("Upload mode");
       this.mode = "upload";
         //get user id from router and update user and property 
       if(this.actRoute.snapshot.params.uid){
@@ -102,7 +105,7 @@ export class UploadListingPage implements OnInit {
         this.user_svc.getUser(this.user.uid)
         .pipe(take(1))
         .subscribe(user_obj =>{
-          this.user = user_obj;
+          this.user = this.user_init_svc.copyUser(user_obj);
           //set id of ulpoader
           this.property.uploader_id = this.user.uid;
           this.property.uploader_contact_number = this.user.phone_number;
@@ -120,6 +123,7 @@ export class UploadListingPage implements OnInit {
     }
   }
 
+  //Get the list of properties uploaded by this user
   getPropertyList(){
     if(this.user.user_type == "landlord"){
       this.ppty_svc.getLandlordProperties(this.user.uid)
@@ -136,6 +140,7 @@ export class UploadListingPage implements OnInit {
     }
   }
 
+  //Select existing property and upload room into the existing property profile
   selectProperty(prop: Property){
     this.property = prop;
     this.addRoomsToProperty();
@@ -171,12 +176,13 @@ export class UploadListingPage implements OnInit {
     }
   }
 
+  //Cancel address autocomplete
   cancelSearch(){
     this.predictions = [];
     this.predictionLoading = false;
   }
 
-  /* Select a place from a list of lpace suggestions */
+  /* Select a place from a list of place suggestions */
   selectPlace(place){
     this.predictionLoading = true;
     this.maps_svc.getSelectedPlace(place).then(data => {
@@ -212,7 +218,7 @@ export class UploadListingPage implements OnInit {
     this.property.num_pics_downloaded++;
   }
 
-  //show filters
+  //Show modal with upload success message
   async uploadSuccess(){
     /* const modal = await this.modalCtrl.create({
       component: UploadSuccessPage,
@@ -243,6 +249,7 @@ export class UploadListingPage implements OnInit {
       //if we go to the second page, upload the room
       if(this.pageActive == 2){
         if(this.room.room_id == ""){
+          console.log("Creating room on database", this.room);
           this.room_svc.createRoom(this.room)
           .then(() =>{
             //present room uploaded toast
@@ -262,6 +269,7 @@ export class UploadListingPage implements OnInit {
     --this.pageActive;
   }
 
+  //Create property profile on database
   saveProperty(){
     if(this.property.accredited){
       this.property.payment_methods = "NSFAS, Bursary and Cash";
@@ -279,6 +287,7 @@ export class UploadListingPage implements OnInit {
     })
   }
 
+  //Update property details on database and in the room object also
   updatePropertyDetails(){
     this.ppty_svc.updateProperty(this.property)
     .then(() =>{
@@ -290,7 +299,7 @@ export class UploadListingPage implements OnInit {
     })
   }
 
-  //Generates a description of the room
+  //Generates a description of the room using key attributes of the room and property objects
   generateRoomDescription(room: Room):string{
     let description: string = "";
     description += room.furnished ? "Fully furnished " : "";
@@ -304,10 +313,9 @@ export class UploadListingPage implements OnInit {
     return description;
   }
 
-
-
   //Save and upload the property and room on initial upload
   async saveAndUpload(){
+    console.log("saving the entire upload...");
     //let updatedCount: number = 0;
     this.showUploadProgressBar = true;
     this.addRoomsToProperty();
@@ -663,6 +671,7 @@ export class UploadListingPage implements OnInit {
         .pipe(take(1))
         .subscribe(url =>{
           this.room.pictures[i].url = url;
+          console.log(this.room.pictures);
           if(i == (this.room.pictures.length - 1))
             this.room.display_pic_url = url;
         })

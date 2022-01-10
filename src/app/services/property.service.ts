@@ -11,7 +11,14 @@ export class PropertyService {
   constructor(private afs: AngularFirestore) { }
 
   	createProperty(property: Property){
-  		return this.afs.collection<Property>('Propertys').add(Object.assign({}, property));
+		let adapated_property = property;
+		for(let i: number = 0; i < property.pictures.length; i++){
+			adapated_property.pictures[i].file = Object.assign({}, property.pictures[i].file);
+		  }
+		  for(let i: number = 0; i < property.shared_area_pics.length; i++){
+			adapated_property.shared_area_pics[i].file = Object.assign({}, property.shared_area_pics[i].file);
+		  } 
+  		return this.afs.collection<Property>('Propertys').add(Object.assign({}, adapated_property));
   	}
 
   	updateProperty(property: Property):Promise<void>{
