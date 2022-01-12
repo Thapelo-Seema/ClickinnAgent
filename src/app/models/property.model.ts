@@ -38,6 +38,8 @@ export interface Property{
 	upload_complete: number;
 	uploader_id: string;
 	uploader_contact_number: string;
+	uploader_name: string;
+	uploader_pic: string;
 	deposit_specifics: string;
 	other_amenities: string;
 	rooms: RoomCount /** The rooms will be removed from inside the property in exchange to 

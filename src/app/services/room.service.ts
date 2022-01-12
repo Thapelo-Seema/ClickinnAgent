@@ -134,6 +134,11 @@ export class RoomService {
 		.valueChanges();
 	}
 
+  getUserRooms(uid: string){
+    return this.afs.collection<Room>('Rooms', ref => ref.where('property.uploader_id', '==', uid))
+		.valueChanges();
+  }
+
   getRoom(id: string){
     return this.afs.collection('Rooms').doc<Room>(id).valueChanges();
   }

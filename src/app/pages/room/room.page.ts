@@ -1,10 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute , Router} from '@angular/router';
 import { ModalController,NavController} from '@ionic/angular';
-
 import { UserService } from '../../services/user.service';
 import { IonicComponentService} from '../../services/ionic-component.service';
 import { Observable } from 'rxjs';
+import { take } from 'rxjs/operators';
+import { RoomService } from '../../services/room.service';
+import { Room } from 'src/app/models/room.model';
+import { FileUpload } from 'src/app/models/file-upload.model';
+import { PropertiesService } from '../../object-init/properties.service';
+import { ImageGalleryViewPage } from '../image-gallery-view/image-gallery-view.page';
 
 @Component({
   selector: 'app-room',
@@ -19,13 +24,11 @@ export class RoomPage implements OnInit {
   };
 
   parentPath:any;
+  uploader_pic_loaded: boolean = false;
 
   //****** image slide  *******/
   sliderOpts = {
-    zoom: false,
-    slidesPerView: 1.5,
-    spaceBetween: 20,
-    centeredSlides: true,
+    slidesPerView: 2.5
   };
 
   //**** toolbar for hide and show ****/
@@ -54,6 +57,8 @@ export class RoomPage implements OnInit {
   //**** User authentication  ****/
   userAuth: boolean = false; // Is user logged in ?
   userId: any;
+  room: Room;
+  pictures: FileUpload[] = [];
 
   constructor(
       public userService: UserService,
@@ -61,17 +66,56 @@ export class RoomPage implements OnInit {
       private navController: NavController,
       public router: Router,
       private ionicComponentService: IonicComponentService,
-      private modalController: ModalController
+      private modalController: ModalController,
+      private room_svc: RoomService,
+      private property_svc: PropertiesService
   ) { 
-    this.itemId = this.activatedRoute.snapshot.paramMap.get('itemId');
+    this.room = this.property_svc.defaultRoom();
   }
 
-  async ngOnInit() {
-    await this.getPlaceDetail();
-    //this.recommenedItems = this.realestateService.getHouseByRecom();
+  ngOnInit() {
+    if(this.activatedRoute.snapshot.paramMap.get("room_id")){
+      this.room_svc.getRoom(this.activatedRoute.snapshot.paramMap.get('room_id'))
+      .pipe(take(1))
+      .subscribe(rm =>{
+        this.room = rm;
+        this.room.pictures.forEach(p =>{
+          this.pictures.push(p);
+        });
+        this.room.property.pictures.forEach(p =>{
+          this.pictures.push(p);
+        })
+        console.log(this.room);
+        console.log(this.pictures)
+      })
+    }
   }
+
   ngOnDestroy() {
 		//this.sub.unsubscribe()
+  }
+
+  updateDisplayPicLoaded(){
+    this.uploader_pic_loaded = true;
+  }
+
+  openPic(pic){
+    console.log("openImageViewer")
+    // let modal = this.modalCtrl.create(CartPage, { data: this.cart });
+   this.modalController.create({
+     component: ImageGalleryViewPage,
+     cssClass: 'fullscreen-modal',
+     componentProps: {
+       data: this.pictures,
+       index: pic
+     }
+   }).then(modal => {
+     modal.present();
+   });
+  }
+
+  openImageViewer(image) {
+    
   }
 
   async getPlaceDetail(){

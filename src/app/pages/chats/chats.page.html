@@ -1,9 +1,21 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>chats</ion-title>
+  <ion-toolbar color="thapsblue">
+    <ion-title>My Chats</ion-title>
   </ion-toolbar>
 </ion-header>
-
 <ion-content>
-
+  <ion-item *ngFor="let chat of chats; let i = index" (click)="gotoThread(chat.thread_id)" >
+    <ion-avatar slot="start">
+      <img src="{{chat.client?.photoURL}}" (load)="updateDisplayPicLoaded(i)" [hidden]="!chat.client?.dp_loaded">
+			<img src="https://ionic-docs-demo.herokuapp.com/assets/avatar.svg" [hidden]="chat.client?.dp_loaded">
+    </ion-avatar>
+    <ion-label>
+      <h3>
+        {{ chat.client.firstname }} 
+      </h3>
+      <p>
+        {{chat.last_message.message}}
+      </p>
+    </ion-label>
+  </ion-item>
 </ion-content>

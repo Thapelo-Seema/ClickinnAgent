@@ -43,6 +43,8 @@ export class UploadListingPage implements OnInit {
   house_number_and_street: string = ""; // to be used as input text for predictions
   showUploadProgressBar: boolean = false;
 
+  uploading_pictures: boolean = false;
+
   //variables for autocomplete
   predictionLoading: boolean = false;
   predictions: any[] = [];
@@ -109,6 +111,8 @@ export class UploadListingPage implements OnInit {
           //set id of ulpoader
           this.property.uploader_id = this.user.uid;
           this.property.uploader_contact_number = this.user.phone_number;
+          this.property.uploader_name = this.user.firstname + " " + this.user.lastname;
+          this.property.uploader_pic = this.user.photo.url;
           //determine whether user is agent or landlord and update ownership details in property
           if(this.user.user_type == "landlord"){
             //Add this user as the landlord of this property
@@ -206,16 +210,22 @@ export class UploadListingPage implements OnInit {
   updateRoomPicsLoaded(i: number){
     this.room.pictures[i].loaded = true;
     this.property.num_pics_downloaded++;
+    console.log("num pics downloaded: ", this.property.num_pics_downloaded);
+    console.log("num pics uploaded: ", this.property.num_pics_uploaded);
   }
 
   updateSharedAreaPicsLoaded(i: number){
     this.property.shared_area_pics[i].loaded = true;
     this.property.num_pics_downloaded++;
+    console.log("num pics downloaded: ", this.property.num_pics_downloaded);
+    console.log("num pics uploaded: ", this.property.num_pics_uploaded);
   }
 
   updatePropertyPicsLoaded(i: number){
     this.property.pictures[i].loaded = true;
     this.property.num_pics_downloaded++;
+    console.log("num pics downloaded: ", this.property.num_pics_downloaded);
+    console.log("num pics uploaded: ", this.property.num_pics_uploaded);
   }
 
   //Show modal with upload success message
@@ -251,7 +261,9 @@ export class UploadListingPage implements OnInit {
         if(this.room.room_id == ""){
           console.log("Creating room on database", this.room);
           this.room_svc.createRoom(this.room)
-          .then(() =>{
+          .then(rm =>{
+            //update the room id
+            this.room.room_id = rm.id;
             //present room uploaded toast
             this.ionic_component_svc.presentToast("Room created on database", 2000);
           })
@@ -326,12 +338,16 @@ export class UploadListingPage implements OnInit {
     .then(ppty =>{
       this.property.property_id = ppty.id;
       this.updatePropertyInRooms();
-      this.ppty_svc.updateProperty(this.property);
+      console.log("updating property", this.property);
+      this.ppty_svc.updateProperty(this.property)
+      .catch(err =>{
+        console.log(err);
+      })
       this.room.description = this.generateRoomDescription(this.room);
       this.room_svc.updateRoom(this.room)
       .then(() =>{
         this.showUploadProgressBar = false;
-        this.uploadSuccess()
+        this.router.navigate(['/room', {room_id: this.room.room_id}]);
       })
       .catch(err =>{
         console.log(err);
@@ -351,7 +367,7 @@ export class UploadListingPage implements OnInit {
     this.room_svc.updateRoom(this.room)
     .then(() =>{
       this.showUploadProgressBar = false;
-      this.uploadSuccess()
+      this.router.navigate(['/room', {room_id: this.room.room_id}]);
     })
     .catch(err =>{
       console.log(err);
@@ -655,6 +671,7 @@ export class UploadListingPage implements OnInit {
   The method also sets the display picture of the backroom
   */
   uploadRoomPics(start_p?: number){
+    this.uploading_pictures = true;
     for(let i: number = start_p || 0; i < this.room.pictures.length; i++){
       const storageRef = this.afstorage.ref(`${this.room.pictures[i].path}/${this.room.pictures[i].name}`);
       let uploadTask = storageRef.put(this.room.pictures[i].file);
@@ -664,6 +681,7 @@ export class UploadListingPage implements OnInit {
       uploadTask.snapshotChanges().subscribe(data =>{
       },
       err =>{
+        console.log("upload ", i, " failed with error: ", err);
       },
       () =>{
         this.property.num_pics_uploaded++;
@@ -672,8 +690,10 @@ export class UploadListingPage implements OnInit {
         .subscribe(url =>{
           this.room.pictures[i].url = url;
           console.log(this.room.pictures);
-          if(i == (this.room.pictures.length - 1))
+          if(i == (this.room.pictures.length - 1)){
             this.room.display_pic_url = url;
+            this.uploading_pictures = false;
+          } 
         })
       })
     }
@@ -711,7 +731,7 @@ export class UploadListingPage implements OnInit {
       })
   }
 
-      /**Handles uploading of the pictures in the backroom.pictures array
+  /**Handles uploading of the pictures in the backroom.pictures array
   to firebase storage. This method also binds the progress of  each picture
   to the backroom object and updates the picture url in the backroom object.
   @param start_p is the index in the pictures array from which 
@@ -744,6 +764,7 @@ export class UploadListingPage implements OnInit {
 }
 
   uploadSharedAreaPics(start_p?: number){
+    this.uploading_pictures = true;
     for(let i: number = start_p || 0; i < this.property.shared_area_pics.length; i++){
       const storageRef = this.afstorage.ref(`${this.property.shared_area_pics[i].path}/${this.property.shared_area_pics[i].name}`);
       let uploadTask = storageRef.put(this.property.shared_area_pics[i].file);
@@ -753,6 +774,7 @@ export class UploadListingPage implements OnInit {
       uploadTask.snapshotChanges().subscribe(data =>{
       },
       err =>{
+        console.log("upload ", i, " failed with error: ", err);
       },
       () =>{
         this.property.num_pics_uploaded++;
@@ -760,8 +782,10 @@ export class UploadListingPage implements OnInit {
         .pipe(take(1))
         .subscribe(url =>{
           this.property.shared_area_pics[i].url = url;
-          if(i == (this.property.shared_area_pics.length - 1))
+          if(i == (this.property.shared_area_pics.length - 1)){
             this.property.display_pic_url = url;
+            this.uploading_pictures = false;
+          } 
         })
       })
     }

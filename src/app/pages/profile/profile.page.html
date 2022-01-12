@@ -1,6 +1,6 @@
 
 <ion-header>
-  <ion-toolbar color="dark">
+  <ion-toolbar color="thapsblue">
     <ion-buttons slot="start" *ngIf="showBackButton">
       <ion-back-button auto-hide="false"></ion-back-button>
     </ion-buttons>
@@ -9,7 +9,6 @@
 </ion-header>
 <ion-content>
   <div class="header-background">
-    <!-- <img [src]="speaker?.profilePic" [alt]="speaker?.name"> -->
     <ion-avatar class="profile">
       <img src="{{profilePicture?.url}}" (load)="updateProfilePicLoaded()" 
 			[hidden]="!profilePicture.loaded">

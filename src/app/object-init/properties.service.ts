@@ -91,20 +91,7 @@ export class PropertiesService {
   	return room;
   }
 
-  /* defaultRoomPreview(){
-  	let room: RoomPreview = {
-	  	available: true,
-		room_id: "",
-		furnished: false,
-		room_type: "",
-		search_rating: 0, //calculated per individual search
-		demand_index: 0, //aggregated over all searches
-		rent: 0,
-		deposit: 0,
-		property: this.defaultPropertyPreview()
-  	}
-  	return room;
-  } */
+  
 
   initializedRoom(type: string,  rm_number: string, is_furnished?: boolean){
   	let room: Room = {
@@ -161,6 +148,8 @@ export class PropertiesService {
 		minutes_from_campus: null,
 		upload_complete: 0,
 		uploader_id: "",
+		uploader_name: "",
+		uploader_pic: "",
 		deposit_specifics: "",
 		uploader_contact_number: "",
 		other_amenities: "",

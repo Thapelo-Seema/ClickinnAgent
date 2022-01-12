@@ -11,7 +11,8 @@ export interface User{
 	business_areas: any[];
 	contracts: any[];
 	current_job: string;
-	display_name: string; 
+	display_name: string;
+	dp_loaded: boolean;
 	dob: Date;
 	email: string;
 	firstname: string;

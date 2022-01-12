@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { ChatService } from '../../object-init/chat.service';
+import { ChattService } from '../../services/chatt.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ChatThread } from 'src/app/models/chat-thread.model';
 
 @Component({
   selector: 'app-chats',
@@ -7,9 +11,29 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ChatsPage implements OnInit {
 
-  constructor() { }
+  chats: ChatThread[] = [];
+  constructor(
+    private chat_init_svc: ChatService, 
+    private chat_svc: ChattService,
+    private activated_route: ActivatedRoute,
+    private router: Router) { }
 
   ngOnInit() {
+    if(this.activated_route.snapshot.paramMap.get("uid")){
+      this.chat_svc.getUserThreads(this.activated_route.snapshot.paramMap.get("uid"))
+      .subscribe(chts =>{
+        console.log(chts);
+        this.chats = chts;
+      })
+    }
+  }
+
+  updateDisplayPicLoaded(i){
+    this.chats[i].client.dp_loaded = true;
+  }
+
+  gotoThread(thread_id){
+    this.router.navigate(['/chat', {'thread_id': thread_id}]);
   }
 
 }

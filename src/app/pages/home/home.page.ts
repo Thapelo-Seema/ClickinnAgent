@@ -84,4 +84,12 @@ export class HomePage implements OnInit {
     }
   }
 
+  gotoMyUploads(){
+    this.router.navigate(['/my-uploads', {'uid': this.user.uid}]);
+  }
+
+  gotoMyChats(){
+    this.router.navigate(['/chats', {'uid': this.user.uid}]);
+  }
+
 }

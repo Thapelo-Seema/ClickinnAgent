@@ -214,7 +214,12 @@
             </ion-row>
 					</ion-grid>
           </ion-card-content>
-					<div class="ion-text-center" style="margin-bottom: 50px;">
+          <ion-item *ngIf="uploading_pictures">
+            <ion-label>Loading Pictures</ion-label>
+            <ion-spinner></ion-spinner>
+          </ion-item> 
+					<div class="ion-text-center" style="margin-bottom: 50px;" 
+          *ngIf="!uploading_pictures">
 						<ion-button color="thapsblue" (click)="nextPage()">
               Next &nbsp; &nbsp; <ion-icon name="arrow-forward-outline" color="light"></ion-icon>
             </ion-button>
@@ -520,18 +525,18 @@
 							<ion-button (click)="prevPage()" color="teal" style="margin-bottom: 30px;">
 								Back
 							</ion-button>
-							<ion-item *ngIf="property.num_pics_downloaded < property.num_pics_uploaded">
+							<ion-item *ngIf="uploading_pictures">
 					          <ion-label>Loading Pictures</ion-label>
 					          <ion-spinner></ion-spinner>
 					    </ion-item>
 							<ion-button (click)="saveAndUpload()" style="margin-bottom: 30px;" color="thapsblue"
-              *ngIf="!uploadingProperty && mode == 'upload' && !(property.num_pics_downloaded < property.num_pics_uploaded)">
+              *ngIf="!uploadingProperty && mode == 'upload' && !uploading_pictures">
 								Save & Upload 
 								<ion-icon slot="end" name="paper-plane-outline" color="light">
 								</ion-icon>
 							</ion-button>
               <ion-button (click)="saveAndUploadEditted()" style="margin-bottom: 30px;" color="thapsblue"
-              *ngIf="!uploadingProperty && mode == 'edit' && !(property.num_pics_downloaded < property.num_pics_uploaded)">
+              *ngIf="!uploadingProperty && mode == 'edit' && !uploading_pictures">
 								Save & Upload 
 								<ion-icon slot="end" name="paper-plane-outline" color="light">
 								</ion-icon>

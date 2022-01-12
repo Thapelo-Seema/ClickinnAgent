@@ -1,0 +1,34 @@
+page-chat-thread {
+
+	.chatroom_messages{
+		
+	}
+
+	.chatroom_input{ 
+		 height: 100%; 
+		 width: 100%; 
+		 background: #EBF5FB;
+	}
+
+	@media (min-width: 800px){
+
+		.chatroom_header{
+			 
+		}
+
+		.chatroom_messages{
+			
+		}
+
+		.chatroom_input{ 
+			 margin-left: 20%; 
+			 margin-right: 20%; 
+			 height: 100%; 
+			 width: 60%;
+			 background: #EBF5FB;
+			 
+		}
+
+	}
+
+}

@@ -1,9 +1,25 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>my-uploads</ion-title>
+  <ion-toolbar color="thapsblue">
+    <ion-title>My Uploads</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-
+  <ion-item *ngFor="let room of my_rooms; let i = index" (click)="gotoRoom(room.room_id)" >
+    <ion-avatar slot="start">
+      <img src="{{room.display_pic_url}}" (load)="updateDisplayPicLoaded(i)" [hidden]="!room.dp_loaded">
+			<img src="../../../assets/imgs/plain-gray-background.jpeg" [hidden]="room.dp_loaded">
+    </ion-avatar>
+    <ion-label>
+      <h3>{{ room.rent | currency : 'ZAR' : 'symbol' :'1.0-0' }} {{room.room_type}}
+      </h3>
+      <p *ngIf="room.property.address.house_number != ''">
+        {{room.property.address.house_number}} {{room.property.address.street}}, 
+        {{room.property.address.neighbourhood}}
+      </p>
+      <p *ngIf="room.property.address.house_number == ''">
+        {{room.property.address.place_name}}
+      </p>
+    </ion-label>
+  </ion-item>
 </ion-content>

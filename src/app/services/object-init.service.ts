@@ -24,6 +24,7 @@ export class ObjectInitService {
 	    address: null,
 	    contracts: [],
 	    display_name: "", 
+      dp_loaded: false,
 	    dob: null,
 	    email: "",
 	    fcm_token: "",

@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Room } from '../../models/room.model';
+import { ActivatedRoute, Router } from '@angular/router';
+import { RoomService } from '../../services/room.service';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-my-uploads',
@@ -7,9 +11,29 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MyUploadsPage implements OnInit {
 
-  constructor() { }
+  my_rooms: Room[] = [];
+  constructor(
+    private activated_route: ActivatedRoute, 
+    private router: Router, 
+    private room_svc: RoomService) { }
 
   ngOnInit() {
+    if(this.activated_route.snapshot.paramMap.get("uid")){
+      this.room_svc.getUserRooms(this.activated_route.snapshot.paramMap.get("uid"))
+      .pipe(take(1))
+      .subscribe(rooms =>{
+        console.log(rooms);
+        this.my_rooms = rooms;
+      })
+    }
+  }
+
+  updateDisplayPicLoaded(i){
+    this.my_rooms[i].dp_loaded = true;
+  }
+
+  gotoRoom(room_id){
+    this.router.navigate(['/room', {'room_id': room_id}]);
   }
 
 }

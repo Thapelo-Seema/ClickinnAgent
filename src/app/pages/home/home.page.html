@@ -66,7 +66,7 @@
         </ion-item>
       </ion-col>
       <ion-col size="10" class="ion-no-padding">
-        <ion-item>
+        <ion-item tappable (click)="gotoMyChats()">
           <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
           <ion-label>
             <h2>Chats</h2>
@@ -113,7 +113,7 @@
   <ion-grid>
     <ion-row>
       <ion-col>
-        <ion-card>
+        <ion-card tappable (click)="gotoMyUploads()">
           <ion-item>
             <ion-label>
               <h2>My Uploads</h2>
