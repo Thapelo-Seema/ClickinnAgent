@@ -38,7 +38,7 @@
         </ion-tab-button>
       </ion-col>
       <ion-col>
-        <ion-tab-button>
+        <ion-tab-button (click)="addLandlord()" >
           <ion-icon color="thapsblue" name="add-circle-outline"></ion-icon>
           <ion-label color="thapsblue"><b>Landlord</b></ion-label>
         </ion-tab-button>
@@ -49,7 +49,7 @@
 
 <ion-content color="light">
   
-  <ion-card>
+  <ion-card tappable (click)="gotoJob()"> 
     <ion-item>
       <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
       <ion-label>

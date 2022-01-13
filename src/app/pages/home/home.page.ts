@@ -92,4 +92,12 @@ export class HomePage implements OnInit {
     this.router.navigate(['/chats', {'uid': this.user.uid}]);
   }
 
+  gotoJob(){
+    this.router.navigate(['/job', {'client_id': this.user.uid, 'job_id': '', 'uid': this.user.uid}]);
+  }
+
+  addLandlord(){
+    this.router.navigate(['/add-landlord', {'uid': this.user.uid}]);
+  }
+
 }

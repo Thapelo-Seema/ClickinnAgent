@@ -1,9 +1,145 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>job</ion-title>
+<ion-header class="ion-no-border">
+  <ion-toolbar color="">
+    <ion-buttons slot="start">
+      <ion-back-button mode="md" color="greensea" defaultHref="#"></ion-back-button>
+    </ion-buttons>
+
+    <!-- <ion-searchbar color="" placeholder="Search by Location, Area , State or Pin Code" (ionFocus)="openSearchModal()" search-icon="ios-pin" ></ion-searchbar>   -->
+    <!-- <ion-title color="realgreen" class="main-b-header4">Agent</ion-title> -->
+
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
 
+  <ion-grid fixed class="ion-no-padding">
+      <div id="profile1-info" class="test-class" padding>
+        <img id="profile1-image" class="pop-in" src="{{client.photo?.url}}" (load)="updateProfilePicLoaded()" 
+			  [hidden]="!client.photo?.loaded">
+			<img id="profile1-image" class="pop-in" src="https://ionic-docs-demo.herokuapp.com/assets/avatar.svg" 
+      [hidden]="client.photo?.loaded">
+
+        <h3 id="profile1-name">{{client.firstname}} {{client.lastname}}</h3>
+        <!--<p>{{(profile2 | async)?.company}} &bull; {{(profile2 | async)?.position}}</p> -->
+        <!-- <p class="profile1-description">{{(agent | async)?.position}} of {{(agent | async)?.company}}</p>
+        <ion-icon style="font-size: 18px !important;" color="warning" *ngFor="let i of [0,1,2,3,4]"
+          [name]="i < (agent | async)?.rating  ? 'star' : 'star-outline'"></ion-icon> -->
+      </div>
+
+
+
+        <ion-row>
+          <!-- <ion-col  class="padding-left-25" size-lg="6" size-md="6" size-sm="12" size="12">
+            
+            <ion-item lines="none">
+              <h1 class="main-header5">About me</h1>
+            </ion-item>
+
+            <ion-item lines="none">
+              <p>{{(agent | async)?.about_me}}</p>
+            </ion-item>
+          </ion-col> -->
+
+
+
+          <ion-col class="padding-left-25" size-lg="6" size-md="6" size-sm="12" size="12">
+
+            <!--***********  Contact  ***********-->
+            <ion-item lines="none">
+              <h1 class="main-header5">Details</h1>
+            </ion-item>
+            <ion-list>
+              <ion-item lines="none">
+                <ion-icon slot="start" name="pin-outline" item-left></ion-icon>
+                <ion-label>
+                  <h2>Preferred Area</h2>
+                  <p>Westdene</p>
+                </ion-label>
+              </ion-item>
+              <ion-item lines="none">
+                <ion-icon slot="start" name="school-outline" item-left></ion-icon>
+                <ion-label>
+                  <h2>Institution & Campus</h2>
+                  <p>UJ Kingsway</p>
+                </ion-label>
+              </ion-item>
+              <ion-item lines="none">
+                <ion-icon slot="start" name="bed-outline" item-left></ion-icon>
+                <ion-label>
+                  <h2>Room Type</h2>
+                  <p>Single Room</p>
+                </ion-label>
+              </ion-item>
+              <ion-item lines="none">
+                <ion-icon slot="start" name="calculator-outline" item-left></ion-icon>
+                <ion-label>
+                  <h2>Max Rent</h2>
+                  <p>R4000</p>
+                </ion-label>
+              </ion-item>
+              <ion-item lines="none">
+                <ion-icon slot="start" name="card-outline" item-left></ion-icon>
+                <ion-label>
+                  <h2>Funding Type</h2>
+                  <p>Self funded</p>
+                </ion-label>
+              </ion-item>
+              <ion-item lines="none">
+                <ion-icon slot="start" name="male-female-outline" item-left></ion-icon>
+                <ion-label>
+                  <h2>Gender Prefference</h2>
+                  <p>Mixed</p>
+                </ion-label>
+              </ion-item>
+              <ion-item lines="none">
+                <ion-icon slot="start" name="car-outline" item-left></ion-icon>
+                <ion-label>
+                  <h2>Parking needed</h2>
+                  <p>Yes</p>
+                </ion-label>
+              </ion-item>
+              <ion-item lines="none">
+                <ion-icon slot="start" name="document-outline" item-left></ion-icon>
+                <ion-label>
+                  <h2>Special needs</h2>
+                  <p>I want a muslim-friendly res</p>
+                </ion-label>
+              </ion-item>
+              <ion-item lines="none">
+                <ion-icon slot="start" name="mail-outline" item-left></ion-icon>
+                <ion-label>
+                  <h2>ceo@cemo.com</h2>
+                  <p>work email</p>
+                </ion-label>
+
+              </ion-item>
+
+              <ion-item lines="none">
+                <ion-icon slot="start" name="call-outline" item-left></ion-icon>
+                <ion-label>
+                  <h2>009923124322</h2>
+                  <p>mobile phone</p>
+                </ion-label>
+
+              </ion-item>
+
+              
+            </ion-list>
+          </ion-col>
+
+
+        </ion-row>
+
+      <!--***********  Properties lists  ***********-->
+  </ion-grid>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="6">
+        <ion-button (click)="acceptJob()" >Accept</ion-button>
+      </ion-col>
+      <ion-col size="6">
+        <ion-button fill="outline" (click)="decline()" >Decline</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>

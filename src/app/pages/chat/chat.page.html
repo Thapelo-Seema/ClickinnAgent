@@ -1,91 +1,129 @@
-<ion-header>
-  <ion-navbar color="clickinn">
-    <ion-title>{{threadInfo?.displayName}}</ion-title>
-  </ion-navbar>
-</ion-header>
+<!-- <ion-header>
+  <ion-toolbar color="thapsblue">
+    <ion-title>{{user?.firstname}}</ion-title>
+  </ion-toolbar>
+</ion-header> -->
 
-<ion-content padding>
+<ion-content>
+	<!-- <p class="results-header">Results</p> -->
+	<ion-item >
 	
+		<ion-slides class="swiper-container ion-border-bottom" pager= false [options]="slideOption" #slidesOne>
+
+			<ion-slide tappable class="swiper-slide" *ngFor="let room of rooms; let i = index" (click)="selectRoom(i)">
+				<ion-grid>
+					<ion-row class="ion-justify-content-center">
+						<ion-col class="ion-no-margin ion-no-padding">
+							<p class="ion-no-margin ion-no-padding">
+								<ion-text class="price-font ion-no-margin ion-no-padding" color="thapsblue">
+									<b>{{room.rent | currency : 'R' : 'symbol' :'1.0-0' }}</b>
+								</ion-text>
+							</p>
+						</ion-col>
+					</ion-row>
+					<ion-row class="ion-justify-content-center">
+						<ion-col class="ion-no-padding ion-no-margin">
+							<div class="agent-icon">
+								<ion-avatar mode="ios">
+									<img class="room-img" src="{{room.display_pic_url}}" (load)="updateRoomPicLoaded(i)" [hidden]="!room.dp_loaded">
+									<img class="room-img" src="../../../assets/imgs/plain-gray-background.jpeg" [hidden]="room.dp_loaded">
+								</ion-avatar>
+								<ion-icon *ngIf="selected_rooms[i] != null" color="danger" class="my-icon" name="checkmark-circle-outline"></ion-icon>
+							</div>
+						</ion-col>
+					</ion-row>
+					
+					<ion-row class="ion-justify-content-center">
+						<ion-col class="ion-no-margin ion-no-padding">
+							
+								<ion-text class="location-font ion-no-margin ion-no-padding" color="thapsblue" style="overflow: hidden;">
+									<b>{{room.room_type}}  </b>
+									<!-- {{room.property.address.place_name}} -->
+								</ion-text>
+						
+						</ion-col>
+					</ion-row>
+				</ion-grid>
+			</ion-slide>
+		</ion-slides>
+	</ion-item>
 	<ion-grid no-padding>
 		<ion-row>
-			<ion-col col-0 col-sm-0 col-md-0 col-lg-3>
-			</ion-col>
-			<ion-col col-12 col-sm-12 col-md-12 col-lg-6>
-				<ion-item no-lines text-wrap style="border-radius: 7px; background: rgba(0, 200,0, 0.8); color: white">
-					<p text-center style="color: white">
-						Text and attach apartments to clarify your messages 
-					</p>
-					<ion-buttons end>
-						<button ion-button small clear>
-							<div style="color: #32db64">
-								<!-- personnel ~ {{channel?.creator?.firstname}} {{channel?.creator?.lastname}} -->
-							</div>
-						</button>
-					</ion-buttons>
-				</ion-item>
-				<div *ngIf="noMessages == true" style="color: lightgray; text-align: center;"> 
-					<h1>No Chats</h1>
-					<p>You have no chats yet</p>
-				</div>
-				<ion-list>
-					<ion-card *ngFor="let msg of thread | async; let i = index" style="border-radius: 7px; ">
-					  <ion-item text-wrap *ngIf="msg?.topic" style="color: white; background: #000190">
-					    {{msg?.topic}} 
-					  </ion-item>
-					  <ion-item text-wrap *ngIf="msg?.attachment" style="color: white; background: #000190" (click)="gotoApartment(msg?.attachment)" >
-					    <ion-avatar item-start>
-					        <img src="{{msg?.attachment?.dP?.url}}" (load)="imagesLoaded[i] = true" [hidden]="!imagesLoaded[i]" imageViewer/>
-					        <img src="assets/imgs/placeholder.jpg" [hidden]="imagesLoaded[i]" />
-					    </ion-avatar>
-					    <p style="color: white;">{{msg?.attachment?.room_type}}, R{{msg?.attachment?.price}}</p>
-					    <p style="color: white;">{{returnFirst(msg?.attachment?.property?.description)}}</p> 
-					  </ion-item>
-					  <ion-card-content padding-top *ngIf="user?.uid != msg?.by?.uid" style="background: #FCF3CF">
-					    <p style="padding-top: 7px">{{msg?.text}}</p>
-					  </ion-card-content>
-					  <ion-card-content *ngIf="user?.uid == msg?.by?.uid">
-					    <p style="padding-top: 7px">{{msg?.text}}</p>
-					  </ion-card-content>
-					  <ion-row *ngIf="user?.uid != msg?.by?.uid" style="background: #FCF3CF">
-					  	<ion-col>
-					  	</ion-col>
-					    <ion-col>
-					    </ion-col>
-					    <ion-col center text-center>
-					      <ion-note>
-					      	{{msg?.timeStamp | timeAgo | async}}
-					      </ion-note>
-					    </ion-col>
-					  </ion-row>
-					  <ion-row *ngIf="user?.uid == msg?.by?.uid">
-					  	<ion-col>
-					  	</ion-col>
-					    <ion-col>
-					    	<button *ngIf="msg?.seen == true" ion-button clear><ion-icon name="done-all" ></ion-icon></button>
-					    </ion-col>
-					    <ion-col center text-center>
-					      <ion-note>
-					      	{{msg?.timeStamp | timeAgo | async}}
-					      </ion-note>
-					    </ion-col>
-					  </ion-row>
+			<ion-list style="background-color:transparent; width: 100%;">
+				<div style="margin: 0; padding: 0;" *ngFor="let msg of thread.chat_messages ; let i = index">
+					<ion-card class="msg-class" *ngIf="msg.from == user.uid" >
+						<div *ngIf="msg?.highlight?.message || msg.rooms.length > 0" class="ion-no-padding ion-no-margin">
+							<ion-slides class="swiper-container" pager= false [options]="slideOption" #slidesOne>
+								<ion-slide tappable class="swiper-slide ion-no-padding ion-no-margin" *ngFor="let room of msg.rooms; let j = index" (click)="openRoom(room.room_id)">
+									<ion-grid>
+										<ion-row class="ion-justify-content-center">
+											<ion-col class="ion-no-padding ion-no-margin">
+												<div class="agent-icon">
+													<ion-avatar mode="ios">
+														<img class="room-img" src="{{room.display_pic_url}}" (load)="updateRoomPicLoaded(i)" [hidden]="!room.dp_loaded">
+														<img class="room-img" src="../../../assets/imgs/plain-gray-background.jpeg" [hidden]="room.dp_loaded">
+													</ion-avatar>
+												</div>
+											</ion-col>
+										</ion-row>
+									</ion-grid>
+								</ion-slide>
+								</ion-slides>
+							<ion-item *ngIf="msg?.highlight">
+								{{msg?.highlight?.message}} 
+							</ion-item>
+						</div>
+						<ion-card-content padding-top style="background: #FCF3CF; width: 100%;">
+							<p>{{msg?.message}}</p>
+							<p class="ion-no-padding ion-no-margin ion-text-right">
+								2 mins ago
+							</p>
+						</ion-card-content>
 					</ion-card>
-				</ion-list>
-			</ion-col>
-			<ion-col col-0 col-sm-0 col-md-0 col-lg-3>
-			</ion-col>
+					<ion-card class="msg2-class" *ngIf="msg.from != user.uid" >
+						<div *ngIf="msg?.highlight?.message || msg.rooms.length > 0" class="ion-no-padding ion-no-margin">
+							<ion-slides class="swiper-container" pager= false [options]="slideOption" #slidesOne>
+								<ion-slide tappable class="swiper-slide ion-no-padding ion-no-margin" *ngFor="let room of msg.rooms; let j = index" (click)="openRoom(room.room_id)">
+									<ion-grid>
+										<ion-row class="ion-justify-content-center">
+											<ion-col class="ion-no-padding ion-no-margin">
+												<div class="agent-icon">
+													<ion-avatar mode="ios">
+														<img class="room-img" src="{{room.display_pic_url}}" (load)="updateRoomPicLoaded(i)" [hidden]="!room.dp_loaded">
+														<img class="room-img" src="../../../assets/imgs/plain-gray-background.jpeg" [hidden]="room.dp_loaded">
+													</ion-avatar>
+												</div>
+											</ion-col>
+										</ion-row>
+									</ion-grid>
+								</ion-slide>
+								</ion-slides>
+							<ion-item *ngIf="msg?.highlight">
+								{{msg?.highlight?.message}} 
+							</ion-item>
+						</div>
+						<ion-card-content padding-top style="background: #d9cffc; width: 100%;">
+							<ion-checkbox mode="ios" (ionChange)="msgHighlight($event, i)"></ion-checkbox>
+							<p>{{msg?.message}}</p>
+							<p class="ion-no-padding ion-no-margin ion-text-right">
+								2 mins ago
+							</p>
+						</ion-card-content>
+					</ion-card>
+				</div>
+			</ion-list>
 		</ion-row>
 	</ion-grid>
 </ion-content>
 <ion-footer>
 	<ion-item class="chatroom_input">
-			<ion-textarea rows="2" placeholder="Type message here..." [(ngModel)]="text" 
-			(keydown)="handleSubmit($event)"></ion-textarea>
-	    <button ion-button clear item-right (click)="send()">
-	      <ion-icon name="send" style="font-size: 30px"></ion-icon>
-	    </button>
-	    <button ion-button  clear item-right (click)="attachApartment()">
+			<ion-textarea auto-grow="true" cols="8" placeholder="Type message here..." [(ngModel)]="new_message.message" 
+			(keydown)="handleTyping($event)"></ion-textarea>
+	    <ion-button fill="clear" color="thapsblue" (click)="send()">
+	      <ion-icon name="paper-plane-outline" style="font-size: 30px"></ion-icon>
+	    </ion-button>
+	    <!-- <button ion-button  clear item-right (click)="attachApartment()">
 	      <ion-icon name="attach" style="font-size: 30px"></ion-icon>
-	    </button>
+	    </button> -->
 	</ion-item>
 </ion-footer>
