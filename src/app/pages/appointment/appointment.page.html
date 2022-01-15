@@ -1,9 +1,16 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>appointment</ion-title>
+  <ion-toolbar color="thapsblue">
+    <ion-buttons slot="start">
+      <ion-back-button mode="md" color="light" defaultHref="#"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Viewing Appointment</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+
+  <ion-datetime show-default-buttons=true (ionChange)="updateAppointment($event)" >
+
+  </ion-datetime>
 
 </ion-content>

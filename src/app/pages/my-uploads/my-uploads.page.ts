@@ -12,6 +12,7 @@ import { take } from 'rxjs/operators';
 export class MyUploadsPage implements OnInit {
 
   my_rooms: Room[] = [];
+  agent_id: string = "";
   constructor(
     private activated_route: ActivatedRoute, 
     private router: Router, 
@@ -19,7 +20,8 @@ export class MyUploadsPage implements OnInit {
 
   ngOnInit() {
     if(this.activated_route.snapshot.paramMap.get("uid")){
-      this.room_svc.getUserRooms(this.activated_route.snapshot.paramMap.get("uid"))
+      this.agent_id = this.activated_route.snapshot.paramMap.get("uid");
+      this.room_svc.getUserRooms(this.agent_id)
       .pipe(take(1))
       .subscribe(rooms =>{
         console.log(rooms);
@@ -33,7 +35,7 @@ export class MyUploadsPage implements OnInit {
   }
 
   gotoRoom(room_id){
-    this.router.navigate(['/room', {'room_id': room_id}]);
+    this.router.navigate(['/room', {'room_id': room_id, 'agent_id': this.agent_id }]);
   }
 
 }

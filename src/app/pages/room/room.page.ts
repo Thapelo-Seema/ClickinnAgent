@@ -25,6 +25,7 @@ export class RoomPage implements OnInit {
 
   parentPath:any;
   uploader_pic_loaded: boolean = false;
+  agent_id: string = '';
 
   //****** image slide  *******/
   sliderOpts = {
@@ -40,7 +41,6 @@ export class RoomPage implements OnInit {
   //**** favorite  ****/
   favorite: boolean = false;
   favArray: any;
-  fav
   heartType: string = "heart-empty";
 
   recommenedItems: Observable<any[]>;
@@ -89,6 +89,9 @@ export class RoomPage implements OnInit {
         console.log(this.pictures)
       })
     }
+    if(this.activatedRoute.snapshot.paramMap.get("agent_id")){
+      this.agent_id = this.activatedRoute.snapshot.paramMap.get("agent_id");
+    }
   }
 
   ngOnDestroy() {
@@ -114,13 +117,12 @@ export class RoomPage implements OnInit {
    });
   }
 
-  openImageViewer(image) {
-    
+  gotoAppointment(){
+    this.router.navigate(['/appointment', {'rooms': [this.room.room_id], 
+    'agent_id': this.room.property.uploader_id, 'client_id':  this.agent_id}]);
   }
 
   async getPlaceDetail(){
-
-
 
     //this.itemDetail =  await this.realestateService.getHouseDetail( this.itemId);
 

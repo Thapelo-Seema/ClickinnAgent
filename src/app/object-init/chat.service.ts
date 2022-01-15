@@ -11,6 +11,7 @@ export class ChatService {
 
   defaultMessage(){
     let msg: ChatMessage ={
+      appointment: null,
       delivered: false,
       from: "",
       highlight: null,
@@ -26,6 +27,7 @@ export class ChatService {
 
   copyMessage(_msg: ChatMessage){
     let msg: ChatMessage ={
+      appointment: _msg.appointment || null,
       delivered: _msg.delivered || false,
       from: _msg.from || "",
       highlight: _msg.highlight || null,

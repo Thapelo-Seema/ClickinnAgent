@@ -11,12 +11,12 @@
       <!-- <ion-title  class="main-header4" color="light" [class.show-title]="showToolbar">{{(itemDetail | async)?.title}}</ion-title> -->
 
       <ion-buttons color="light" slot="end">
-        <!-- <ion-button color="light">
-          <ion-icon slot="icon-only" ios="call-outline" md="call-sharp"></ion-icon>
-        </ion-button> -->
+        <ion-button color="light">
+          <ion-icon slot="icon-only" ios="heart-outline"></ion-icon>
+        </ion-button>
 
         <ion-button color="light" routerLink="/home" routerDirection="root">
-          <ion-icon slot="icon-only" ios="home-outline" md="share-sharp"></ion-icon>
+          <ion-icon slot="icon-only" ios="home-outline"></ion-icon>
         </ion-button>
       </ion-buttons>
     </ion-toolbar>
@@ -266,9 +266,8 @@
         
 
         <ion-row>
+          <!--*********** location ***********-->
           <ion-col size-lg="6" size-md="6" size-sm="12" size="12">
-
-            <!--*********** location ***********-->
             <ion-item lines="none">
               <h1 class="main-header5">Location</h1>
             </ion-item>
@@ -283,12 +282,9 @@
                 </h2>
               </ion-label>
             </ion-item>
-
           </ion-col>
 
           <ion-col size-lg="6" size-md="6" size-sm="12" size="12">
-
-            <!--*********** Contact ***********-->
             <ion-item lines="none" *ngIf="room.property.uploader_pic">
               <h1 class="main-header5">Contact agent</h1>
             </ion-item>
@@ -298,12 +294,8 @@
 			          <img src="../../../assets/imgs/plain-gray-background.jpeg" [hidden]="uploader_pic_loaded">
               </ion-avatar>
               <ion-label>
-                <!-- <h3 class="main-header6">{{(itemDetail | async)?.agentId}}</h3> -->
                 <h3 class="main-header6">{{room.property.uploader_name}}</h3>
                 <h3 class="main-header6">Agent</h3>
-                <!-- <ion-icon style="font-size: 16px !important;" color="warning" *ngFor="let i of [0,1,2,3,4]"
-                  [name]="i < (agentDetail | async)?.rating  ? 'star' : 'star-outline'"></ion-icon> -->
-                <!-- <p class="main-b-header9"  (click)="logout()">LOGOUT</p> -->
               </ion-label>
             </ion-item>
           </ion-col>
@@ -312,21 +304,21 @@
       </ion-grid>
       </div>
     </ion-grid>
-    <!-- <ion-grid>
+    <ion-grid>
       <ion-row>
         <ion-col>
-          <ion-button  expand="block" color="pumpkin">
+          <ion-button id="open-modal"  expand="block" (click)="gotoAppointment()">
             <ion-icon slot="start" name="call-outline"></ion-icon>
-            CALL
+            Set Viewing Appointment
           </ion-button>
         </ion-col>
         <ion-col>
-          <ion-button  expand="block" color="pumpkin" >
+          <ion-button  expand="block">
             <ion-icon slot="start" name="mail-outline"></ion-icon>
-            E-MAIL
+            Chat With Agent
           </ion-button>
         </ion-col>
       </ion-row>
-    </ion-grid> -->
+    </ion-grid>
 </ion-content>
 

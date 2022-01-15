@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ChattService } from '../../services/chatt.service';
 import { ChatService } from '../../object-init/chat.service';
 import { RoomService } from '../../services/room.service';
@@ -9,6 +9,8 @@ import { UserService } from '../../services/user.service';
 import { User } from 'src/app/models/user.model';
 import { UsersService } from '../../object-init/users.service';
 import { ChatMessage } from '../../models/chat-message.model';
+import { IonDatetime } from '@ionic/angular';
+import { format, parseISO } from 'date-fns';
 
 @Component({
   selector: 'app-chat',
@@ -17,6 +19,7 @@ import { ChatMessage } from '../../models/chat-message.model';
 })
 export class ChatPage implements OnInit {
 
+  @ViewChild(IonDatetime, {static: true}) datetime: IonDatetime;
   user: User;
   rooms: Room[] = [];
   thread: ChatThread;
@@ -69,6 +72,22 @@ export class ChatPage implements OnInit {
 
   }
 
+  confirm(){
+    this.datetime.confirm(true);
+  }
+
+  cancel(){
+    this.datetime.cancel(true);
+  }
+
+  updateAppointment(event){
+    this.formatDate(event.detail.value);
+  }
+
+  formatDate(value: string){
+    console.log(format(parseISO(value), 'MMM dd yyyy'));
+  }
+
   send(){
     this.new_message.time = Date.now();
     this.new_message.message_id = this.thread.chat_messages.length > 0 ? this.thread.chat_messages.length - 1: 0;
@@ -92,6 +111,13 @@ export class ChatPage implements OnInit {
       })
     }
     this.new_message = this.chat_init_svc.defaultMessage();
+    this.resetSelectedRooms();
+  }
+
+  setAppointment(){
+    this.router.navigate(['/appointment', {'agent_id': this.user.uid, 
+    'client_id': this.thread.client ? this.thread.client.uid : '', 
+    'rooms': this.generateSelectedRoomIds(), 'thread_id': this.thread.thread_id}])
   }
 
   updateRoomPicLoaded(i){
@@ -99,12 +125,27 @@ export class ChatPage implements OnInit {
   }
 
   selectRoom(i){
+    //selected_rooms[i] holds the index of rooms[i] in new_message.rooms array
     if(this.selected_rooms[i] == null){
       this.selected_rooms[i] = this.new_message.rooms.push(this.rooms[i]) - 1;
     }else{
       this.new_message.rooms.splice(this.selected_rooms[i]);
       this.selected_rooms[i] = null;
     }
+  }
+
+  generateSelectedRoomIds(){
+    let room_arr = [];
+    this.new_message.rooms.forEach(r =>{
+      room_arr.push(r.room_id)
+    })
+    return room_arr;
+  }
+
+  resetSelectedRooms(){
+    for(let i = 0; i < this.selected_rooms.length; i++){
+      this.selected_rooms[i] = null;
+    } 
   }
 
   msgHighlight(event, i){

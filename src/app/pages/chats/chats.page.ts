@@ -12,6 +12,7 @@ import { ChatThread } from 'src/app/models/chat-thread.model';
 export class ChatsPage implements OnInit {
 
   chats: ChatThread[] = [];
+  uid: string = "";
   constructor(
     private chat_init_svc: ChatService, 
     private chat_svc: ChattService,
@@ -20,7 +21,8 @@ export class ChatsPage implements OnInit {
 
   ngOnInit() {
     if(this.activated_route.snapshot.paramMap.get("uid")){
-      this.chat_svc.getUserThreads(this.activated_route.snapshot.paramMap.get("uid"))
+      this.uid = this.activated_route.snapshot.paramMap.get("uid");
+      this.chat_svc.getUserThreads(this.uid)
       .subscribe(chts =>{
         console.log(chts);
         this.chats = chts;
@@ -33,7 +35,7 @@ export class ChatsPage implements OnInit {
   }
 
   gotoThread(thread_id){
-    this.router.navigate(['/chat', {'thread_id': thread_id}]);
+    this.router.navigate(['/chat', {'thread_id': thread_id, 'uid': this.uid}]);
   }
 
 }
