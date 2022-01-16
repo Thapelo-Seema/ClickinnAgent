@@ -15,4 +15,5 @@ export interface RoomSearch{
 	special_needs: string;
 	completed: boolean;
 	id: string;
+	time: number;
 }
