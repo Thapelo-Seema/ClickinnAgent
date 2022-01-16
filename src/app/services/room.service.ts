@@ -142,4 +142,10 @@ export class RoomService {
   getRoom(id: string){
     return this.afs.collection('Rooms').doc<Room>(id).valueChanges();
   }
+
+  getRoomsIn(room_ids: string[]){
+    return this.afs.collection<Room>('Rooms', ref =>
+    ref.where('room_id', 'in', room_ids))
+    .valueChanges();
+  }
 }

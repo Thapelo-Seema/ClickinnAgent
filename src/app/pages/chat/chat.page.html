@@ -25,12 +25,10 @@
 				
 				<ion-row class="ion-justify-content-center">
 					<ion-col class="ion-no-margin ion-no-padding">
-						
-							<ion-text class="price-font ion-no-margin ion-no-padding" color="thapsblue" style="overflow: hidden;">
-								{{room.room_type}} 
-								<!-- {{room.property.address.place_name}} -->
-							</ion-text>
-					
+						<ion-text class="price-font ion-no-margin ion-no-padding" color="thapsblue" style="overflow: hidden;">
+							{{room.room_type}} 
+							<!-- {{room.property.address.place_name}} -->
+						</ion-text>
 					</ion-col>
 				</ion-row>
 			</ion-grid>
@@ -38,68 +36,54 @@
 	</ion-slides>
 </ion-header>
 
-<ion-content color="light">
+<ion-content #content>
 	
 	<ion-grid no-padding>
 		<ion-row>
 			<ion-list style="background-color:transparent; width: 100%;">
 				<div style="margin: 0; padding: 0;" *ngFor="let msg of thread.chat_messages ; let i = index">
+					<div *ngIf="msg?.highlight?.message" class="ion-no-padding ion-no-margin">
+						<ion-slides class="swiper-container" pager= false [options]="slideOption" #slidesOne>
+							<ion-slide tappable class="swiper-slide ion-no-padding ion-no-margin" *ngFor="let room of msg.rooms; let j = index" (click)="openRoom(room.room_id)">
+								<ion-grid>
+									<ion-row class="ion-justify-content-center">
+										<ion-col class="ion-no-padding ion-no-margin">
+											<div class="agent-icon">
+												<ion-avatar mode="ios">
+													<img class="room-img" src="{{room.display_pic_url}}" (load)="updateRoomPicLoaded(i)" [hidden]="!room.dp_loaded">
+													<img class="room-img" src="../../../assets/imgs/plain-gray-background.jpeg" [hidden]="room.dp_loaded">
+												</ion-avatar>
+											</div>
+										</ion-col>
+									</ion-row>
+								</ion-grid>
+							</ion-slide>
+						</ion-slides>
+					</div>
 					<ion-card class="msg-class" *ngIf="msg.from == user.uid" >
-						<div *ngIf="msg?.highlight?.message || msg.rooms.length > 0" class="ion-no-padding ion-no-margin">
-							<ion-slides class="swiper-container" pager= false [options]="slideOption" #slidesOne>
-								<ion-slide tappable class="swiper-slide ion-no-padding ion-no-margin" *ngFor="let room of msg.rooms; let j = index" (click)="openRoom(room.room_id)">
-									<ion-grid>
-										<ion-row class="ion-justify-content-center">
-											<ion-col class="ion-no-padding ion-no-margin">
-												<div class="agent-icon">
-													<ion-avatar mode="ios">
-														<img class="room-img" src="{{room.display_pic_url}}" (load)="updateRoomPicLoaded(i)" [hidden]="!room.dp_loaded">
-														<img class="room-img" src="../../../assets/imgs/plain-gray-background.jpeg" [hidden]="room.dp_loaded">
-													</ion-avatar>
-												</div>
-											</ion-col>
-										</ion-row>
-									</ion-grid>
-								</ion-slide>
-							</ion-slides>
-							<ion-item class="ion-text-nowrap highlight-font" *ngIf="msg?.highlight" lines="none">
-								<p>{{msg?.highlight?.message}}</p>
-							</ion-item>
-						</div>
-						<ion-card-content padding-top style="background: #FCF3CF; width: 100%;">
+						<ion-item *ngIf="msg?.highlight"  color="light" lines="none">
+							<ion-label>
+								<p class="highlight-font">{{msg?.highlight?.message}}</p>
+							</ion-label>
+						</ion-item>
+						<ion-card-content padding-top style="background: #f5f1e3; width: 100%;">
 							<p>{{msg?.message}}</p>
-							<p class="ion-no-padding ion-no-margin ion-text-right">
-								2 mins ago
+							<p class="ion-no-padding ion-no-margin ion-text-right time-font">
+								{{timeAgo(msg?.time)}}
 							</p>
 						</ion-card-content>
 					</ion-card>
 					<ion-card class="msg2-class" *ngIf="msg.from != user.uid" >
-						<div *ngIf="msg?.highlight?.message || msg.rooms.length > 0" class="ion-no-padding ion-no-margin">
-							<ion-slides class="swiper-container" pager= false [options]="slideOption" #slidesOne>
-								<ion-slide tappable class="swiper-slide ion-no-padding ion-no-margin" *ngFor="let room of msg.rooms; let j = index" (click)="openRoom(room.room_id)">
-									<ion-grid>
-										<ion-row class="ion-justify-content-center">
-											<ion-col class="ion-no-padding ion-no-margin">
-												<div class="agent-icon">
-													<ion-avatar mode="ios">
-														<img class="room-img" src="{{room.display_pic_url}}" (load)="updateRoomPicLoaded(i)" [hidden]="!room.dp_loaded">
-														<img class="room-img" src="../../../assets/imgs/plain-gray-background.jpeg" [hidden]="room.dp_loaded">
-													</ion-avatar>
-												</div>
-											</ion-col>
-										</ion-row>
-									</ion-grid>
-								</ion-slide>
-							</ion-slides>
-							<ion-item class="ion-text-nowrap highlight-font" *ngIf="msg?.highlight" lines="none">
-								<p>{{msg?.highlight?.message}}</p>
-							</ion-item>
-						</div>
-						<ion-card-content padding-top style="background: #e7e2f8; width: 100%;">
+						<ion-item color="light" *ngIf="msg?.highlight" lines="none">
+							<ion-label>
+								<p class="highlight-font">{{msg?.highlight?.message}}</p>
+							</ion-label>
+						</ion-item>
+						<ion-card-content padding-top style="background: #f2eff8; width: 100%;">
 							<ion-checkbox mode="ios" (ionChange)="msgHighlight($event, i)"></ion-checkbox>
 							<p>{{msg?.message}}</p>
-							<p class="ion-no-padding ion-no-margin ion-text-right">
-								2 mins ago
+							<p class="ion-no-padding ion-no-margin ion-text-right time-font">
+								{{timeAgo(msg?.time)}}
 							</p>
 						</ion-card-content>
 					</ion-card>
@@ -112,14 +96,15 @@
 	<ion-grid>
 		<ion-row>
 			<ion-col size="9">
-				<ion-textarea mode="ios" class="msg-textarea" auto-grow="true" cols="6" placeholder=" Type message here..." [(ngModel)]="new_message.message" 
+				<ion-textarea mode="ios" class="msg-textarea" auto-grow="true" cols="6" 
+				placeholder=" Type message here..." [(ngModel)]="new_message.message" 
 					(keydown)="handleTyping($event)">
 				</ion-textarea>
 			</ion-col>
 			<ion-col size="3">
 				<div>
 					<ion-button fill="clear" color="thapsblue" (click)="send()">
-						<ion-icon name="paper-plane-outline" style="font-size: 30px"></ion-icon>
+						<ion-icon name="paper-plane" style="font-size: 30px"></ion-icon>
 					</ion-button>
 					<ion-button id="open-modal" fill="clear" color="thapsblue" (click)="setAppointment()">
 						<ion-icon name="calendar-number-outline" style="font-size: 30px"></ion-icon>

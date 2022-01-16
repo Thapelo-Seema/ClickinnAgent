@@ -8,7 +8,7 @@
 </ion-header>
 
 <ion-content>
-  <ion-item *ngFor="let room of my_rooms; let i = index" (click)="gotoRoom(room.room_id)" >
+  <ion-item *ngFor="let room of my_rooms; let i = index" (click)="gotoRoom(room.room_id)" class="ion-margin">
     <ion-avatar slot="start">
       <img src="{{room.display_pic_url}}" (load)="updateDisplayPicLoaded(i)" [hidden]="!room.dp_loaded">
 			<img src="../../../assets/imgs/plain-gray-background.jpeg" [hidden]="room.dp_loaded">

@@ -9,8 +9,17 @@
 
 <ion-content>
 
-  <ion-datetime show-default-buttons=true (ionChange)="updateAppointment($event)" >
+  
 
+  <ion-datetime (ionChange)="datetimeChanged($event)">
+    <ion-buttons>
+      <ion-button>
+        Confirm Appointment
+      </ion-button>
+      <ion-button>
+        Cancel
+      </ion-button>
+    </ion-buttons>
   </ion-datetime>
 
 </ion-content>

@@ -7,7 +7,7 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  <ion-item *ngFor="let chat of chats; let i = index" (click)="gotoThread(chat.thread_id)" >
+  <ion-item *ngFor="let chat of chats; let i = index" (click)="gotoThread(chat.thread_id)" class="ion-margin">
     <ion-avatar slot="start">
       <!-- <img src="{{chat.client?.photoURL}}" (load)="updateDisplayPicLoaded(i)" [hidden]="!chat.client?.dp_loaded"> -->
 			<img src="https://ionic-docs-demo.herokuapp.com/assets/avatar.svg">

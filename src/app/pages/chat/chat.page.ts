@@ -9,17 +9,18 @@ import { UserService } from '../../services/user.service';
 import { User } from 'src/app/models/user.model';
 import { UsersService } from '../../object-init/users.service';
 import { ChatMessage } from '../../models/chat-message.model';
-import { IonDatetime } from '@ionic/angular';
-import { format, parseISO } from 'date-fns';
+import { IonDatetime, IonContent } from '@ionic/angular';
+import { format, parseISO, formatDistance } from 'date-fns';
 
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.page.html',
   styleUrls: ['./chat.page.scss'],
 })
-export class ChatPage implements OnInit {
+export class ChatPage implements OnInit{
 
   @ViewChild(IonDatetime, {static: true}) datetime: IonDatetime;
+  @ViewChild(IonContent, {read: IonContent, static: false}) content: IonContent;
   user: User;
   rooms: Room[] = [];
   thread: ChatThread;
@@ -41,9 +42,15 @@ export class ChatPage implements OnInit {
     this.thread = this.chat_init_svc.defaultThread();
     this.user = this.user_init_svc.defaultUser();
     this.new_message = this.chat_init_svc.defaultMessage();
+    
+  }
+
+  ionViewWillEnter(){
+    this.content.scrollToBottom(300);
   }
 
   ngOnInit(){
+    
     if(this.activated_route.snapshot.paramMap.get("thread_id")){
       this.chat_svc.getThread(this.activated_route.snapshot.paramMap.get("thread_id"))
       .subscribe(thd =>{
@@ -88,6 +95,10 @@ export class ChatPage implements OnInit {
     console.log(format(parseISO(value), 'MMM dd yyyy'));
   }
 
+  timeAgo(date){
+    return formatDistance(date, Date.now(), {addSuffix: true});
+  }
+
   send(){
     this.new_message.time = Date.now();
     this.new_message.message_id = this.thread.chat_messages.length > 0 ? this.thread.chat_messages.length - 1: 0;
@@ -112,6 +123,7 @@ export class ChatPage implements OnInit {
     }
     this.new_message = this.chat_init_svc.defaultMessage();
     this.resetSelectedRooms();
+    this.content.scrollToBottom(300);
   }
 
   setAppointment(){

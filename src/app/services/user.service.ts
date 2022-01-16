@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { User } from '../models/user.model';
 import { Observable } from 'rxjs';
+import { Client } from '../models/client.model';
 //import { Agent } from '../models/agent.model';
 
 @Injectable({
@@ -30,6 +31,14 @@ export class UserService {
   //Takes the user id (uid) as a parameter and returns a User Observable
   getUser(uid: string):Observable<User>{
     return this.afs.collection('Agents').doc<User>(uid).valueChanges();
+  }
+
+  getClient(uid: string){
+    return this.afs.collection('Users').doc<Client>(uid).valueChanges();
+  }
+
+  updateClient(client: Client){
+    return this.afs.collection('Users').doc(client.uid).update(client);
   }
 
   signupUser(firstname, lastname, phone, username, password): Promise<any>{
