@@ -19,6 +19,7 @@ export class AppointmentPage implements OnInit {
 
   @ViewChild(IonDatetime, {static: true}) datetime: IonDatetime;
   appointment: Appointment = {
+    location: null,
     agent: null,
     appointment_id: "",
     client: null,
@@ -31,6 +32,11 @@ export class AppointmentPage implements OnInit {
     time_modified: 0,
     seen: false
   }
+  slideOption = {
+    slidesPerView: 'auto',
+    grabCursor: true
+  };
+  show_datetime: boolean = false;
 
   constructor(
     private appointment_svc: AppointmentService,
@@ -78,10 +84,22 @@ export class AppointmentPage implements OnInit {
 
     }else{
       this.appointment_svc.getAppointment(this.activated_route.snapshot.paramMap.get('appointment_id'))
-      .subscribe(appt =>[
-        this.appointment = appt
-      ])
+      .subscribe(appt =>{
+        this.appointment = this.appointment_svc.copyAppointment(appt);
+      })
     }
+  }
+
+  showDatePicker(){
+    this.show_datetime = !this.show_datetime;
+  }
+
+  openRoom(room_id){
+    this.router.navigate(['/room', {'room_id': room_id}]);
+  }
+
+  updateRoomPicLoaded(i){
+    this.appointment.rooms[i].dp_loaded = true;
   }
 
   datetimeChanged(event){
@@ -113,6 +131,20 @@ export class AppointmentPage implements OnInit {
         console.log(err);
       })
     }
+  }
+
+  cancelAppointment(){
+
+  }
+
+  confirmDatetime(){
+    //this.datetime.confirm(true);
+    this.showDatePicker();
+  }
+
+  cancelDatetime(){
+    //this.datetime.cancel(true);
+    this.showDatePicker();
   }
 
 

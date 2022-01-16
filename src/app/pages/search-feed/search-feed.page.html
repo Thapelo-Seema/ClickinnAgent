@@ -1,12 +1,49 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="thapsblue">
     <ion-buttons slot="start">
       <ion-back-button mode="md" color="light" defaultHref="#"></ion-back-button>
     </ion-buttons>
-    <ion-title>search-feed</ion-title>
+    <ion-title>Search feed</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col size-sm="0" size-lg="2">
+      </ion-col>
+      <ion-col size="12" size-lg="8">
+        <ion-list style="width: 100%;">
+          <ion-card>
+            <ion-item lines="none">
+              <ion-avatar slot="start">
+                <!-- <img src="{{user?.photoURL}}" (load)="updateDisplayPicLoaded()" [hidden]="!displayPicLoaded">
+			          <img src="https://ionic-docs-demo.herokuapp.com/assets/avatar.svg" [hidden]="displayPicLoaded"> -->
+                <img src="https://ionic-docs-demo.herokuapp.com/assets/avatar.svg">
+              </ion-avatar>
+              <ion-label><h4 class="ion-text-wrap">Thapelo Seema</h4> </ion-label>
+            </ion-item>
+            <ion-item lines="none">  
+              <ion-label>
+                <p>Single Room</p>
+                <h3>Max Rent Amount</h3>
+                <p>R3500</p>
+                <h3>Location</h3>
+                <p class="ion-text-wrap">UJ Kingsway Campus and surrounding areas</p>
+                <h3>Gender Prefference</h3>
+                <p>Females only</p>
+              </ion-label>
+            </ion-item>
+            <div class="ion-padding">
+              <ion-button expand="block">
+                Take on Job
+              </ion-button>
+            </div>
+          </ion-card>
+        </ion-list>
+      </ion-col>
+      <ion-col size-sm="0" size-lg="2"></ion-col>
+    </ion-row>
+  </ion-grid>
 
 </ion-content>

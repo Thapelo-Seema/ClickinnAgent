@@ -4,10 +4,10 @@ import { FormBuilder, FormGroup ,Validators } from '@angular/forms';
 import { MenuController,NavController } from '@ionic/angular';
 import { UserService } from '../../services/user.service';
 import { IonicComponentService } from '../../services/ionic-component.service';
-import { User } from '../../models/user.model';
 import { ObjectInitService } from '../../services/object-init.service';
 import { AuthService } from '../../services/auth.service';
 import { ValidationService } from '../../services/validation.service';
+import { landlord } from 'src/app/models/landlord.model';
 
 @Component({
   selector: 'app-add-landlord',
@@ -19,7 +19,7 @@ export class AddLandlordPage implements OnInit {
   public showPassword: boolean = false;
   redirectUrl: string;
   public registerForm: FormGroup;
-  user: User;
+  user: landlord;
   
   constructor(
     private authSvc: AuthService,

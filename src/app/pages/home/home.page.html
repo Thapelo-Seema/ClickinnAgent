@@ -32,7 +32,7 @@
         </ion-tab-button>
       </ion-col>
       <ion-col>
-        <ion-tab-button>
+        <ion-tab-button (click)="gotoSearchfeed()">
           <ion-icon color="thapsblue" name="search-outline"></ion-icon>
           <ion-label color="thapsblue"><b>Search</b></ion-label>
         </ion-tab-button>
@@ -92,7 +92,7 @@
       </ion-col>
     </ion-row>
   </ion-card>
-  <ion-card color="thapslightblue" class="ion-no-padding">
+  <ion-card  tappable color="thapslightblue" class="ion-no-padding" (click)="gotoAppointments()">
     <ion-row class="ion-no-padding">
       <ion-col size="2" class="ion-no-padding">
         <ion-item color="thapslightblue">

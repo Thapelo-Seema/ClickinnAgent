@@ -28,4 +28,40 @@ export class AppointmentService {
     .valueChanges();
   }
 
+  defaultAppointment(){
+    let appointment: Appointment = {
+      location: null,
+      agent: null,
+      appointment_id: "",
+      client: null,
+      client_cancels: false,
+      date: null,
+      landlord_confirmations: [],
+      landlord_declines: [],
+      rooms: [],
+      time_set: 0,
+      time_modified: 0,
+      seen: false
+    }
+    return appointment;
+  }
+
+  copyAppointment(apt: Appointment){
+    let appointment: Appointment = {
+      location: apt.location || null,
+      agent: apt.agent || null,
+      appointment_id: apt.appointment_id || "",
+      client: apt.client || null,
+      client_cancels: apt.client_cancels || false,
+      date: apt.date || null,
+      landlord_confirmations: apt.landlord_confirmations || [],
+      landlord_declines: apt.landlord_declines || [],
+      rooms: apt.rooms || [],
+      time_set: apt.time_set || 0,
+      time_modified: apt.time_modified || 0,
+      seen: apt.seen || false
+    }
+    return appointment;
+  }
+
 }

@@ -1,0 +1,111 @@
+.swiper-container {
+    width: 100%;
+    //@at-root: 120px;
+   // margin: 5px auto;
+}
+
+.swiper-slide {
+    width: 110px;
+	height: 100%;
+    text-align: center;
+	margin: 0;
+}
+
+.swiper-pagination-bullets {
+  bottom: -20px;
+  left: 0;
+  width: 100%;
+}
+
+.my-icon{
+	z-index: 1000000;
+}
+
+.price-font{
+	font-size: small;
+	text-align: center;
+	margin-bottom: 0;
+}
+
+.description-font{
+	font-size: 0.7em;
+	text-align: center;
+	margin-top: 0;
+	letter-spacing: 0.05em;
+}
+
+.location-font{
+	font-size: 0.6em;
+	text-align: center;
+	letter-spacing: 0.08em;
+}
+
+.highlight-font{
+	font-size: 0.7em;
+	letter-spacing: 0.08em;	
+}
+
+.time-font{
+	font-size: 0.69em;
+	letter-spacing: 0.08em;
+}
+
+.width-class{
+	width: 100%;
+}
+
+ion-checkbox{
+	--size: 15px;
+}
+
+.room-img{
+  display: block;
+  border-radius: 50%;
+  width: 140px;
+  height: 140px;
+  margin: 0 auto 0;
+  border-width: 2px;
+  border-style: solid;
+  border-color: rgba(255, 255, 255,0.1);
+  border-image: initial;
+  background-color: #dddddd;
+}
+
+.results-header{
+	font-size: x-small;
+	letter-spacing: 0.1em;
+	font-weight: bold;
+}
+
+//********** horizontal agent list **********//
+.agent-icon  {
+    display:inline-block;
+    // height:100px !important;
+    margin: 0px 5px 0px 5px !important;
+}
+
+.msg-class{
+	width: 80%;
+}
+.msg2-class{
+	width: 80%;
+	margin-left: 18%;
+}
+
+.msg-textarea{
+	background-color: #f3eedc;
+	border-radius: 7px;
+	box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  	transition: 0.3s;
+	padding: 7px ;
+}
+
+.msg-textarea:hover{
+	box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+ion-textarea{
+	min-height: 40px;
+}
+
+

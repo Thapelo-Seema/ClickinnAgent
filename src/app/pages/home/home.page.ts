@@ -100,4 +100,12 @@ export class HomePage implements OnInit {
     this.router.navigate(['/add-landlord', {'uid': this.user.uid}]);
   }
 
+  gotoAppointments(){
+    this.router.navigate(['/appointments', {'uid': this.user.uid}]);
+  }
+
+  gotoSearchfeed(){
+    this.router.navigate(['/search-feed', {'uid': this.user.uid}]);
+  }
+
 }
