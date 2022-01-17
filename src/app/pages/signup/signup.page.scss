@@ -1,0 +1,309 @@
+.logo-box {
+    width: 100%;
+    height: 200px;
+    position: relative;
+    overflow: hidden;
+    margin-top: 30px;
+  
+    img {
+        position: absolute;
+        width: 140px;
+        height: 140px;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        margin: auto;
+    }
+    ion-icon {
+        font-size: 150px;
+        position: absolute;
+        width: 140px;
+        height: 140px;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        margin: auto;
+    }
+  }
+  
+  .login-form {
+    width: 85%;
+    margin: auto;
+  
+    ion-list {
+        background: none;
+        // ion-item {
+        //     background: rgba(#333, 0.05);
+        //     --background: none;
+        //     border-radius: 10px;
+        //     padding: 3px 20px !important;
+        //     margin-bottom: 20px;
+        //     border: none !important;
+        //     -webkit-box-shadow: none !important;
+        //     box-shadow: none !important;
+  
+        //     .item-native {
+        //         --background: none !important;
+        //     }
+  
+        //     & ion-select-option{
+        //         margin-left: auto;
+        //         max-width: unset;
+        //         -webkit-box-align: center;
+        //         -webkit-align-items: center;
+        //         -ms-flex-align: center;
+        //         align-items: center;
+        //         padding: 0;
+  
+        //         .select {
+        //             max-width: 100%;
+        //             .select-text {
+        //                 font-size: 1.35rem;
+        //             }
+        //         }
+        //     }
+        //     &.item-input {
+        //         .text-input::placeholder {
+        //             color: #78927e !important;
+        //             font-size: 1.3rem;
+        //         }
+        //     }
+  
+        //     .label {
+        //         font-size: 1.35rem;
+        //         font-weight: 400;
+        //         color: #78927e;
+        //         flex: unset;
+        //     }
+        // }
+    }
+  }
+  
+  .profile {
+    width: 100px !important;
+    height: 100px !important;
+  }
+  .profile img {
+    width: 100px;
+    border-radius: 50%;
+    background-color: #ccc;
+    margin-top: calc(-1 * var(--ion-safe-area-top));
+  }
+  
+  .header-background {
+    position: relative;
+    background-color: #ddd;
+    display: flex;
+  
+    padding-top: var(--ion-safe-area-top);
+  
+    align-items: center;
+    justify-content: center;
+  
+    flex-direction: column;
+  
+    height: calc(250px + var(--ion-safe-area-top));
+  }
+  
+  .header-background h2 {
+    position: absolute;
+  
+    bottom: 20px;
+  
+    color: white;
+  }
+  
+  .empty-icon-circle {
+    border-radius: 50%;
+    padding: 20px;
+    margin-top: 5px;
+    margin-bottom: 25px;
+  }
+  .icon-large {
+    height: 180px;
+    width: 180px;
+  }
+  .icon-mid {
+    height: 100px;
+    width: 100px;
+  }
+  .icon-small {
+    height: 60px;
+    width: 60px;
+  }
+  .empty-icon-color {
+    background: var(--ion-color-slightgray);
+    color: #fff;
+  }
+  
+  //
+  #container {
+    text-align: center;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  
+  #container strong {
+    font-size: 20px;
+    line-height: 26px;
+  }
+  
+  #container p {
+    font-size: 16px;
+    line-height: 22px;
+    color: #8c8c8c;
+    margin: 0;
+  }
+  
+  #container a {
+    text-decoration: none;
+  }
+  
+  
+  .ios body.dark  {
+    --ion-item-background: #1c1c1e;
+  }
+  
+  //    {
+  //     --background-darker: var(--ion-color-step-200, #e9edf3);
+  
+  //     --text-dark: var(--ion-color-step-850, #27323f);
+  //     --text-darker: var(--ion-color-step-950, #0e151f);
+  
+  //     --text-light: var(--ion-color-step-650, #5b708b);
+  //     --text-lighter: var(--ion-color-step-550, #73849a);
+  //     --text-lightest: var(--ion-color-step-300, #b2becd);
+  //   }
+  
+   ion-card .header-img {
+    width: 80%;
+    height: 120px;
+  }
+  
+   ion-card ion-card-subtitle {
+    color: var(--text-lighter);
+  }
+  
+   ion-card ion-card-title {
+    color: var(--text-darker);
+  }
+  
+   ion-card ion-card-content {
+    color: var(--text-light);
+  }
+  
+   ion-card ion-list ion-item {
+    --padding-start: 0;
+  }
+  
+  /* Action Card */
+  
+   .action-card ion-grid {
+    --ion-grid-column-padding: 0;
+  
+    padding: 10px 0 0;
+  }
+  
+   .action-card ion-col:last-child {
+    text-align: right;
+  }
+  
+  .md  .action-card .button-clear {
+    --background-hover: currentColor;
+    --background-focused: currentColor;
+  }
+  
+   .action-card .button-clear {
+    --color: #c6cede;
+    --border-radius: 50%;
+    --padding-top: 0;
+    --padding-end: 0;
+    --padding-bottom: 0;
+    --padding-start: 0;
+  
+    margin: 0;
+  
+    height: 36px;
+    width: 36px;
+  }
+  
+  /* Apps Card */
+  
+   .apps-card ion-list ion-thumbnail {
+    margin-top: 5px;
+    margin-bottom: 5px;
+  
+    --border-radius: 14px;
+  }
+  
+  /* Coworker Card */
+  
+   .coworker-card .header-img {
+    height: 160px;
+  }
+  
+   .coworker-card h1 {
+    font-weight: 600;
+    font-size: 18px;
+  }
+  
+   /* .coworker-card p {
+    //color: var(--text-light);
+  } */
+  
+   .coworker-card ion-icon {
+    align-self: start;
+    margin-top: 10px;
+    margin-right: 29px;
+  
+    //color: var(--text-lightest);
+  }
+  
+  /* Music Card */
+  
+   .music-card ion-card-header,
+   .music-card ion-card-content {
+    text-align: center;
+  }
+  
+   .music-card img {
+    width: 248px;
+    height: 248px;
+  
+    box-shadow: 0px 2px 8px rgba(2, 8, 20, 0.1), 0px 8px 16px rgba(2, 8, 20, 0.08);
+    border-radius: 6px;
+  }
+  
+   .music-card h2 {
+    font-weight: 600;
+    font-size: 16px;
+  
+    color: var(--text-darker);
+  }
+  
+   /* .music-card p {
+    color: var(--text-light);
+  } */
+  
+   .music-card ion-button {
+    --padding-start: 7px;
+    --padding-end: 7px;
+  
+    margin: 0;
+  }
+  
+   .music-card .button-largest {
+    font-size: 28px;
+  }
+  
+   .music-card ion-progress-bar {
+    margin: 30px 0 20px;
+  
+    --background: var(--background-darker);
+    --progress-background: var(--text-dark);
+  }

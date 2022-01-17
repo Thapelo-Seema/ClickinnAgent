@@ -1,49 +1,21 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>add-landlord</ion-title>
+
+<ion-header class="ion-no-border">
+  <ion-toolbar color="thapsblue">
+    <ion-buttons slot="end">
+      <ion-menu-button auto-hide="false"></ion-menu-button>
+    </ion-buttons>
+    <ion-title class="main-header4">Add Landlord</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-
-</ion-content>
-<ion-header class="ion-no-border">
-  <ion-toolbar>
-    <ion-buttons slot="end">
-      <ion-menu-button color="orange" auto-hide="false"></ion-menu-button>
-    </ion-buttons>
-    <ion-title color="orange" lass="main-header4">SIGN UP</ion-title>
-    <ion-buttons slot="start">
-      <ion-back-button color="orange"></ion-back-button>
-    </ion-buttons>
-    <!-- <ion-title slot="start" class="main-header4">SIGNIN</ion-title> -->
-  </ion-toolbar>
-</ion-header>
-
-<ion-content fullscreen=true>
-  <ion-grid fixed class="ion-no-padding">
-      <ion-header class="ion-no-border" collapse="condense">
-        <ion-toolbar>
-          <ion-title color="orange" size="large">SIGN UP</ion-title>
-        </ion-toolbar>
-      </ion-header>
+  <ion-grid class="ion-no-padding">
+     
     
       <div class="register-form ion-margin">
-          <ion-text color="dark">
-              <h2 text-center class="ion-margin-bottom main-header7">
-                  Create new account.
-              </h2>
-          </ion-text>
-          <ion-item class="ion-padding-top ion-padding-bottom margin-top-15">
-            <ion-label position="stacked">
-              Sign up as
-            </ion-label>
-            <ion-select placeholder="Select User Type" [(ngModel)]="user.role">
-              <ion-select-option value="Agent">Agent</ion-select-option>
-              <ion-select-option value="Landlord">Landlord</ion-select-option>
-              <ion-select-option value="Student">Student</ion-select-option>
-            </ion-select>
-          </ion-item>
           <form [formGroup]="registerForm" novalidate>
   <!--  -->
             <ion-list class="ion-margin-top ion-padding">
@@ -67,33 +39,27 @@
                 <ion-label>
                   <ion-icon name="call-outline" color="medium"></ion-icon>
                   </ion-label>
-                <ion-input  type="number" formControlName="phone" placeholder="phone" ></ion-input>
+                <ion-input  type="text" formControlName="phone" placeholder="phone" ></ion-input>
               </ion-item>
 
               <!-- ############ -->
               <ion-item  class="roundedInput8px margin-bottom-10">
                   <ion-label>
                     <ion-icon name="mail-outline" color="medium"></ion-icon>
-                    </ion-label>
-                  <ion-input type="text" formControlName="username" placeholder="Username(email)"></ion-input>
+                  </ion-label>
+                  <ion-input type="text" formControlName="username" placeholder="Email"></ion-input>
                 </ion-item>
     
-
-
               <!-- ############ -->                              
               <ion-item  class="roundedInput8px margin-bottom-10">
-
-                <ion-label slot="start" class="margin-right-8">
+                <ion-label>
                   <ion-icon name="lock-closed-outline" color="medium"></ion-icon>
-                  </ion-label>
-
+                </ion-label>
                 <ion-input type="text" formControlName="password" placeholder="Password" [type]="showPassword ? 'text' : 'password'" clearOnEdit="false"></ion-input>
-
                     <!-- ### Show/hide password ### -->    
                     <div (click)="onPasswordToggle()" ion-button fill="clear" size="small" >
                       <ion-icon  slot="icon-only" color="medium" [name]="showPassword ? 'eye-off' : 'eye'"></ion-icon>
                     </div>
-
               </ion-item>
 
             </ion-list>
@@ -163,13 +129,39 @@
                       long!
                   </p>
               </ion-text>
+              <ion-card class="checkout-card">
+                <ion-item lines="none">
+                  <h4 class="main-header2 ion-text-center">Add Landlords Properties</h4>
+                </ion-item>
+                <ion-radio-group>
+                  <ion-item *ngFor="let loc of user.property_addresses" class="ion-margin-end">
+                    <ion-icon name="navigate-circle-outline" slot="start"></ion-icon>
+                    <ion-label>{{loc.neighbourhood}}</ion-label>
+                    <ion-icon name="close-outline" slot="end"></ion-icon>
+                  </ion-item>
+                  <ion-item  class="roundedInput8px ion-padding-top ion-padding-bottom margin-top-15 ion-margin-horizontal">
+                    <ion-label>
+                      <ion-icon name="location-outline" color="medium"></ion-icon>
+                    </ion-label>
+                    <ion-input type="text" placeholder="e.g 73 Caroline Street, Brixton" [(ngModel)]="businessAddress" 
+                    [ngModelOptions]="{standalone: true}" (ionInput)="getBusinessAreaPredictions($event)" ></ion-input>
+                  </ion-item>
+                  <ion-item *ngFor="let prediction of businessAddressPredictions">
+                    <ion-label (click)="businessAddressSelected(prediction)" >
+                      <h3>{{prediction.structured_formatting.main_text}}</h3>
+                      <p>{{prediction.structured_formatting.secondary_text}}</p>
+                    </ion-label>
+                  </ion-item>
+                  
+                </ion-radio-group>
+                </ion-card>
 
               <!-- Submit button -->
-              <ion-button mode="ios" color="orange" expand="block" class="ion-margin-top" [disabled]="!registerForm.valid"
+              <ion-button mode="ios" color="thapsblue" expand="block" class="ion-margin-top" [disabled]="!registerForm.valid"
                   (click)="registerUser()">
                   Create
               </ion-button>
-              <ion-button mode="ios" color="orange" expand="block" fill="outline" class="ion-margin-top"
+              <ion-button mode="ios" color="thapsblue" expand="block" fill="outline" class="ion-margin-top"
                   routerLink="/signin">
                   Cancel
               </ion-button>

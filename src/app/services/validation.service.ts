@@ -81,15 +81,18 @@ export class ValidationService {
 
       let phoneNumber = control.value.toString();
       if(phoneNumber.length != 10){
+        console.log("phone number incorrect length");
         phoneValid.valid = false;
         console.log({phoneValid})
         return {phoneValid};
       }
       if(phoneNumber[0] != '0'){
+        console.log("phone number must start with '0'");
         phoneValid.valid = false;
         return {phoneValid};
       }
       if(phoneNumber[1] != '6' && phoneNumber[1] != '7' && phoneNumber[1] != '8'){
+        console.log("phone number second digit inccorect");
         phoneValid.valid = false;
         return {phoneValid};
       }

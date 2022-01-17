@@ -37,6 +37,7 @@ export class AppointmentPage implements OnInit {
     grabCursor: true
   };
   show_datetime: boolean = false;
+  appointment_changed: boolean = false;
 
   constructor(
     private appointment_svc: AppointmentService,
@@ -88,6 +89,7 @@ export class AppointmentPage implements OnInit {
         this.appointment = this.appointment_svc.copyAppointment(appt);
       })
     }
+    
   }
 
   showDatePicker(){
@@ -109,12 +111,12 @@ export class AppointmentPage implements OnInit {
       this.appointment.time_set = Date.now();
       this.appointment.time_modified = Date.now();
     }
-    this.appointment.date = event.detail.value;
-    console.log(this.appointment);
+    this.appointment_changed = true;
+    //console.log(this.appointment);
   }
 
   formatDate(value: string){
-    return format(parseISO(value), 'PPPPpppp');
+    return format(new Date(value), 'PPPPp');
   }
 
   setAppointment(){

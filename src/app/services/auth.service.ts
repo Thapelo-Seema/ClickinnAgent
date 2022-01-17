@@ -61,6 +61,10 @@ export class AuthService {
     return this.afAuth.signInAnonymously()
   }
 
+  signOut(){
+    return this.afAuth.signOut();
+  }
+
 
   /* signInWithFacebook():Promise<any>{
     return this.afAuth.signInWithPopup(new auth.FacebookAuthProvider())

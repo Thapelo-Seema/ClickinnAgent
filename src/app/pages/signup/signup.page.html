@@ -1,23 +1,15 @@
 <ion-header class="ion-no-border">
-  <ion-toolbar>
-    <ion-buttons slot="end">
-      <ion-menu-button color="orange" auto-hide="false"></ion-menu-button>
-    </ion-buttons>
-    <ion-title color="orange" lass="main-header4">SIGN UP</ion-title>
+  <ion-toolbar color="thapsblue">
+    <ion-title lass="main-header4">SIGN UP</ion-title>
     <ion-buttons slot="start">
-      <ion-back-button color="orange"></ion-back-button>
+      <ion-back-button></ion-back-button>
     </ion-buttons>
     <!-- <ion-title slot="start" class="main-header4">SIGNIN</ion-title> -->
   </ion-toolbar>
 </ion-header>
 
-<ion-content fullscreen=true>
-  <ion-grid fixed class="ion-no-padding">
-      <ion-header class="ion-no-border" collapse="condense">
-        <ion-toolbar>
-          <ion-title color="orange" size="large">SIGN UP</ion-title>
-        </ion-toolbar>
-      </ion-header>
+<ion-content >
+  <ion-grid  class="ion-no-padding">
     
       <div class="register-form ion-margin">
           <ion-text color="dark">
@@ -25,7 +17,7 @@
                   Create new account.
               </h2>
           </ion-text>
-          <ion-item class="ion-padding-top ion-padding-bottom margin-top-15">
+          <!-- <ion-item class="ion-padding-top ion-padding-bottom margin-top-15">
             <ion-label position="stacked">
               Sign up as
             </ion-label>
@@ -34,7 +26,7 @@
               <ion-select-option value="Landlord">Landlord</ion-select-option>
               <ion-select-option value="Student">Student</ion-select-option>
             </ion-select>
-          </ion-item>
+          </ion-item> -->
           <form [formGroup]="registerForm" novalidate>
   <!--  -->
             <ion-list class="ion-margin-top ion-padding">
@@ -51,14 +43,14 @@
                 <ion-label>
                   <ion-icon name="people-outline" color="medium"></ion-icon>
                   </ion-label>
-                <ion-input type="text" formControlName="lastname" placeholder="Lastname"></ion-input>
+                <ion-input type="text" formControlName="lastname" placeholder="Last name"></ion-input>
               </ion-item>
               <!-- ############ -->
               <ion-item  class="roundedInput8px margin-bottom-10">
                 <ion-label>
                   <ion-icon name="call-outline" color="medium"></ion-icon>
                   </ion-label>
-                <ion-input  type="number" formControlName="phone" placeholder="phone" ></ion-input>
+                <ion-input  type="text" formControlName="phone" placeholder="Phone" ></ion-input>
               </ion-item>
 
               <!-- ############ -->
@@ -66,7 +58,7 @@
                   <ion-label>
                     <ion-icon name="mail-outline" color="medium"></ion-icon>
                     </ion-label>
-                  <ion-input type="text" formControlName="username" placeholder="Username(email)"></ion-input>
+                  <ion-input type="text" formControlName="username" placeholder="Email"></ion-input>
                 </ion-item>
     
 
@@ -74,7 +66,7 @@
               <!-- ############ -->                              
               <ion-item  class="roundedInput8px margin-bottom-10">
 
-                <ion-label slot="start" class="margin-right-8">
+                <ion-label>
                   <ion-icon name="lock-closed-outline" color="medium"></ion-icon>
                   </ion-label>
 
@@ -156,19 +148,20 @@
               </ion-text>
 
               <!-- Submit button -->
-              <ion-button mode="ios" color="orange" expand="block" class="ion-margin-top" [disabled]="!registerForm.valid"
+              <ion-button mode="ios" color="thapsblue" expand="block" class="ion-margin-top" [disabled]="!registerForm.valid"
                   (click)="registerUser()">
                   Create
               </ion-button>
-              <ion-button mode="ios" color="orange" expand="block" fill="outline" class="ion-margin-top"
+              <ion-button mode="ios" color="thapsblue" expand="block" fill="outline" class="ion-margin-top"
                   routerLink="/signin">
                   Cancel
               </ion-button>
               <ion-text color="dark">
-                  <h2  class="ion-text-center ion-margin-bottom main-header8">
-                      By clicking Sign up you agree to the following Terms ans Conditions without reservation
-                  </h2>
+                  <p  class="ion-text-center ion-margin-bottom main-header8">
+                      By clicking Create you agree to the following Terms and Conditions without reservation
+                  </p>
               </ion-text>
+              <p class="ion-text-center"><a class="ion-text-center">Clickinn Terms of Service</a></p>
           </form>
 
       </div>

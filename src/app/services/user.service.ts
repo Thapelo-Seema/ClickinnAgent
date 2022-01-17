@@ -3,6 +3,7 @@ import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { User } from '../models/user.model';
 import { Observable } from 'rxjs';
 import { Client } from '../models/client.model';
+import { landlord } from '../models/landlord.model';
 //import { Agent } from '../models/agent.model';
 
 @Injectable({
@@ -43,6 +44,10 @@ export class UserService {
 
   signupUser(firstname, lastname, phone, username, password): Promise<any>{
     return null;
+  }
+
+  addLandlord(landlord: landlord){
+    return this.afs.collection('Landlords').doc(landlord.uid).set(landlord);
   }
 
   /* getAgent(uid: string){

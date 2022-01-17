@@ -105,7 +105,11 @@ export class HomePage implements OnInit {
   }
 
   gotoSearchfeed(){
-    this.router.navigate(['/search-feed', {'uid': this.user.uid}]);
+    let locs = [];
+    this.user.business_areas.forEach(ba =>{
+      locs.push(ba.neighbourhood);
+    })
+    this.router.navigate(['/search-feed', {'uid': this.user.uid, 'locations': locs}]);
   }
 
 }

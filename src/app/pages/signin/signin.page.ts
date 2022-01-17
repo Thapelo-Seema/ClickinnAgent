@@ -1,7 +1,7 @@
 import { Component, OnInit, NgZone } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup ,Validators } from '@angular/forms';
-import { MenuController, NavController } from '@ionic/angular';
+import { NavController } from '@ionic/angular';
 import { AuthService } from '../../services/auth.service';
 import { IonicComponentService } from '../../services/ionic-component.service';
 
@@ -59,20 +59,9 @@ export class SigninPage implements OnInit {
     
   }
 
-  submitFormTest(){
-    if (!this.registerForm.valid){
-      console.log(this.registerForm.value);
-      //this.presentAlert("invalid form");
-      console.log("invalid form")
-    } else {
-      console.log(this.registerForm.value);
-      console.log("yes, ")
-      //this.userService.loginUser()
-    }
-  }
+  
   /// old way ////
   async signInUser(){
-    console.log("call signopUser");
     if (!this.registerForm.valid){
       this.ionicComponentService.presentAlert("Please ensure that your login details are valid");
     } else {

@@ -1,6 +1,6 @@
 <ion-header class="ion-no-border">
   <ion-toolbar color="thapsblue">
-    <ion-title color="orange" class="main-header4">SIGN IN</ion-title>
+    <ion-title  class="main-header4">SIGN IN</ion-title>
     <ion-buttons slot="start">
       <ion-back-button color="orange"></ion-back-button>
     </ion-buttons>
@@ -8,15 +8,10 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content fullscreen=true color="light">
-  <ion-grid fixed class="ion-no-padding">
-      <ion-header class="ion-no-border" collapse="condense">
-        <ion-toolbar>
-          <ion-title color="orange" size="large">SIGN IN</ion-title>
-        </ion-toolbar>
-      </ion-header>
+<ion-content >
+  <ion-grid class="ion-no-padding" style="background-color: transparent;">
     
-      <div class="register-form ion-margin">
+      <div class="register-form ion-margin" style="background-color: transparent;">
           <ion-text color="dark">
               <h2 text-center class="ion-margin-bottom main-header7">
                   Welcome to Clickinn
@@ -24,7 +19,7 @@
           </ion-text>
           <form [formGroup]="registerForm" novalidate>
   <!--  -->
-            <ion-list class="ion-margin-top ion-padding">
+            <ion-list class="ion-margin-top ion-padding" style="background-color: transparent;">
               <!-- ############ -->
               
               <!-- ############ -->
@@ -33,7 +28,7 @@
               
 
               <!-- ############ -->
-              <ion-item  class="roundedInput8px margin-bottom-10">
+              <ion-item  class="roundedInput8px margin-bottom-10" style="background-color: transparent;">
                   <ion-label>
                     <ion-icon name="mail-outline" color="medium"></ion-icon>
                     </ion-label>
@@ -43,7 +38,7 @@
 
 
               <!-- ############ -->                              
-              <ion-item  class="roundedInput8px margin-bottom-10">
+              <ion-item  class="roundedInput8px margin-bottom-10" style="background-color: transparent;">
 
                 <ion-label slot="start" class="margin-right-8">
                   <ion-icon name="lock-closed-outline" color="medium"></ion-icon>
@@ -115,20 +110,20 @@
               <span >
                 <p class="ion-text-right">Forgot password?</p>
               </span>
-              <ion-button mode="ios" color="orange" expand="block" class="ion-margin-top" [disabled]="!registerForm.valid"
+              <ion-button mode="ios" color="thapsblue" expand="block" class="ion-margin-top" [disabled]="!registerForm.valid"
                   (click)="signInUser()">
                   Sign In
               </ion-button>
-              <ion-button mode="ios" color="orange" expand="block" fill="outline" class="ion-margin-top"
+              <ion-button mode="ios" color="thapsblue" expand="block" fill="outline" class="ion-margin-top"
                   routerLink="/signup">
                   Create an Account
               </ion-button>
               <ion-text class="ion-text-center" >
-                  <h2  class="ion-text-center ion-margin-bottom main-header8">
-                      By clicking Sign in you agree to the following Terms ans Conditions without reservation
-                  </h2>
-                  <a class="ion-text-center">Clickinn Terms of Service</a>
+                  <p  class="ion-text-center ion-margin-bottom main-header8">
+                      By clicking Sign in you agree to the following Terms and Conditions without reservation
+                  </p>
               </ion-text>
+              <p class="ion-text-center"><a class="ion-text-center">Clickinn Terms of Service</a></p>
           </form>
 
       </div>

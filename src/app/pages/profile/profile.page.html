@@ -1,13 +1,13 @@
 
 <ion-header>
   <ion-toolbar color="thapsblue">
-    <ion-buttons slot="start" *ngIf="showBackButton">
-      <ion-back-button auto-hide="false"></ion-back-button>
+    <ion-buttons slot="start">
+      <ion-back-button mode="md" color="light" defaultHref="#"  ></ion-back-button>
     </ion-buttons>
     <ion-title class="main-header4 ion-text-center">Agent Profile</ion-title>
   </ion-toolbar>
 </ion-header>
-<ion-content>
+<ion-content color="light">
 
   <div class="header-background">
     <ion-avatar class="profile">
@@ -27,9 +27,9 @@
         <h1 *ngIf="!profileComplete"  class="ion-margin-bottom main-header1 ion-text-center">
             <b color="orange">Please complete your profile before continuing.</b>
         </h1>
-        <h1 *ngIf="profileComplete" class="ion-margin-bottom main-header10 ion-text-center">
-          Update your profile.
-      </h1>
+        <h5 *ngIf="profileComplete" class="ion-margin-bottom main-header10 ion-text-center ion-padding">
+         Always keep your profile up-to-date.
+      </h5>
     </ion-text>
     <form [formGroup]="profileForm" novalidate>
       <ion-card class="checkout-card">
@@ -38,7 +38,7 @@
         </ion-item>
       <ion-radio-group class="ion-margin-top ion-padding">
         <!-- ############ -->
-        <ion-item  class="roundedInput8px margin-bottom-10">
+        <ion-item  class="roundedInput8px margin-bottom-10 ion-margin-horizontal">
           <ion-label>
             <ion-icon name="person-outline" color="medium"></ion-icon>
           </ion-label>
@@ -53,7 +53,7 @@
           </p>
         </ion-text>
         <!-- ############ -->
-        <ion-item  class="roundedInput8px margin-bottom-10">
+        <ion-item  class="roundedInput8px margin-bottom-10 ion-margin-horizontal">
           <ion-label>
             <ion-icon name="people-outline" color="medium"></ion-icon>
           </ion-label>
@@ -67,7 +67,7 @@
           </p>
         </ion-text>
         <!-- ############ -->
-        <ion-item  class="roundedInput8px margin-bottom-10">
+        <ion-item  class="roundedInput8px margin-bottom-10 ion-margin-horizontal">
           <ion-label>
             <ion-icon name="mail-outline" color="medium"></ion-icon>
             </ion-label>
@@ -80,11 +80,11 @@
           </p>
         </ion-text>
         <!-- ############ -->
-        <ion-item  class="roundedInput8px margin-bottom-10">
+        <ion-item  class="roundedInput8px margin-bottom-10 ion-margin-horizontal">
           <ion-label>
             <ion-icon name="call-outline" color="medium"></ion-icon>
             </ion-label>
-          <ion-input  inputmode="tel" type="tel" minlength="10" maxlength="10" placeholder="contact no" formControlName="phone" [value]="user.phoneNumber">
+          <ion-input  inputmode="tel" type="tel" minlength="10" maxlength="10" placeholder="contact no" formControlName="phone" [value]="user.phone_number">
           </ion-input>
         </ion-item>
         <ion-text color="danger">
@@ -93,11 +93,11 @@
               Invalid cell phone number !
           </p>
         </ion-text>
-        <ion-item  class="roundedInput8px margin-bottom-10">
+        <ion-item  class="roundedInput8px margin-bottom-10 ion-margin-horizontal">
           <ion-label>
             <ion-icon name="finger-print-outline" color="medium"></ion-icon>
           </ion-label>
-          <ion-input inputmode="tel" type="tel" minlength="13" maxlength="13" placeholder="ID number" formControlName="idNumber" [value]="user.idNumber">
+          <ion-input inputmode="tel" type="tel" minlength="13" maxlength="13" placeholder="ID number" formControlName="idNumber" [value]="user.id_no">
           </ion-input>
         </ion-item>
         <ion-text color="danger">
@@ -109,11 +109,62 @@
       </ion-card>
 
       <ion-card class="checkout-card">
+        <ion-item lines="none">
+          <h1 class="main-header5">Banking Details</h1>
+        </ion-item>
+        <ion-radio-group class="ion-margin-top ion-padding">
+          <ion-item  class="roundedInput8px margin-bottom-10 ion-margin-horizontal">
+            <ion-label>
+              <ion-icon name="person-outline" color="medium"></ion-icon>
+            </ion-label>
+            <ion-input  type="text" placeholder="Account holder" [ngModelOptions]="{standalone: true}"  
+            [(ngModel)]="user.banking_details.account_holder">
+            </ion-input>
+          </ion-item>
+          <ion-item  class="roundedInput8px margin-bottom-10 ion-margin-horizontal">
+            <ion-label>
+              <ion-icon name="person-outline" color="medium"></ion-icon>
+            </ion-label>
+            <ion-input  type="text" placeholder="Account number" [ngModelOptions]="{standalone: true}"  
+            [(ngModel)]="user.banking_details.account_number" >
+            </ion-input>
+          </ion-item>
+          <ion-item class="ion-padding-top ion-padding-bottom margin-top-15">
+            <ion-label position="stacked">
+              Account Type
+            </ion-label>
+            <ion-select placeholder="Select Account Type" [(ngModel)]="user.banking_details.account_type" 
+            [ngModelOptions]="{standalone: true}">
+              <ion-select-option value="Cheque">Cheque</ion-select-option>
+              <ion-select-option value="Savings">Savings</ion-select-option>
+            </ion-select>
+          </ion-item>
+          <ion-item class="ion-padding-top ion-padding-bottom margin-top-15">
+            <ion-label position="stacked">
+              Bank
+            </ion-label>
+            <ion-select placeholder="Select Bank" [(ngModel)]="user.banking_details.bank" 
+            [ngModelOptions]="{standalone: true}">
+              <ion-select-option value="ABSA">ABSA</ion-select-option>
+              <ion-select-option value="AFRICAN BANK">AFRICAN BANK</ion-select-option>
+              <ion-select-option value="CAPITEC">CAPITEC</ion-select-option>
+              <ion-select-option value="FNB">FNB</ion-select-option>
+              <ion-select-option value="NEDBANK">NEDBANK</ion-select-option>
+              <ion-select-option value="STANDARD BANK">STANDARD BANK</ion-select-option>
+              <ion-select-option value="DISCOVERY BANK">DISCOVERY BANK</ion-select-option>
+              <ion-select-option value="TYME BANK">TYME BANK</ion-select-option>
+              <ion-select-option value="INVESTEC">INVESTEC</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-radio-group>
+      </ion-card>
+
+      <ion-card class="checkout-card">
       <ion-item lines="none">
-        <h1 class="main-header5">Location Details</h1>
+        <h1 class="main-header2">Home Address</h1>
       </ion-item>
       <ion-radio-group>
-        <ion-item  class="roundedInput8px ion-padding-top ion-padding-bottom margin-top-15">
+        <ion-item  class="roundedInput8px ion-padding-top ion-padding-bottom margin-top-15 ion-margin-horizontal">
           <ion-label>
             <ion-icon name="location-outline" color="medium"></ion-icon>
           </ion-label>
@@ -130,11 +181,38 @@
       </ion-radio-group>
       </ion-card>
 
+      <ion-card class="checkout-card">
+        <ion-item lines="none">
+          <h1 class="main-header2">Areas of business</h1>
+        </ion-item>
+        <ion-radio-group>
+          <ion-item *ngFor="let loc of user.business_areas" class="ion-margin-end">
+            <ion-icon name="navigate-circle-outline" slot="start"></ion-icon>
+            <ion-label>{{loc.neighbourhood}}</ion-label>
+            <ion-icon name="close-outline" slot="end"></ion-icon>
+          </ion-item>
+          <ion-item  class="roundedInput8px ion-padding-top ion-padding-bottom margin-top-15 ion-margin-horizontal">
+            <ion-label>
+              <ion-icon name="location-outline" color="medium"></ion-icon>
+            </ion-label>
+            <ion-input type="text" placeholder="Area e.g Auckland Park" [(ngModel)]="businessAddress" 
+            [ngModelOptions]="{standalone: true}" (ionInput)="getBusinessAreaPredictions($event)" ></ion-input>
+          </ion-item>
+          <ion-item *ngFor="let prediction of businessAddressPredictions">
+            <ion-label (click)="businessAddressSelected(prediction)" >
+              <h3>{{prediction.structured_formatting.main_text}}</h3>
+              <p>{{prediction.structured_formatting.secondary_text}}</p>
+            </ion-label>
+          </ion-item>
+          
+        </ion-radio-group>
+        </ion-card>
+
       <div class="ion-margin-vertical ion-padding">
-        <ion-button mode="ios" color="orange" expand="block" class="ion-margin-top"  (click)="save()">
+        <ion-button mode="ios" color="thapsblue" expand="block" class="ion-margin-top"  (click)="save()">
           Update Profile
         </ion-button>
-        <ion-button mode="ios" color="orange" fill="outline" expand="block" class="ion-margin-top"  (click)="logout()">
+        <ion-button mode="ios" color="thapsblue" fill="outline" expand="block" class="ion-margin-top"  (click)="logout()">
             Cancel
         </ion-button>
       </div>  

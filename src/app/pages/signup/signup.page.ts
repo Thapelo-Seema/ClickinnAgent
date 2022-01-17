@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { ActivatedRoute , Router} from '@angular/router';
 import { FormBuilder, FormGroup ,Validators } from '@angular/forms';
-import { MenuController,NavController } from '@ionic/angular';
+import { MenuController, NavController } from '@ionic/angular';
 import { UserService } from '../../services/user.service';
 import { IonicComponentService } from '../../services/ionic-component.service';
 import { User } from '../../models/user.model';
@@ -25,7 +25,8 @@ export class SignupPage implements OnInit {
     private authSvc: AuthService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    public menuCtrl: MenuController,
+    public navController: NavController,
+    private ngZone: NgZone,
     private userService:  UserService,
     private ionicComponentService: IonicComponentService,
     private object_init_svc: ObjectInitService,
@@ -55,40 +56,26 @@ export class SignupPage implements OnInit {
      console.log("redirectUrl="+this.redirectUrl)
   }
 
-  submitFormTest(){
-    if (!this.registerForm.valid){
-      console.log(this.registerForm.value);
-      //this.presentAlert("invalid form");
-      console.log("invalid form")
-    } else {
-      console.log(this.registerForm.value);
-      console.log("yes, ")
-      //this.userService.loginUser()
-    }
-  }
-
   /// old way ////
   async registerUser(){
-    console.log("call signopUser");
     if (!this.registerForm.valid){
       console.log(this.registerForm.value);
       console.log("invalid form")
       //this.presentAlert("invalid form");
     } else {
       this.ionicComponentService.presentLoading();
-      console.log(this.registerForm.value);
-      console.log("yes, ")
       this.authSvc.signUpWithEmailAndPassword(this.registerForm.value.username,
         this.registerForm.value.password)
       .then(data => {
-        console.log(data);
         this.user.uid = data.user.uid;
         this.bindFormToUser();
-        console.log(this.user);
         this.userService.createUser(this.user)
         .then(() =>{
           //navigate user to respective home page
           this.ionicComponentService.dismissLoading();
+          this.ngZone.run(() =>{
+            this.navController.navigateRoot(['/home', {'uid': data.user.uid}])
+          })
         })
       }, (error) => { 
          var errorMessage: string = error.message;

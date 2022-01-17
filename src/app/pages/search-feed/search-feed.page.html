@@ -10,62 +10,85 @@
 <ion-content color="light">
   <ion-grid>
     <ion-row>
-      <ion-col size-sm="0" size-lg="2">
+      <ion-col size="0" size-lg="2">
       </ion-col>
       <ion-col size="12" size-lg="8">
         <ion-list style="width: 100%; background-color: transparent;">
-          <ion-card>
-            <ion-item lines="none">
-              <ion-avatar slot="start">
-                <!-- <img src="{{user?.photoURL}}" (load)="updateDisplayPicLoaded()" [hidden]="!displayPicLoaded">
-			          <img src="https://ionic-docs-demo.herokuapp.com/assets/avatar.svg" [hidden]="displayPicLoaded"> -->
-                <img src="https://ionic-docs-demo.herokuapp.com/assets/avatar.svg">
-              </ion-avatar>
-              <ion-label color="thapsblue"><h3 class="ion-text-wrap">Thapelo Seema</h3></ion-label>
-            </ion-item>
-            <ion-item lines="none"> 
-              <ion-icon name="home-outline" slot="start"></ion-icon>
-              <ion-label>
-                <p>Single Room</p>
-              </ion-label>
-            </ion-item>
-            <ion-item lines="none">
-              <ion-icon name="card-outline" slot="start"></ion-icon>
-              <ion-label>
-                <p>CASH</p>
-              </ion-label>
-            </ion-item>
-            <ion-item lines="none">
-              <ion-icon name="calculator-outline" slot="start"></ion-icon>
-              <ion-label>
-                <p>R3500</p>
-              </ion-label>
-            </ion-item>
-            <ion-item lines="none">
-              <ion-icon name="navigate-circle-outline" slot="start"></ion-icon>
-              <ion-label>
-                <p class="ion-text-wrap">UJ Kingsway Campus and surrounding areas</p>
-              </ion-label>
-            </ion-item>
-            <ion-item lines="none">
-              <ion-icon name="transgender-outline" slot="start"></ion-icon>
-              <ion-label>
-                <p>Females only</p>
-                <p class="ion-no-padding ion-no-margin ion-text-right time-font">
-                  2 mins ago
-                </p>
-              </ion-label>
-            </ion-item>
-            <div class="ion-padding">
-              <ion-button expand="block" color="thapslightblue">
-                <ion-text color="light">Take Job</ion-text> 
-                <ion-icon name="bag-check-outline" slot="end" color="light"></ion-icon>
-              </ion-button>
-            </div>
-          </ion-card>
+          <ion-infinite-scroll threshold="15%" (ionInfinite="loadData($event") >
+            <ion-infinite-scroll-content>
+              <ion-card *ngFor="let search of searches ;  let i = index">
+                <ion-item lines="none">
+                  <ion-avatar slot="start">
+                    <!-- <img src="{{search?.searcher?.photoURL}}" (load)="updateDisplayPicLoaded(i)" [hidden]="!searcher?.searcher.dp_loaded">
+                    <img src="https://ionic-docs-demo.herokuapp.com/assets/avatar.svg" [hidden]="search?.searcher.dp_loaded"> -->
+                    <img src="https://ionic-docs-demo.herokuapp.com/assets/avatar.svg">
+                  </ion-avatar>
+                  <ion-label color="thapsblue"><h3 class="ion-text-wrap">
+                    {{search?.searcher.firstname}} {{search?.searcher.lastname}}
+                  </h3></ion-label>
+                </ion-item>
+                <ion-item lines="none"> 
+                  <ion-icon name="home-outline" slot="start"></ion-icon>
+                  <ion-label>
+                    <p>{{search?.room_type}}</p>
+                  </ion-label>
+                </ion-item>
+                <ion-item lines="none">
+                  <ion-icon name="card-outline" slot="start"></ion-icon>
+                  <ion-label>
+                    <p>{{search?.funding_type}}</p>
+                  </ion-label>
+                </ion-item>
+                <ion-item lines="none">
+                  <ion-icon name="calculator-outline" slot="start"></ion-icon>
+                  <ion-label>
+                    <p>{{search?.max_price}}</p>
+                  </ion-label>
+                </ion-item>
+                <ion-item lines="none">
+                  <ion-icon name="navigate-circle-outline" slot="start"></ion-icon>
+                  <ion-label>
+                    <p class="ion-text-wrap">{{search?.institution_and_campus}}, and surrounding areas</p>
+                  </ion-label>
+                </ion-item>
+                <ion-item lines="none" *ngIf="search.parking_needed">
+                  <ion-icon name="car-sport-outline" slot="start"></ion-icon>
+                  <ion-label>
+                    <p class="ion-text-wrap">I need secure parking</p>
+                  </ion-label>
+                </ion-item>
+                <ion-item lines="none">
+                  <ion-icon name="transgender-outline" slot="start"></ion-icon>
+                  <ion-label>
+                    <p>{{search?.gender_prefference}}</p>
+                    <p  *ngIf="search.special_needs ==''" class="ion-no-padding ion-no-margin ion-text-right time-font">
+                      {{timeAgo(search?.time)}}
+                    </p>
+                  </ion-label>
+                </ion-item>
+                <ion-item lines="none" *ngIf="search.special_needs != ''">
+                  <ion-icon name="options-outline" slot="start"></ion-icon>
+                  <ion-label>
+                    <p class="ion-text-wrap">{{search?.special_needs}}</p>
+                    <p class="ion-no-padding ion-no-margin ion-text-right time-font">
+                      {{timeAgo(search?.time)}}
+                    </p>
+                  </ion-label>
+                </ion-item>
+                
+                <div class="ion-padding">
+                  <ion-button expand="block" color="thapslightblue">
+                    <ion-text color="light">Take Job</ion-text> 
+                    <ion-icon name="bag-check-outline" slot="end" color="light"></ion-icon>
+                  </ion-button>
+                </div>
+              </ion-card>
+            </ion-infinite-scroll-content>
+          </ion-infinite-scroll>
+          
         </ion-list>
       </ion-col>
-      <ion-col size-sm="0" size-lg="2"></ion-col>
+      <ion-col size="0" size-lg="2"></ion-col>
     </ion-row>
   </ion-grid>
 

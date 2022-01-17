@@ -8,7 +8,7 @@ export interface landlord{
 	agents: any[];
 	agreed_to_terms: boolean;
 	banking_details: BankingDetails;
-	business_areas: any[];
+	property_addresses: any[];
 	contracts: any[];
 	current_job: string;
 	display_name: string;

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { BankingDetails } from '../models/banking-details.model';
 import { Client } from '../models/client.model';
 import { landlord } from '../models/landlord.model';
 import { User } from '../models/user.model';
@@ -13,7 +14,7 @@ export class UsersService {
     let user: User = {
       agents: [],
       agreed_to_terms: false,
-      banking_details: null,
+      banking_details: this.defaultBankingDetails(),
       business_areas: [],
       current_job: "",
       firstime: true,
@@ -50,7 +51,7 @@ export class UsersService {
     let user: User = {
       agents: usr.agents || [],
       agreed_to_terms: usr.agreed_to_terms || false,
-      banking_details: usr.banking_details || null,
+      banking_details: usr.banking_details || this.defaultBankingDetails(),
       business_areas: usr.business_areas || [],
       current_job: usr.current_job || "",
       firstime: usr.firstime || true,
@@ -87,7 +88,7 @@ export class UsersService {
     let user: Client = {
       agents: [],
       agreed_to_terms: false,
-      banking_details: null,
+      banking_details: this.defaultBankingDetails(),
       business_areas: [],
       current_job: "",
       firstime: true,
@@ -124,7 +125,7 @@ export class UsersService {
     let user: Client = {
       agents: usr.agents || [],
       agreed_to_terms: usr.agreed_to_terms || false,
-      banking_details: usr.banking_details || null,
+      banking_details: usr.banking_details || this.defaultBankingDetails(),
       business_areas: usr.business_areas || [],
       current_job: usr.current_job || "",
       firstime: usr.firstime || true,
@@ -161,8 +162,8 @@ export class UsersService {
     let user: landlord = {
       agents: [],
       agreed_to_terms: false,
-      banking_details: null,
-      business_areas: [],
+      banking_details: this.defaultBankingDetails(),
+      property_addresses: [],
       current_job: "",
       firstime: true,
       firstname: "",
@@ -198,8 +199,8 @@ export class UsersService {
     let user: landlord = {
       agents: usr.agents || [],
       agreed_to_terms: usr.agreed_to_terms || false,
-      banking_details: usr.banking_details || null,
-      business_areas: usr.business_areas || [],
+      banking_details: usr.banking_details || this.defaultBankingDetails(),
+      property_addresses: usr.property_addresses || [],
       current_job: usr.current_job || "",
       firstime: usr.firstime || true,
       firstname: usr.firstname || "",
@@ -229,6 +230,28 @@ export class UsersService {
       user_type: ""
     }
     return user;
+  }
+
+  defaultBankingDetails(){
+    let bd: BankingDetails = {
+      account_holder: "",
+      account_number: "",
+      account_type: "",
+      bank: "",
+      branch_code: ""
+    }
+    return bd;
+  }
+
+  copyBankingDetails(_bds: BankingDetails){
+    let bd: BankingDetails = {
+      account_holder: _bds.account_holder || "",
+      account_number: _bds.account_number || "",
+      account_type: _bds.account_type || "",
+      bank: _bds.bank || "",
+      branch_code: _bds.branch_code || ""
+    }
+    return bd;
   }
 
 }

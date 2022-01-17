@@ -25,7 +25,9 @@ export class ProfilePage implements OnInit {
   @Input("userID") userID;
   userAuth: boolean = false; // Is user logged in ?
   userAddress: string = "";
-  addressPredictions: any[] = [];f
+  businessAddress: string = "";
+  addressPredictions: any[] = [];
+  businessAddressPredictions: any[] = [];
   profileComplete: boolean = false;
   public profileForm: FormGroup;
   showBackButton: boolean = false;
@@ -277,6 +279,30 @@ export class ProfilePage implements OnInit {
     this.mapsService.getPlacePredictionsSA(this.userAddress)
     .then(res =>{
       this.addressPredictions = res;
+    })
+    .catch(err =>{
+      this.ionicComponentService.presentAlert(err.message);
+    })
+  }
+
+  getBusinessAreaPredictions(event){
+    this.mapsService.getPlacePredictionsSA(this.businessAddress)
+    .then(res =>{
+      this.businessAddressPredictions = res;
+    })
+    .catch(err =>{
+      this.ionicComponentService.presentAlert(err.message);
+    })
+  }
+
+  businessAddressSelected(address: any){
+    this.businessAddress = address.structured_formatting.main_text;
+    this.businessAddressPredictions = [];
+    this.mapsService.getSelectedPlace(address)
+    .then(adrs =>{
+      this.user.business_areas.push(adrs)
+      this.businessAddressPredictions = [];
+      this.businessAddress = "";
     })
     .catch(err =>{
       this.ionicComponentService.presentAlert(err.message);

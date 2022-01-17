@@ -1,8 +1,9 @@
 import { User } from './user.model';
 import { Address } from './address.model';
+import { Client } from './client.model';
 
 export interface RoomSearch{
-	agent: boolean;
+	agent: User;
 	institution_and_campus: string;
 	institution_address: Address;
 	room_type: string;
@@ -11,7 +12,7 @@ export interface RoomSearch{
 	parking_needed: boolean;
 	gender_prefference: string;
 	preffered_property_type: string;
-	searcher: User;
+	searcher: Client;
 	special_needs: string;
 	completed: boolean;
 	id: string;

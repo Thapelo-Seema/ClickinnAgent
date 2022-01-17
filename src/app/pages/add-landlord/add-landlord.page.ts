@@ -8,6 +8,8 @@ import { ObjectInitService } from '../../services/object-init.service';
 import { AuthService } from '../../services/auth.service';
 import { ValidationService } from '../../services/validation.service';
 import { landlord } from 'src/app/models/landlord.model';
+import { UsersService } from '../../object-init/users.service';
+import { MapsService } from '../../services/maps.service';
 
 @Component({
   selector: 'app-add-landlord',
@@ -17,9 +19,11 @@ import { landlord } from 'src/app/models/landlord.model';
 export class AddLandlordPage implements OnInit {
 
   public showPassword: boolean = false;
-  redirectUrl: string;
+  agent_id: string = "";
   public registerForm: FormGroup;
   user: landlord;
+  businessAddress: string = "";
+  businessAddressPredictions: any[] = [];
   
   constructor(
     private authSvc: AuthService,
@@ -27,8 +31,10 @@ export class AddLandlordPage implements OnInit {
     private activatedRoute: ActivatedRoute,
     public menuCtrl: MenuController,
     private userService:  UserService,
+    private user_init_svc: UsersService,
     private ionicComponentService: IonicComponentService,
     private object_init_svc: ObjectInitService,
+    private mapsService: MapsService,
     //****** form validation ********//
     public  formBuilder: FormBuilder
   ){ 
@@ -36,7 +42,7 @@ export class AddLandlordPage implements OnInit {
   
     //this.catId = this.activatedRoute.snapshot.paramMap.get('catId');
    /// console.log("CatId="+this.catId);
-   this.user = this.object_init_svc.userInit();
+   this.user = this.user_init_svc.defaultLandlord();
    let EMAIL_REGEXP = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
  
  
@@ -51,45 +57,35 @@ export class AddLandlordPage implements OnInit {
   }
 
   ngOnInit() {
-    this.redirectUrl = this.activatedRoute.snapshot.queryParamMap.get('redirectUrl');
-    // const secondParam: string = this.route.snapshot.queryParamMap.get('secondParamKey');
-     console.log("redirectUrl="+this.redirectUrl)
-  }
-
-  submitFormTest(){
-    if (!this.registerForm.valid){
-      console.log(this.registerForm.value);
-      //this.presentAlert("invalid form");
-      console.log("invalid form")
-    } else {
-      console.log(this.registerForm.value);
-      console.log("yes, ")
-      //this.userService.loginUser()
+    if(this.activatedRoute.snapshot.paramMap.get('uid')){
+      this.user.agents.push(this.activatedRoute.snapshot.paramMap.get('uid'));
     }
   }
 
   /// old way ////
   async registerUser(){
-    console.log("call signopUser");
     if (!this.registerForm.valid){
       console.log(this.registerForm.value);
       console.log("invalid form")
       //this.presentAlert("invalid form");
     } else {
       this.ionicComponentService.presentLoading();
-      console.log(this.registerForm.value);
-      console.log("yes, ")
       this.authSvc.signUpWithEmailAndPassword(this.registerForm.value.username,
         this.registerForm.value.password)
       .then(data => {
-        console.log(data);
         this.user.uid = data.user.uid;
         this.bindFormToUser();
-        console.log(this.user);
-        this.userService.createUser(this.user)
+        this.userService.addLandlord(this.user)
         .then(() =>{
           //navigate user to respective home page
           this.ionicComponentService.dismissLoading();
+          this.router.navigate(['/signin'])
+          .then(() =>{
+            this.authSvc.signOut()
+            .then(() =>{
+              console.log("logged out!")
+            })
+          })
         })
       }, (error) => { 
          var errorMessage: string = error.message;
@@ -137,6 +133,30 @@ export class AddLandlordPage implements OnInit {
     this.user.lastname = this.registerForm.value.lastname
     this.user.phone_number = this.registerForm.value.phone;
     this.user.email = this.registerForm.value.username;
+  }
+
+  getBusinessAreaPredictions(event){
+    this.mapsService.getPlacePredictionsSA(this.businessAddress)
+    .then(res =>{
+      this.businessAddressPredictions = res;
+    })
+    .catch(err =>{
+      this.ionicComponentService.presentAlert(err.message);
+    })
+  }
+
+  businessAddressSelected(address: any){
+    this.businessAddress = address.structured_formatting.main_text;
+    this.businessAddressPredictions = [];
+    this.mapsService.getSelectedPlace(address)
+    .then(adrs =>{
+      this.user.property_addresses.push(adrs)
+      this.businessAddressPredictions = [];
+      this.businessAddress = "";
+    })
+    .catch(err =>{
+      this.ionicComponentService.presentAlert(err.message);
+    })
   }
 
 }
