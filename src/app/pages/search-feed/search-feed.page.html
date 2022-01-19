@@ -14,7 +14,7 @@
       </ion-col>
       <ion-col size="12" size-lg="8">
         <ion-list style="width: 100%; background-color: transparent;">
-          <ion-infinite-scroll threshold="15%" (ionInfinite="loadData($event") >
+          <ion-infinite-scroll threshold="15%" (ionInfinite)="loadData($event)" >
             <ion-infinite-scroll-content>
               <ion-card *ngFor="let search of searches ;  let i = index">
                 <ion-item lines="none">
@@ -77,7 +77,7 @@
                 </ion-item>
                 
                 <div class="ion-padding">
-                  <ion-button expand="block" color="thapslightblue">
+                  <ion-button expand="block" color="thapslightblue" (click)="takeJob(search)" >
                     <ion-text color="light">Take Job</ion-text> 
                     <ion-icon name="bag-check-outline" slot="end" color="light"></ion-icon>
                   </ion-button>

@@ -8,6 +8,7 @@ import { RoomSearch } from 'src/app/models/room-search.model';
 import { take } from 'rxjs/operators';
 import { format, parseISO, formatDistance } from 'date-fns';
 import { IonInfiniteScroll } from '@ionic/angular';
+import { IonicComponentService } from '../../services/ionic-component.service';
 
 @Component({
   selector: 'app-search-feed',
@@ -23,6 +24,7 @@ export class SearchFeedPage implements OnInit {
   constructor(
     private activated_route: ActivatedRoute,
     private router: Router,
+    private ionic_component_svc: IonicComponentService,
     private searchfeed_svc: SearchFeedService,
     private user_svc: UserService,
     private user_init_svc: UsersService
@@ -76,6 +78,27 @@ export class SearchFeedPage implements OnInit {
       this.updateSearchesAndPointer(schs);
       event.target.complete();
     })
+  }
+
+  takeJob(search: RoomSearch){
+    this.ionic_component_svc.presentLoading();
+    let _search = search;
+    //update agent current job 
+    this.user.current_job = search.id;
+    this.user_svc.updateUser(this.user);
+
+    //update job agent field
+    _search.agent = this.user;
+    this.searchfeed_svc.updateSearch(_search)
+    .then(() =>{
+      this.ionic_component_svc.dismissLoading();
+      this.router.navigate(['/chat', {'search_id': _search.id}])
+    })
+    .catch(err =>{
+      this.ionic_component_svc.dismissLoading();
+      this.ionic_component_svc.presentAlert(err.message);
+    })
+    //send job id over to chat page
   }
 
 

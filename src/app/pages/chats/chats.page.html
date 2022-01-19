@@ -13,9 +13,9 @@
 			<img src="https://ionic-docs-demo.herokuapp.com/assets/avatar.svg">
     </ion-avatar>
     <ion-label>
-      <!-- <h3>
+      <h2 *ngIf="chat.client">
         {{ chat.client.firstname }} 
-      </h3> -->
+      </h2>
       <p>
         {{chat.last_message.message}}
       </p>

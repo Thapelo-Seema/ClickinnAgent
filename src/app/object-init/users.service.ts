@@ -42,6 +42,8 @@ export class UsersService {
       rating: 0,
       online: false,
       typing: false,
+      contacts: [],
+      thread_ids: [],
       user_type: "" 
     }
     return user;
@@ -79,6 +81,8 @@ export class UsersService {
       rating: usr.rating || 0,
       online: usr.online || false,
       typing: usr.typing || false,
+      contacts: usr.contacts || [],
+      thread_ids: usr.thread_ids || [],
       user_type: ""
     }
     return user;
@@ -116,6 +120,8 @@ export class UsersService {
       rating: 0,
       online: false,
       typing: false,
+      contacts: [],
+      thread_ids: [],
       user_type: "" 
     }
     return user;
@@ -153,6 +159,8 @@ export class UsersService {
       rating: usr.rating || 0,
       online: usr.online || false,
       typing: usr.typing || false,
+      contacts: usr.contacts || [],
+      thread_ids: usr.thread_ids || [],
       user_type: ""
     }
     return user;

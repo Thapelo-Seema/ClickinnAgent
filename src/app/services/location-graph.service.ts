@@ -10,6 +10,11 @@ export class LocationGraphService {
   						 'KwaZulu Natal', 'Western Cape', 'Northern Cape', 
   						 'Mpumalanga', 'Free State', 'Eastern Cape']
 
+auckland_park_neighbourhoods: string[] = [
+							'auckland park', 'melville', 'brixton', 'hursthill', 'westdene', 'crosby',
+							'rossmore', 'cottesloe'
+						]
+
   gauteng_cities: string[] = ['Johannesburg', 'Pretoria']
   Johannesburg_neighbourhoods: string[] = ['Sandton', 'Morningside', 'Suninghill', 
   								 'Bryanston', 'Randburg', 'Hyde Park', 'Auckland Park', 

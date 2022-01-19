@@ -42,7 +42,7 @@
 		<ion-row>
 			<ion-list style="background-color:transparent; width: 100%;">
 				<div style="margin: 0; padding: 0;" *ngFor="let msg of thread.chat_messages ; let i = index">
-					<div *ngIf="msg?.highlight?.message" class="ion-no-padding ion-no-margin">
+					<div *ngIf="msg?.rooms" class="ion-no-padding ion-no-margin">
 						<ion-slides class="swiper-container" pager= false [options]="slideOption" #slidesOne>
 							<ion-slide tappable class="swiper-slide ion-no-padding ion-no-margin" *ngFor="let room of msg.rooms; let j = index" (click)="openRoom(room.room_id)">
 								<ion-grid>

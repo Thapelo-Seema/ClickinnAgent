@@ -11,6 +11,8 @@ import { UsersService } from '../../object-init/users.service';
 import { ChatMessage } from '../../models/chat-message.model';
 import { IonDatetime, IonContent } from '@ionic/angular';
 import { format, parseISO, formatDistance } from 'date-fns';
+import { SearchFeedService } from '../../services/search-feed.service';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-chat',
@@ -37,6 +39,7 @@ export class ChatPage implements OnInit{
     private activated_route: ActivatedRoute,
     private router: Router,
     private user_svc: UserService,
+    private searchfeed_svc: SearchFeedService,
     private user_init_svc: UsersService
   ) { 
     this.thread = this.chat_init_svc.defaultThread();
@@ -56,23 +59,36 @@ export class ChatPage implements OnInit{
       .subscribe(thd =>{
         this.thread = this.chat_init_svc.copyThread(thd);
       })
+    }else if(this.activated_route.snapshot.paramMap.get("search_id")){
+      this.searchfeed_svc.getSearch(this.activated_route.snapshot.paramMap.get("search_id"))
+      .pipe(take(1))
+      .subscribe(sch =>{
+        this.searchfeed_svc.getRoomSearchResults(sch)
+        .pipe(take(1))
+        .subscribe(rms =>{
+          this.rooms = rms;
+          this.rooms.forEach(rm =>{
+            this.selected_rooms.push(null); //initalize all rooms as not selected
+          })
+        })
+        //check if these two have a chat open already
+        if(sch.agent.contacts.indexOf(sch.searcher.uid) != -1){
+          let index = sch.agent.contacts.indexOf(sch.searcher.uid);
+          this.chat_svc.getThread(sch.agent.thread_ids[index])
+          .subscribe(thd =>{
+            this.thread = this.chat_init_svc.copyThread(thd);
+          })
+        }else{
+           //if they dont have a chat open, start one
+          this.thread.agent = sch.agent;
+          this.thread.client = sch.searcher;
+          //generate initial message
+          this.generateInitialMessage();
+        }
+       
+      })
     }
 
-    if(this.activated_route.snapshot.paramMap.get("uid")){
-      this.user_svc.getUser(this.activated_route.snapshot.paramMap.get("uid"))
-      .subscribe(usr =>{
-        this.user = this.user_init_svc.copyUser(usr);
-        this.thread.agent = this.user_init_svc.copyUser(usr);
-      })
-      this.room_svc.getUserRooms(this.activated_route.snapshot.paramMap.get("uid"))
-      .subscribe(rms =>{
-        this.rooms = rms;
-        console.log(this.rooms)
-        this.rooms.forEach(rm =>{
-          this.selected_rooms.push(null); //initalize all rooms as not selected
-        })
-      })
-    }
   }
 
   handleTyping(event){
@@ -99,6 +115,12 @@ export class ChatPage implements OnInit{
     return formatDistance(date, Date.now(), {addSuffix: true});
   }
 
+  generateInitialMessage(){
+    this.new_message.message = "Hi " + this.thread.client.firstname + ", my name is " + this.thread.agent.firstname +
+    ". I am a trained Clickinn agent, and I will make sure you find the accommodation that best suits your needs. How are you today?";
+    this.send();
+  }
+
   send(){
     this.new_message.time = Date.now();
     this.new_message.message_id = this.thread.chat_messages.length > 0 ? this.thread.chat_messages.length - 1: 0;
@@ -112,6 +134,17 @@ export class ChatPage implements OnInit{
       this.chat_svc.createThread(this.thread)
       .then(td =>{
         this.thread.thread_id = td.id;
+        //update contacts on agent and client
+        this.thread.agent.contacts.push(this.thread.client.uid);
+        this.thread.agent.thread_ids.push(this.thread.thread_id);
+
+        this.user_svc.updateUser(this.thread.agent);
+
+        this.thread.client.contacts.push(this.thread.agent.uid);
+        this.thread.client.thread_ids.push(this.thread.thread_id);
+
+        this.user_svc.updateClient(this.thread.client);
+
         this.chat_svc.updateThread(this.thread)
         .catch(err =>{
           console.log(err);

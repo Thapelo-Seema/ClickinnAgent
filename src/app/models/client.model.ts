@@ -32,6 +32,8 @@ export interface Client{
 	rating: number;
 	online: boolean;
 	user_type: string;
+	contacts?: string[];
+	thread_ids?: string[];
 	typing: boolean;
 	uid: string;
 }

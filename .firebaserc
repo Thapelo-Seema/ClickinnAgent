@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "clickinn-996f0"
+  },
+  "targets": {
+    "clickinn-996f0": {
+      "hosting": {
+        "agents-app": [
+          "clickinn-agents"
+        ]
+      }
+    }
+  }
+}
