@@ -9,6 +9,7 @@ export interface User{
 	agreed_to_terms: boolean;
 	banking_details: BankingDetails;
 	business_areas: any[];
+	neighbourhoods?: string[];
 	contracts: any[];
 	current_job: string;
 	display_name: string;

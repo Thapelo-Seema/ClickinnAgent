@@ -244,7 +244,7 @@ export class ProfilePage implements OnInit {
       this.modalController.dismiss()
       .then()
       .catch(err =>{
-        this.router.navigate(['./agent-dash', {uid: this.user.uid}]);
+        this.router.navigate(['/home', {uid: this.user.uid}]);
       })
     }
   
@@ -263,10 +263,13 @@ export class ProfilePage implements OnInit {
    }
 
    async updateProfile(){
+     this.user.business_areas.forEach(ba =>{
+       this.user.neighbourhoods.push(ba.neighbourhood);
+     })
     this.userService.updateUser(this.user)
     .then(() =>{
       this.ionicComponentService.dismissLoading();
-      this.ionicComponentService.presentAlert("User Updated");
+      this.ionicComponentService.presentAlert("Profile Updated");
     })
     .catch(err =>{
       this.ionicComponentService.dismissLoading();
