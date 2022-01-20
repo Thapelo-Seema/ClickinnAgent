@@ -33,10 +33,10 @@ export class HomePage implements OnInit {
     if(this.user.uid = this.activatedRoute.snapshot.paramMap.get('uid')){
       console.log(this.activatedRoute.snapshot.paramMap.get('uid'));
       this.user_svc.getUser(this.user.uid)
-      .pipe(take(1))
       .subscribe(fetched_user =>{
         if(fetched_user){
-          this.user = this.user_init_svc.copyUser(fetched_user);
+          this.user = this.user_init_svc.copyUser(fetched_user)
+          if(this.user.current_job != "") this.gotoJob()
         }
       });
     }else{
@@ -44,11 +44,10 @@ export class HomePage implements OnInit {
       .pipe(take(1)).subscribe(firebase_user =>{
         if(firebase_user){
           this.user_svc.getUser(firebase_user.uid)
-          .pipe(take(1))
           .subscribe(fetched_user =>{
             if(fetched_user){
               this.user = this.user_init_svc.copyUser(fetched_user);
-              console.log(fetched_user);
+              if(this.user.current_job != "") this.gotoJob()
             }
           });
         }
@@ -93,7 +92,7 @@ export class HomePage implements OnInit {
   }
 
   gotoJob(){
-    this.router.navigate(['/job', {'client_id': this.user.uid, 'job_id': '', 'uid': this.user.uid}]);
+    this.router.navigate(['/job', {'job_id': this.user.current_job, 'uid': this.user.uid}]);
   }
 
   addLandlord(){

@@ -3,8 +3,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { User } from 'src/app/models/user.model';
 import { UserService } from 'src/app/services/user.service';
 import { UsersService } from '../../object-init/users.service';
-import { RoomService } from '../../services/room.service';
+import { IonicComponentService } from '../../services/ionic-component.service';
+import { SearchFeedService } from '../../services/search-feed.service';
 import { take } from 'rxjs/operators';
+import { RoomSearch } from 'src/app/models/room-search.model';
 
 @Component({
   selector: 'app-job',
@@ -14,35 +16,64 @@ import { take } from 'rxjs/operators';
 export class JobPage implements OnInit {
 
   uid: string = "";
-  client: User;
+  user: User;
+  search: RoomSearch;
   constructor(
     private activated_route: ActivatedRoute,
     private router: Router,
+    private ionic_component_svc: IonicComponentService,
     private user_init_svc: UsersService,
-    private room_svc: RoomService,
+    private searchfeed_svc: SearchFeedService,
     private user_svc: UserService
   ) { 
-    this.client = this.user_init_svc.defaultUser();
+    this.user = this.user_init_svc.defaultUser();
+    this.search = this.searchfeed_svc.defaultSearch();
   }
 
   ngOnInit() {
-    this.uid = this.activated_route.snapshot.paramMap.get("uid") ? this.activated_route.snapshot.paramMap.get("client_id") : "";
-    if(this.activated_route.snapshot.paramMap.get("client_id")){
-      this.user_svc.getUser(this.activated_route.snapshot.paramMap.get("client_id"))
+    this.ionic_component_svc.presentLoading();
+    let job_id = this.activated_route.snapshot.paramMap.get("job_id");
+    if(this.activated_route.snapshot.paramMap.get("uid")){
+      this.user_svc.getUser(this.activated_route.snapshot.paramMap.get("uid"))
       .pipe(take(1))
       .subscribe(usr =>{
-        this.client = this.user_init_svc.copyUser(usr);
-        console.log(this.client)
+        this.user = this.user_init_svc.copyUser(usr);
+        if(this.user.current_job != "" && this.user.current_job == job_id){
+          this.searchfeed_svc.getSearch(this.user.current_job)
+          .pipe(take(1))
+          .subscribe(sch =>{
+            this.search = this.searchfeed_svc.copySearch(sch);
+            this.ionic_component_svc.dismissLoading().catch(err =>{
+              console.log(err);
+            })
+          })
+        }else{
+          this.ionic_component_svc.dismissLoading().catch(err =>{
+            console.log(err);
+          })
+        }
+      })
+    }else{
+      this.ionic_component_svc.dismissLoading().catch(err =>{
+        console.log(err);
       })
     }
   }
 
   updateProfilePicLoaded(){
-    this.client.photo.loaded = true;
+    this.search.searcher.dp_loaded = true;
   }
 
   acceptJob(){
-    this.router.navigate(['/chat', {'search_id': this.client.uid, 'uid': this.uid}]);
+    this.ionic_component_svc.presentLoading();
+    this.search.agent = this.user_init_svc.copyUser(this.user);
+    this.searchfeed_svc.updateSearch(this.search)
+    .then(() =>{
+      this.ionic_component_svc.dismissLoading().catch(err =>{
+        console.log(err);
+      })
+      this.router.navigate(['/chat', {'search_id': this.search.id}]);
+    })
   }
 
   decline(){

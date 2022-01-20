@@ -128,4 +128,44 @@ export class SearchFeedService {
     return this.http.post(url, search, {headers});*/
   }
 
+  defaultSearch(){
+    let search: RoomSearch = {
+      agent: null,
+      institution_and_campus: "",
+      institution_address: null,
+      room_type: "",
+      max_price: 0,
+      funding_type: "",
+      parking_needed: false,
+      gender_prefference: "",
+      preffered_property_type: "",
+      searcher: null,
+      special_needs: "",
+      completed: false,
+      id: "",
+      time: 0
+    }
+    return search;
+  }
+
+  copySearch(_search: RoomSearch){
+    let search: RoomSearch = {
+      agent: _search.agent || null,
+      institution_and_campus: _search.institution_and_campus || "",
+      institution_address: _search.institution_address || null,
+      room_type: _search.room_type || "",
+      max_price: _search.max_price || 0,
+      funding_type: _search.funding_type || "",
+      parking_needed: _search.parking_needed || false,
+      gender_prefference: _search.gender_prefference || "",
+      preffered_property_type: _search.preffered_property_type || "",
+      searcher: _search.searcher || null,
+      special_needs: _search.special_needs || "",
+      completed: _search.completed || false,
+      id: _search.id || "",
+      time: _search.time || 0
+    }
+    return search;
+  }
+
 }
