@@ -1,4 +1,13 @@
 <ion-header>
+	<ion-toolbar>
+		<ion-buttons slot="start">
+			<ion-back-button></ion-back-button>
+			<ion-button (click)="goHome()">
+				<ion-icon slot="icon-only" name="home-outline"></ion-icon>
+			</ion-button>
+		</ion-buttons>
+	</ion-toolbar>
+	
 	<ion-slides class="swiper-container ion-border-bottom" pager= false [options]="slideOption" #slidesOne>
 		<ion-slide tappable class="swiper-slide" *ngFor="let room of rooms; let i = index" (click)="selectRoom(i)">
 			<ion-grid>

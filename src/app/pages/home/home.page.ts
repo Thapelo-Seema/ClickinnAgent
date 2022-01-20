@@ -7,6 +7,7 @@ import { take } from 'rxjs/operators';
 import { AuthService } from '../../services/auth.service';
 import { IonicComponentService } from '../../services/ionic-component.service';
 import { SearchFeedService } from '../../services/search-feed.service';
+import { RoomSearch } from 'src/app/models/room-search.model';
 
 
 @Component({
@@ -17,6 +18,7 @@ import { SearchFeedService } from '../../services/search-feed.service';
 export class HomePage implements OnInit {
 
   user: User;
+  search: RoomSearch;
   displayPicLoaded: boolean = false;
   constructor(
     private router: Router,
@@ -29,6 +31,7 @@ export class HomePage implements OnInit {
   ) {
       //User initialised
       this.user = this.user_init_svc.defaultUser();
+      this.search = this.searchfeed_svc.defaultSearch();
    }
 
   ngOnInit(){
@@ -60,16 +63,21 @@ export class HomePage implements OnInit {
   }
 
   handleJob(){
+    let instruction = this.activatedRoute.snapshot.paramMap.get("instruction");
     if(this.user.current_job != ""){
       this.searchfeed_svc.getSearch(this.user.current_job)
       .pipe(take(1))
       .subscribe(sch =>{
+        if(sch)
+        this.search = this.searchfeed_svc.copySearch(sch)
         if(sch && sch.agent && (sch.agent.uid == this.user.uid)){
           if(this.user.contacts.indexOf(sch.searcher.uid) != -1){
             let index = this.user.contacts.indexOf(sch.searcher.uid)
             let thread_id = this.user.thread_ids[index];
+            if(instruction != "do not proceed to job")
             this.router.navigate(['/chat', {'thread_id': thread_id}])
           }else{
+            if(instruction != "do not proceed to job")
             this.gotoJob();
           }
         }

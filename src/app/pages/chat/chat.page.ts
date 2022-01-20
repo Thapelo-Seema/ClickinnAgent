@@ -243,4 +243,8 @@ export class ChatPage implements OnInit{
     this.router.navigate(['/room', {'room_id': room_id}]);
   }
 
+  goHome(){
+    this.router.navigate(['/home', {'instruction': 'do not proceed to job'}]);
+  }
+
 }
