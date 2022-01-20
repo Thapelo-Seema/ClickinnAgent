@@ -6,6 +6,7 @@ import { UserService } from '../../services/user.service';
 import { take } from 'rxjs/operators';
 import { AuthService } from '../../services/auth.service';
 import { IonicComponentService } from '../../services/ionic-component.service';
+import { SearchFeedService } from '../../services/search-feed.service';
 
 
 @Component({
@@ -23,23 +24,25 @@ export class HomePage implements OnInit {
     private user_svc: UserService,
     private activatedRoute: ActivatedRoute,
     private auth_svc: AuthService,
-    private ionic_component_svc: IonicComponentService
+    private ionic_component_svc: IonicComponentService,
+    private searchfeed_svc: SearchFeedService
   ) {
+      //User initialised
       this.user = this.user_init_svc.defaultUser();
    }
 
-  ngOnInit() {
-    console.log('ngOnInit running...');
+  ngOnInit(){
+    //If User just signed in or just signed up, this part will run
     if(this.user.uid = this.activatedRoute.snapshot.paramMap.get('uid')){
-      console.log(this.activatedRoute.snapshot.paramMap.get('uid'));
       this.user_svc.getUser(this.user.uid)
       .subscribe(fetched_user =>{
         if(fetched_user){
           this.user = this.user_init_svc.copyUser(fetched_user)
-          if(this.user.current_job != "") this.gotoJob()
+          //If user is associated to a job, attend to this job
+          this.handleJob();
         }
       });
-    }else{
+    }else{ //Else if user is already authenticated but just reloading the app this part of the code will run
       this.auth_svc.getAuthenticatedUser()
       .pipe(take(1)).subscribe(firebase_user =>{
         if(firebase_user){
@@ -47,12 +50,31 @@ export class HomePage implements OnInit {
           .subscribe(fetched_user =>{
             if(fetched_user){
               this.user = this.user_init_svc.copyUser(fetched_user);
-              if(this.user.current_job != "") this.gotoJob()
+              //If user is associated to a job, attend to this job
+              this.handleJob();
             }
           });
         }
       })
     }
+  }
+
+  handleJob(){
+    if(this.user.current_job != ""){
+      this.searchfeed_svc.getSearch(this.user.current_job)
+      .pipe(take(1))
+      .subscribe(sch =>{
+        if(sch && sch.agent && (sch.agent.uid == this.user.uid)){
+          if(this.user.contacts.indexOf(sch.searcher.uid) != -1){
+            let index = this.user.contacts.indexOf(sch.searcher.uid)
+            let thread_id = this.user.thread_ids[index];
+            this.router.navigate(['/chat', {'thread_id': thread_id}])
+          }else{
+            this.gotoJob();
+          }
+        }
+      })
+    } 
   }
 
   gotoUpload(){

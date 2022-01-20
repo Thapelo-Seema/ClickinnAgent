@@ -13,6 +13,7 @@ import { IonDatetime, IonContent } from '@ionic/angular';
 import { format, parseISO, formatDistance } from 'date-fns';
 import { SearchFeedService } from '../../services/search-feed.service';
 import { take } from 'rxjs/operators';
+import { RoomSearch } from 'src/app/models/room-search.model';
 
 @Component({
   selector: 'app-chat',
@@ -57,25 +58,32 @@ export class ChatPage implements OnInit{
     if(this.activated_route.snapshot.paramMap.get("thread_id")){
       this.chat_svc.getThread(this.activated_route.snapshot.paramMap.get("thread_id"))
       .subscribe(thd =>{
+        console.log("Thread updated!");
+        //Prepare the search results for the client's current search
+        if(thd.client.current_job != "" && (this.rooms.length == 0)){
+          this.searchfeed_svc.getSearch(this.thread.client.current_job)
+          .pipe(take(1))
+          .subscribe(sch =>{
+            this.prepareSearchResults(sch);
+          }) 
+        }
         this.thread = this.chat_init_svc.copyThread(thd);
+        if(this.thread.thread_id == ""){
+          this.thread.thread_id = this.activated_route.snapshot.paramMap.get("thread_id");
+          this.chat_svc.updateThread(this.thread);
+        }
       })
     }else if(this.activated_route.snapshot.paramMap.get("search_id")){
       this.searchfeed_svc.getSearch(this.activated_route.snapshot.paramMap.get("search_id"))
       .pipe(take(1))
       .subscribe(sch =>{
-        this.searchfeed_svc.getRoomSearchResults(sch)
-        .pipe(take(1))
-        .subscribe(rms =>{
-          this.rooms = rms;
-          this.rooms.forEach(rm =>{
-            this.selected_rooms.push(null); //initalize all rooms as not selected
-          })
-        })
+        this.prepareSearchResults(sch)
         //check if these two have a chat open already
         if(sch.agent.contacts.indexOf(sch.searcher.uid) != -1){
           let index = sch.agent.contacts.indexOf(sch.searcher.uid);
           this.chat_svc.getThread(sch.agent.thread_ids[index])
           .subscribe(thd =>{
+            console.log("Thread updated!");
             this.thread = this.chat_init_svc.copyThread(thd);
           })
         }else{
@@ -85,10 +93,20 @@ export class ChatPage implements OnInit{
           //generate initial message
           this.generateInitialMessage();
         }
-       
       })
     }
 
+  }
+
+  prepareSearchResults(search: RoomSearch){
+    this.searchfeed_svc.getRoomSearchResults(search)
+    .pipe(take(1))
+    .subscribe(rms =>{
+      this.rooms = rms;
+      this.rooms.forEach(rm =>{
+        this.selected_rooms.push(null); //initalize all rooms as not selected
+      })
+    })
   }
 
   handleTyping(event){
@@ -122,30 +140,49 @@ export class ChatPage implements OnInit{
   }
 
   send(){
+    console.log("Sending message...");
     this.new_message.time = Date.now();
     this.new_message.message_id = this.thread.chat_messages.length > 0 ? this.thread.chat_messages.length - 1: 0;
     this.thread.chat_messages.push(this.new_message);
     this.thread.last_message = this.new_message;
     this.thread.new_messages.push(this.new_message);
     this.thread.last_update = Date.now();
+    //If thread is not empty, just update the thread else create a new thread on the database 
     if(this.thread.thread_id != ""){
+      console.log("Agent already has client as a contact");
       this.chat_svc.updateThread(this.thread);
     }else{
+      console.log("Agent does not have the client as a contact");
       this.chat_svc.createThread(this.thread)
       .then(td =>{
+        console.log("Just created new thread")
         this.thread.thread_id = td.id;
-        //update contacts on agent and client
+
+        //update contacts on agent
         this.thread.agent.contacts.push(this.thread.client.uid);
         this.thread.agent.thread_ids.push(this.thread.thread_id);
 
-        this.user_svc.updateUser(this.thread.agent);
-
+        //update contacts on client
         this.thread.client.contacts.push(this.thread.agent.uid);
         this.thread.client.thread_ids.push(this.thread.thread_id);
 
-        this.user_svc.updateClient(this.thread.client);
+        console.log("Just updated the agent and clients contact list locally: ", this.thread);
 
+        //Update the thread
         this.chat_svc.updateThread(this.thread)
+        .then(() =>{
+          console.log("Just synced the thread: ");
+          //Sync agent and client profiles
+          this.user_svc.updateClient(this.thread.client);
+          this.user_svc.updateUser(this.thread.agent);
+          console.log("Just synced the agent and client profiles");
+          console.log("Subscribing to thread...");
+          this.chat_svc.getThread(this.thread.thread_id)
+          .subscribe(_thd =>{
+            console.log("Thread updated!");
+            this.thread = this.chat_init_svc.copyThread(_thd);
+          })
+        })
         .catch(err =>{
           console.log(err);
         })
