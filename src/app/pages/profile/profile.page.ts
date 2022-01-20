@@ -12,6 +12,7 @@ import { MapsService } from '../../services/maps.service';
 import { ValidationService } from '../../services/validation.service';
 import { FileUpload } from '../../models/file-upload.model';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-profile',
@@ -53,6 +54,7 @@ export class ProfilePage implements OnInit {
   }
   constructor(
     private router: Router, 
+    private auth_svc: AuthService,
     private activatedRoute: ActivatedRoute,
     private modalController: ModalController,
     private mapsService: MapsService,
@@ -136,6 +138,16 @@ export class ProfilePage implements OnInit {
          loaded: false
       }
     this.uploadProfilePic();
+  }
+
+  signout(){
+    this.router.navigate(['/signin'])
+    .then(() =>{
+      this.auth_svc.signOut()
+      .then(() =>{
+        console.log("logged out!")
+      })
+    })
   }
 
   /**Handles uploading of the pictures in the backroom.pictures array
