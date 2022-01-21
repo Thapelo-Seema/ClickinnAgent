@@ -77,10 +77,13 @@
                 </ion-item>
                 
                 <div class="ion-padding">
-                  <ion-button expand="block" color="thapslightblue" (click)="takeJob(search)" >
+                  <ion-button *ngIf="!search.agent" expand="block" color="thapslightblue" (click)="takeJob(search)" >
                     <ion-text color="light">Take Job</ion-text> 
                     <ion-icon name="bag-check-outline" slot="end" color="light"></ion-icon>
                   </ion-button>
+                  <ion-chip *ngIf="search.agent" color="thapsblue">
+                    <p>Currently being attended by an agent</p>
+                  </ion-chip>
                 </div>
               </ion-card>
             </ion-infinite-scroll-content>

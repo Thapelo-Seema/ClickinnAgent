@@ -33,21 +33,33 @@ export class SearchFeedPage implements OnInit {
   }
 
   ngOnInit() {
+    this.ionic_component_svc.presentLoading();
     if(this.activated_route.snapshot.paramMap.get('uid')){
       this.user_svc.getUser(this.activated_route.snapshot.paramMap.get('uid'))
       .pipe(take(1))
       .subscribe(usr =>{
-        this.user = this.user_init_svc.copyUser(usr);
+        if(usr){
+          this.user = this.user_init_svc.copyUser(usr);
+          this.searchfeed_svc.getMySearchFeed(this.user.neighbourhoods)
+          .subscribe(schs =>{
+            this.searches = schs;
+            this.updatePointer();
+            this.ionic_component_svc.dismissLoading()
+            .catch(err =>{
+              console.log(err)
+            })
+          })
+        }else{
+          this.ionic_component_svc.dismissLoading()
+          .catch(err =>{
+            console.log(err)
+          })
+        }
       })
-    }
-
-    if(this.activated_route.snapshot.paramMap.get('locations')){
-      this.locations = this.activated_route.snapshot.paramMap.get('locations').split(',');
-      this.searchfeed_svc.getMySearchFeed(this.locations)
-      .pipe(take(1))
-      .subscribe(schs =>{
-        this.searches = schs;
-        this.updatePointer();
+    }else{
+      this.ionic_component_svc.dismissLoading()
+      .catch(err =>{
+        console.log(err)
       })
     }
   }
@@ -72,7 +84,7 @@ export class SearchFeedPage implements OnInit {
   }
 
   loadData(event){
-    this.searchfeed_svc.getNextFeedResults(this.locations, this.last_search)
+    this.searchfeed_svc.getNextFeedResults(this.user.neighbourhoods, this.last_search)
     .pipe(take(1))
     .subscribe(schs =>{
       this.updateSearchesAndPointer(schs);

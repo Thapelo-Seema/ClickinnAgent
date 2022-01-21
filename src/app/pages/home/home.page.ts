@@ -8,6 +8,7 @@ import { AuthService } from '../../services/auth.service';
 import { IonicComponentService } from '../../services/ionic-component.service';
 import { SearchFeedService } from '../../services/search-feed.service';
 import { RoomSearch } from 'src/app/models/room-search.model';
+//import { getMessaging, getToken } from 'firebase/messaging';
 
 
 @Component({
@@ -20,6 +21,7 @@ export class HomePage implements OnInit {
   user: User;
   search: RoomSearch;
   displayPicLoaded: boolean = false;
+  //messaging = getMessaging();
   constructor(
     private router: Router,
     private user_init_svc: UsersService,
@@ -41,6 +43,7 @@ export class HomePage implements OnInit {
       .subscribe(fetched_user =>{
         if(fetched_user){
           this.user = this.user_init_svc.copyUser(fetched_user)
+          //this.updateUserFCM();
           //If user is associated to a job, attend to this job
           this.handleJob();
         }
@@ -53,6 +56,7 @@ export class HomePage implements OnInit {
           .subscribe(fetched_user =>{
             if(fetched_user){
               this.user = this.user_init_svc.copyUser(fetched_user);
+              //this.updateUserFCM();
               //If user is associated to a job, attend to this job
               this.handleJob();
             }
@@ -61,6 +65,19 @@ export class HomePage implements OnInit {
       })
     }
   }
+
+  /* updateUserFCM(){
+    //Update user fcm token
+    getToken(this.messaging)
+    .then(token =>{
+      this.user.fcm_token = token;
+      this.user_svc.updateUser(this.user);
+      console.log(token);
+    })
+    .catch(err =>{
+      console.log(err)
+    })
+  } */
 
   handleJob(){
     let instruction = this.activatedRoute.snapshot.paramMap.get("instruction");
