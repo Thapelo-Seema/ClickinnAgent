@@ -53,7 +53,7 @@ auckland_park_neighbourhoods: string[] = [
    	}
 
    	generateCampusSuggestion(neighbourhood: string): string[]{
-   		if( neighbourhood == "Auckland Park" || 
+   		if( neighbourhood == "Auckland Park" || neighbourhood == "Rossmore" ||
    			neighbourhood == "Melville" || neighbourhood == "Brixton" ||
    			neighbourhood == "Hursthill" || neighbourhood == "Crosby" ||
    			neighbourhood == "Westdene" || neighbourhood == "Braamfontein" ||

@@ -10,6 +10,7 @@ import { Room } from 'src/app/models/room.model';
 import { FileUpload } from 'src/app/models/file-upload.model';
 import { PropertiesService } from '../../object-init/properties.service';
 import { ImageGalleryViewPage } from '../image-gallery-view/image-gallery-view.page';
+//import { PropertiesService } from '../../object-init/properties.service';
 
 @Component({
   selector: 'app-room',
@@ -58,6 +59,7 @@ export class RoomPage implements OnInit {
   userAuth: boolean = false; // Is user logged in ?
   userId: any;
   room: Room;
+  is_owner: boolean = false;
   pictures: FileUpload[] = [];
 
   constructor(
@@ -85,13 +87,13 @@ export class RoomPage implements OnInit {
         this.room.property.pictures.forEach(p =>{
           this.pictures.push(p);
         })
-        console.log(this.room);
-        console.log(this.pictures)
+        if(this.activatedRoute.snapshot.paramMap.get("agent_id")){
+          this.agent_id = this.activatedRoute.snapshot.paramMap.get("agent_id");
+          if(this.room.property.uploader_id == this.agent_id) this.is_owner = true;
+        }
       })
     }
-    if(this.activatedRoute.snapshot.paramMap.get("agent_id")){
-      this.agent_id = this.activatedRoute.snapshot.paramMap.get("agent_id");
-    }
+    
   }
 
   ngOnDestroy() {
@@ -197,6 +199,14 @@ export class RoomPage implements OnInit {
   } */
   openDetail(url,itemId){
     this.router.navigateByUrl('/'+url+'/'+itemId);
+  }
+
+  edit(){
+    this.router.navigate(['/upload-listing', {'room_id': this.room.room_id}]);
+  }
+
+  chat(){
+    
   }
 
 }

@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { User } from '../models/user.model';
+import { UserService } from './user.service';
 //import auth from 'firebase/app';
-import { map } from 'rxjs/operators'
+import { map, take, filter } from 'rxjs/operators'
 
 
 @Injectable({
@@ -10,11 +11,11 @@ import { map } from 'rxjs/operators'
 })
 export class AuthService {
 
-  constructor(private afAuth: AngularFireAuth) { }
+  constructor(private afAuth: AngularFireAuth, private user_svc: UserService) { }
 
   //Function that returns a logged in Firebase User
   checkAuthStatus(){
-    return this.afAuth.user.pipe(map(usr => usr != null ? true : false));
+    return this.afAuth.user.pipe(map( (usr) => usr != null))
   }
 
   //Get authenticated user if any otherwise return null

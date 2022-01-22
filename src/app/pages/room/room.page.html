@@ -4,104 +4,239 @@
   
   <ion-header class="ion-no-border" slot="fixed">
     <ion-toolbar class="first" [class.show-background]="showToolbar">
-      <ion-buttons slot="start">
-        <ion-back-button mode="md" color="light" defaultHref="#"></ion-back-button>
+      <ion-buttons mode="md" slot="start">
+        <ion-back-button  color="light" defaultHref="#"></ion-back-button>
       </ion-buttons>
 
-      <!-- <ion-title  class="main-header4" color="light" [class.show-title]="showToolbar">{{(itemDetail | async)?.title}}</ion-title> -->
-
-      <ion-buttons color="light" slot="end">
+      <ion-buttons slot="end">
         <ion-button color="light">
-          <ion-icon slot="icon-only" ios="heart-outline"></ion-icon>
+          <ion-icon slot="icon-only" name="heart-outline"></ion-icon>
         </ion-button>
-
         <ion-button color="light" routerLink="/home" routerDirection="root">
-          <ion-icon slot="icon-only" ios="home-outline"></ion-icon>
+          <ion-icon slot="icon-only" name="home-outline"></ion-icon>
         </ion-button>
       </ion-buttons>
     </ion-toolbar>
   </ion-header>
 
+     
+  <!--******* Image header  *******-->
 
-
-      <!--*****************************-->
-      <!--******* Image header  *******-->
-      <!--*****************************-->
-
-      <!-- <div *ngIf="(itemDetail | async)?.recommended"  class="ribbon pop-in">Best</div> -->
-      <div class="detail-header" [ngStyle]="{'background-image': 'url(' + room?.display_pic_url + ')'}">
-        <ion-grid fixed class="ion-no-padding">
-
-          <div class="detail-price">
-            <h1 class="main-b-header4 margin-top-10">
-              Price: {{ room.rent | currency : 'R' : 'symbol' :
-              '1.0-0' }}
-              <!-- <span *ngIf="itemDetail.type===false"  class="ribbon pop-in">Sold</span> -->
-            </h1>
-          </div>
-          <div class="detail-sfeatured">
-            <h2 class="main-header7 ">
-              {{room.room_type}}
-            </h2>
-          </div>
-          <!-- <div *ngIf="(itemDetail | async)?.new" class="real-tags-bottom">Edit</div> -->
-        </ion-grid>
-      </div>
-
-
-    <ion-grid fixed class="ion-no-padding">
-      <ion-list-header class="margin-bottom-10">
-        <ion-label class="margin-top-3 travel_header2">
-          {{room.furnished ? "Fully furnished " : ""}} {{room.room_type}} </ion-label>
-      </ion-list-header>
-
-      <div class="ion-padding">
-        <p class="margin-left-5 margin-top-0">
-          {{room.description}}
-        </p>
-      </div>
-
-
-      <ion-slides class="swiper-container margin-left-10" pager= false [options]="sliderOpts" #slidesne>
-        <ion-slide *ngFor="let pic of pictures; let i = index" (click)="openPic(i)">
-          <ion-card mode="ios" class="main-h-card real-card1 slide-right">
-            <img src="{{pic.url}}" class="slide-img">
-          </ion-card>
-        </ion-slide>
-      </ion-slides>
-
-      <!--*********** Features ***********-->
-
+  <!-- <div *ngIf="(itemDetail | async)?.recommended"  class="ribbon pop-in">Best</div> -->
+  <div class="detail-header" [ngStyle]="{'background-image': 'url(' + room?.display_pic_url + ')'}">
+  </div>
+  <ion-grid fixed class="ion-no-padding">
+    <div class="travel_space1">
       <ion-item lines="none">
-        <h1 class="main-header5">Amenities</h1>
+          <ion-label text-wrap>
+              <h1 class="travel_header1 detail-name">{{room.room_type}}</h1>
+              <ion-text color="medium">
+                  <h2 class="travel_header3 detail-price"> Price: {{ room.rent | currency : 'R' : 'symbol' :
+                    '1.0-0' }}</h2>
+              </ion-text>
+          </ion-label>
+          <div slot="end">
+              <ion-icon style="font-size: 18px !important;" color="warning" *ngFor="let i of [0,1,2,3,4]"
+                  [name]="i < room?.search_rating  ? 'star' : 'star-outline'"></ion-icon>
+          </div>
       </ion-item>
-      <div class="">
-
-        <ion-grid style="margin-left: 30px;">
-          <ion-row wrap>
-
+    </div>
+    <ion-row>
+      <ion-col size-lg="8" size-md="12" size-sm="12" size="12" class="ion-padding">
+        <!--*********** Tag  ***********-->
+        <div>
+          <ion-button color="thapsblue" (click)="gotoAppointment()">
+              <ion-icon name="calendar-outline" slot="start"></ion-icon>
+                Make Appointment
+          </ion-button>
+          <ion-button *ngIf="!is_owner" (click)="chat()" color="thapslightblue">
+              <ion-icon slot="icon-only" name="chatbubbles-outline" color="light"></ion-icon>
+          </ion-button>
+          <ion-button *ngIf="is_owner" (click)="edit()" color="thapslightblue">
+            <ion-icon slot="icon-only" name="create-outline" color="light"></ion-icon>
+          </ion-button>
+        </div>
+        <!--*********** Description ***********-->
+        <div class="travel_space4">
+            <p>
+                {{room?.description}}
+            </p>
+        </div>
+    
+                <!--*********** Image gallery ***********-->
+        <div class="detail-horizontal-scroll ion-margin-top ion-margin-bottom">
+            <div class="img-gallery margin" *ngFor="let pic of pictures; let i = index" (click)="openPic(i)">
+                <img src="{{pic.url}}" />
+            </div>
+        </div>
+    
+      </ion-col>
+      <ion-col size-lg="4" size-md="12" size-sm="12" size="12">
+                <!--*********** Contact  ***********-->
+    
+        <div class=" ion-margin-bottom">
+    
+          <ion-item lines="none">
+              <h1 class="main-header5">Amenities & Facilities</h1>
+          </ion-item>
+          <ion-grid style="margin-left: 30px;">
+            <ion-row wrap>
+            
               <ion-col tappable size-lg="6" size-md="6" size-sm="12" size="12">
                 <ion-item class="ion-no-margin ion-no-padding" lines="none">
-                  <ion-icon class="margin-right-15" name="checkmark-circle-outline" color="greensea" slot="start">
+                  <ion-icon *ngIf="room.furnished" class="margin-right-15" name="checkmark-circle-outline" color="greensea" slot="start">
+                  </ion-icon>
+                  <ion-icon *ngIf="!room.furnished" class="margin-right-15" name="close-outline" color="danger" slot="start">
                   </ion-icon>
                   <ion-label>
-                    <h2>Furnished:</h2>
-                  </ion-label>
-                  <ion-label>
-                    <h3>{{room.furnished}}</h3>
+                    <h2 class="ion-text-uppercase">Furnished</h2>
                   </ion-label>
                 </ion-item>
               </ion-col>
-
+            
               <ion-col tappable size-lg="6" size-md="6" size-sm="12" size="12">
                 <ion-item class="ion-no-margin ion-no-padding" lines="none">
-                  <ion-icon class="margin-right-15" name="checkmark-circle-outline" color="greensea" slot="start">
+                  <ion-icon *ngIf="room.accredited" class="margin-right-15" name="checkmark-circle-outline" color="greensea" slot="start">
+                  </ion-icon>
+                  <ion-icon *ngIf="!room.accredited" class="margin-right-15" name="close-outline" color="danger" slot="start">
                   </ion-icon>
                   <ion-label>
-                    <h2>Accredited:</h2>
+                    <h2 class="ion-text-uppercase">Accredited</h2>
+                  </ion-label>
+                </ion-item>
+              </ion-col>
+                        
+              <ion-col tappable size-lg="6" size-md="6" size-sm="12" size="12">
+                <ion-item class="ion-no-margin ion-no-padding" lines="none">
+                  <ion-icon *ngIf="room.property.parking" class="margin-right-15" name="checkmark-circle-outline" color="greensea" slot="start">
+                  </ion-icon>
+                  <ion-icon *ngIf="!room.property.parking" class="margin-right-15" name="close-outline" color="danger" slot="start">
+                  </ion-icon>
+                  <ion-label>
+                    <h2 class="ion-text-uppercase" >Parking</h2>
+                  </ion-label>
+                </ion-item>
+              </ion-col>
+            
+              <ion-col tappable size-lg="6" size-md="6" size-sm="12" size="12">
+                <ion-item class="ion-no-margin ion-no-padding" lines="none">
+                  <ion-icon *ngIf="room.property.gym" class="margin-right-15" name="checkmark-circle-outline" color="greensea" slot="start">
+                  </ion-icon>
+                  <ion-icon *ngIf="!room.property.gym" class="margin-right-15" name="close-outline" color="danger" slot="start">
+                  </ion-icon>
+                  <ion-label>
+                    <h2 class="ion-text-uppercase">Gym</h2>
+                  </ion-label>
+                </ion-item>
+              </ion-col>
+            
+              <ion-col tappable size-lg="6" size-md="6" size-sm="12" size="12">
+                <ion-item class="ion-no-margin ion-no-padding" lines="none">
+                  <ion-icon *ngIf="room.property.wifi" class="margin-right-15" name="checkmark-circle-outline" color="greensea" slot="start">
+                  </ion-icon>
+                  <ion-icon *ngIf="!room.property.wifi" class="margin-right-15" name="close-outline" color="danger" slot="start">
+                  </ion-icon>
+                  <ion-label>
+                    <h2 class="ion-text-uppercase">Wifi</h2>
+                  </ion-label>
+                </ion-item>
+              </ion-col>
+            
+              <ion-col tappable size-lg="6" size-md="6" size-sm="12" size="12">
+                <ion-item class="ion-no-margin ion-no-padding" lines="none">
+                  <ion-icon *ngIf="room.property.pool" class="margin-right-15" name="checkmark-circle-outline" color="greensea" slot="start">
+                  </ion-icon>
+                  <ion-icon *ngIf="!room.property.pool" class="margin-right-15" name="close-outline" color="danger" slot="start">
+                  </ion-icon>
+                  <ion-label>
+                    <h2 class="ion-text-uppercase">Pool</h2>
+                  </ion-label>
+                </ion-item>
+              </ion-col>
+            
+              <ion-col tappable size-lg="6" size-md="6" size-sm="12" size="12">
+                <ion-item class="ion-no-margin ion-no-padding" lines="none">
+                  <ion-icon *ngIf="room.property.laundry" class="margin-right-15" name="checkmark-circle-outline" color="greensea" slot="start">
+                  </ion-icon>
+                  <ion-icon *ngIf="!room.property.laundry" class="margin-right-15" name="close-outline" color="danger" slot="start">
+                  </ion-icon>
+                  <ion-label>
+                    <h2 class="ion-text-wrap ion-text-uppercase">Laundry facilities</h2>
+                  </ion-label>
+                </ion-item>
+              </ion-col>
+            
+              <ion-col tappable size-lg="6" size-md="6" size-sm="12" size="12">
+                <ion-item class="ion-no-margin ion-no-padding" lines="none">
+                  <ion-icon *ngIf="room.property.tv_room" class="margin-right-15" name="checkmark-circle-outline" color="greensea" slot="start">
+                  </ion-icon>
+                  <ion-icon *ngIf="!room.property.tv_room" class="margin-right-15" name="close-outline" color="danger" slot="start">
+                  </ion-icon>
+                  <ion-label>
+                    <h2 class="ion-text-uppercase" >TV room</h2>
+                  </ion-label>
+                </ion-item>
+              </ion-col>
+            
+              <ion-col tappable size-lg="6" size-md="6" size-sm="12" size="12">
+                <ion-item class="ion-no-margin ion-no-padding" lines="none">
+                  <ion-icon *ngIf="room.property.security" class="margin-right-15" name="checkmark-circle-outline" color="greensea" slot="start">
+                  </ion-icon>
+                  <ion-icon *ngIf="!room.property.security" class="margin-right-15" name="close-outline" color="danger" slot="start">
+                  </ion-icon>
+                  <ion-label>
+                    <h2 class="ion-text-uppercase">Security</h2>
+                  </ion-label>
+                </ion-item>
+              </ion-col>
+            
+              <ion-col tappable size-lg="6" size-md="6" size-sm="12" size="12">
+                <ion-item class="ion-no-margin ion-no-padding" lines="none">
+                  <ion-icon *ngIf="room.property.electricity_inclusive_in_rent" class="margin-right-15" name="checkmark-circle-outline" color="greensea" slot="start">
+                  </ion-icon>
+                  <ion-icon *ngIf="!room.property.electricity_inclusive_in_rent" class="margin-right-15" name="close-outline" color="danger" slot="start">
+                  </ion-icon>
+                  <ion-label>
+                    <h2 class="ion-text-wrap ion-text-uppercase">Electricity inclusive</h2>
+                  </ion-label>
+                </ion-item>
+              </ion-col>
+            
+              <ion-col tappable size-lg="6" size-md="6" size-sm="12" size="12">
+                <ion-item class="ion-no-margin ion-no-padding" lines="none">
+                  <ion-icon class="margin-right-15" name="transgender-outline" color="greensea" slot="start">
+                  </ion-icon>
+                  <ion-label>
+                    <h2 class="ion-text-wrap ion-text-uppercase">Genders accepted:</h2>
                   </ion-label>
                   <ion-label>
-                    <h3>{{room.accredited}}</h3>
+                    <h3 class="ion-text-wrap">{{room.property.genders_housed}}</h3>
+                  </ion-label>
+                </ion-item>
+              </ion-col>
+            
+              <ion-col tappable size-lg="6" size-md="6" size-sm="12" size="12">
+                <ion-item class="ion-no-margin ion-no-padding" lines="none">
+                  <ion-icon class="margin-right-15" name="walk-outline" color="greensea" slot="start">
+                  </ion-icon>
+                  <ion-label>
+                    <h2 class="ion-text-wrap ion-text-uppercase">Minutes to campus:</h2>
+                  </ion-label>
+                  <ion-label>
+                    <h3 class="ion-text-wrap">{{room.property.minutes_from_campus}}</h3>
+                  </ion-label>
+                </ion-item>
+              </ion-col>
+            
+              <ion-col tappable size-lg="6" size-md="6" size-sm="12" size="12">
+                <ion-item class="ion-no-margin ion-no-padding" lines="none">
+                  <ion-icon class="margin-right-15" name="card-outline" color="greensea" slot="start">
+                  </ion-icon>
+                  <ion-label>
+                    <h2 class="ion-text-wrap ion-text-uppercase">Deposit specifics:</h2>
+                  </ion-label>
+                  <ion-label>
+                    <h3 class="ion-text-wrap"> {{room.property.deposit_specifics}}</h3>
                   </ion-label>
                 </ion-item>
               </ion-col>
@@ -111,214 +246,54 @@
                   <ion-icon class="margin-right-15" name="checkmark-circle-outline" color="greensea" slot="start">
                   </ion-icon>
                   <ion-label>
-                    <h2>Parking:</h2>
+                    <h2 class="ion-text-wrap ion-text-uppercase">Other amenities:</h2>
                   </ion-label>
                   <ion-label>
-                    <h3>{{room.property.parking}}</h3>
+                    <h3 class="ion-text-wrap">{{room.property.other_amenities}}</h3>
                   </ion-label>
                 </ion-item>
               </ion-col>
-
-              <ion-col tappable size-lg="6" size-md="6" size-sm="12" size="12">
-                <ion-item class="ion-no-margin ion-no-padding" lines="none">
-                  <ion-icon class="margin-right-15" name="checkmark-circle-outline" color="greensea" slot="start">
-                  </ion-icon>
-                  <ion-label>
-                    <h2>Gym:</h2>
-                  </ion-label>
-                  <ion-label>
-                    <h3>{{room.property.gym}}</h3>
+            </ion-row>
+                    
+            
+            <ion-row>
+              <!--*********** location ***********-->
+              <ion-col size-lg="6" size-md="6" size-sm="12" size="12">
+                <ion-item lines="none">
+                  <h1 class="main-header5">Location</h1>
+                </ion-item>
+    
+                <ion-item lines="none" class="ion-wrap">
+                  <ion-icon class="margin-left-8"  name="navigate-circle-outline" slot="start" color="medium" size="large"></ion-icon>
+                  <ion-label class="ion-text-wrap">
+                    <h2 *ngIf="room.property.address.house_number != ''">{{room.property.address.house_number}} {{room.property.address.street}}, 
+                      {{room.property.address.neighbourhood}}
+                    </h2>
+                    <h2 *ngIf="room.property.address.house_number == ''">{{room.property.address.place_name}}
+                    </h2>
                   </ion-label>
                 </ion-item>
               </ion-col>
-
-              <ion-col tappable size-lg="6" size-md="6" size-sm="12" size="12">
-                <ion-item class="ion-no-margin ion-no-padding" lines="none">
-                  <ion-icon class="margin-right-15" name="checkmark-circle-outline" color="greensea" slot="start">
-                  </ion-icon>
+            
+              <ion-col size-lg="6" size-md="6" size-sm="12" size="12">
+                <ion-item lines="none" *ngIf="room.property.uploader_pic">
+                  <h1 class="main-header5">Contact agent</h1>
+                </ion-item>
+                <ion-item lines="none" style="padding: 0px !important;" *ngIf="room.property.uploader_pic">
+                  <ion-avatar slot="start">
+                    <img src="{{room.property.uploader_pic}}" (load)="updateDisplayPicLoaded()" [hidden]="!uploader_pic_loaded">
+                    <img src="../../../assets/imgs/plain-gray-background.jpeg" [hidden]="uploader_pic_loaded">
+                  </ion-avatar>
                   <ion-label>
-                    <h2>Wifi:</h2>
-                  </ion-label>
-                  <ion-label>
-                    <h3>{{room.property.wifi}}</h3>
+                    <h3 class="main-header6">{{room.property.uploader_name}}</h3>
+                    <h3 class="main-header6">Agent</h3>
                   </ion-label>
                 </ion-item>
               </ion-col>
-
-              <ion-col tappable size-lg="6" size-md="6" size-sm="12" size="12">
-                <ion-item class="ion-no-margin ion-no-padding" lines="none">
-                  <ion-icon class="margin-right-15" name="checkmark-circle-outline" color="greensea" slot="start">
-                  </ion-icon>
-                  <ion-label>
-                    <h2>Pool:</h2>
-                  </ion-label>
-                  <ion-label>
-                    <h3>{{room.property.pool}}</h3>
-                  </ion-label>
-                </ion-item>
-              </ion-col>
-
-              <ion-col tappable size-lg="6" size-md="6" size-sm="12" size="12">
-                <ion-item class="ion-no-margin ion-no-padding" lines="none">
-                  <ion-icon class="margin-right-15" name="checkmark-circle-outline" color="greensea" slot="start">
-                  </ion-icon>
-                  <ion-label>
-                    <h2>Laundry facilities:</h2>
-                  </ion-label>
-                  <ion-label>
-                    <h3>{{room.property.laundry}}</h3>
-                  </ion-label>
-                </ion-item>
-              </ion-col>
-
-              <ion-col tappable size-lg="6" size-md="6" size-sm="12" size="12">
-                <ion-item class="ion-no-margin ion-no-padding" lines="none">
-                  <ion-icon class="margin-right-15" name="checkmark-circle-outline" color="greensea" slot="start">
-                  </ion-icon>
-                  <ion-label>
-                    <h2>TV room:</h2>
-                  </ion-label>
-                  <ion-label>
-                    <h3>{{room.property.tv_room}}</h3>
-                  </ion-label>
-                </ion-item>
-              </ion-col>
-
-              <ion-col tappable size-lg="6" size-md="6" size-sm="12" size="12">
-                <ion-item class="ion-no-margin ion-no-padding" lines="none">
-                  <ion-icon class="margin-right-15" name="checkmark-circle-outline" color="greensea" slot="start">
-                  </ion-icon>
-                  <ion-label>
-                    <h2>Security:</h2>
-                  </ion-label>
-                  <ion-label>
-                    <h3>{{room.property.security}}</h3>
-                  </ion-label>
-                </ion-item>
-              </ion-col>
-
-              <ion-col tappable size-lg="6" size-md="6" size-sm="12" size="12">
-                <ion-item class="ion-no-margin ion-no-padding" lines="none">
-                  <ion-icon class="margin-right-15" name="checkmark-circle-outline" color="greensea" slot="start">
-                  </ion-icon>
-                  <ion-label>
-                    <h2>Electricity inclusive:</h2>
-                  </ion-label>
-                  <ion-label>
-                    <h3>{{room.property.electricity_inclusive_in_rent}}</h3>
-                  </ion-label>
-                </ion-item>
-              </ion-col>
-
-              <ion-col tappable size-lg="6" size-md="6" size-sm="12" size="12">
-                <ion-item class="ion-no-margin ion-no-padding" lines="none">
-                  <ion-icon class="margin-right-15" name="checkmark-circle-outline" color="greensea" slot="start">
-                  </ion-icon>
-                  <ion-label>
-                    <h2>Genders accepted:</h2>
-                  </ion-label>
-                  <ion-label>
-                    <h3>{{room.property.genders_housed}}</h3>
-                  </ion-label>
-                </ion-item>
-              </ion-col>
-
-              <ion-col tappable size-lg="6" size-md="6" size-sm="12" size="12">
-                <ion-item class="ion-no-margin ion-no-padding" lines="none">
-                  <ion-icon class="margin-right-15" name="checkmark-circle-outline" color="greensea" slot="start">
-                  </ion-icon>
-                  <ion-label>
-                    <h2>Minutes to campus:</h2>
-                  </ion-label>
-                  <ion-label>
-                    <h3>{{room.property.minutes_from_campus}}</h3>
-                  </ion-label>
-                </ion-item>
-              </ion-col>
-
-              <ion-col tappable size-lg="6" size-md="6" size-sm="12" size="12">
-                <ion-item class="ion-no-margin ion-no-padding" lines="none">
-                  <ion-icon class="margin-right-15" name="checkmark-circle-outline" color="greensea" slot="start">
-                  </ion-icon>
-                  <ion-label>
-                    <h2>Deposit specifics:</h2>
-                  </ion-label>
-                  <ion-label>
-                    <h3>{{room.property.deposit_specifics}}</h3>
-                  </ion-label>
-                </ion-item>
-              </ion-col>
-
-              <ion-col tappable size-lg="6" size-md="6" size-sm="12" size="12">
-                <ion-item class="ion-no-margin ion-no-padding" lines="none">
-                  <ion-icon class="margin-right-15" name="checkmark-circle-outline" color="greensea" slot="start">
-                  </ion-icon>
-                  <ion-label>
-                    <h2>Other amenities:</h2>
-                  </ion-label>
-                  <ion-label>
-                    <h3>{{room.property.other_amenities}}</h3>
-                  </ion-label>
-                </ion-item>
-              </ion-col>
-        
-          </ion-row>
-        
-
-        <ion-row>
-          <!--*********** location ***********-->
-          <ion-col size-lg="6" size-md="6" size-sm="12" size="12">
-            <ion-item lines="none">
-              <h1 class="main-header5">Location</h1>
-            </ion-item>
-
-            <ion-item lines="none" class="ion-wrap">
-              <ion-icon class="margin-left-8"  name="navigate-circle-outline" slot="start" color="medium" size="large"></ion-icon>
-              <ion-label class="ion-text-wrap">
-                <h2 *ngIf="room.property.address.house_number != ''">{{room.property.address.house_number}} {{room.property.address.street}}, 
-                  {{room.property.address.neighbourhood}}
-                </h2>
-                <h2 *ngIf="room.property.address.house_number == ''">{{room.property.address.place_name}}
-                </h2>
-              </ion-label>
-            </ion-item>
-          </ion-col>
-
-          <ion-col size-lg="6" size-md="6" size-sm="12" size="12">
-            <ion-item lines="none" *ngIf="room.property.uploader_pic">
-              <h1 class="main-header5">Contact agent</h1>
-            </ion-item>
-            <ion-item lines="none" style="padding: 0px !important;" *ngIf="room.property.uploader_pic">
-              <ion-avatar slot="start">
-                <img src="{{room.property.uploader_pic}}" (load)="updateDisplayPicLoaded()" [hidden]="!uploader_pic_loaded">
-			          <img src="../../../assets/imgs/plain-gray-background.jpeg" [hidden]="uploader_pic_loaded">
-              </ion-avatar>
-              <ion-label>
-                <h3 class="main-header6">{{room.property.uploader_name}}</h3>
-                <h3 class="main-header6">Agent</h3>
-              </ion-label>
-            </ion-item>
-          </ion-col>
-
-        </ion-row>
-      </ion-grid>
-      </div>
-    </ion-grid>
-    <ion-grid>
-      <ion-row>
-        <ion-col>
-          <ion-button id="open-modal"  expand="block" (click)="gotoAppointment()">
-            <ion-icon slot="start" name="call-outline"></ion-icon>
-            Set Viewing Appointment
-          </ion-button>
-        </ion-col>
-        <ion-col>
-          <ion-button  expand="block">
-            <ion-icon slot="start" name="mail-outline"></ion-icon>
-            Chat With Agent
-          </ion-button>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
+            </ion-row>
+          </ion-grid>
+        </div>
+      </ion-col>
+    </ion-row>          
+  </ion-grid>
 </ion-content>
-

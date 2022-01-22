@@ -54,8 +54,8 @@
       <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
       <ion-label>
         <h2>Current Job</h2>
-        <p *ngIf="!search">No current job</p>
-        <p *ngIf="search" class="ion-text-wrap">{{search?.room_type}} | {{search?.institution_address?.neighbourhood}} and surroundings</p>
+        <p *ngIf="!search?.institution_address">No current job</p>
+        <p *ngIf="search?.institution_address" class="ion-text-wrap">{{search?.room_type}} | {{search?.institution_address?.neighbourhood}} and surroundings</p>
       </ion-label>
     </ion-item>
   </ion-card>

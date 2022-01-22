@@ -96,7 +96,7 @@
                     </ion-input>
                 </ion-item>
                 <ion-item  lines="none" color="light">
-                  <ion-label position="stacked">
+                  <ion-label position="stacked" class="ion-text-wrap">
                     How Many Other Same Type Rooms ?
                   </ion-label>
                   <ion-input type="number" [(ngModel)]="property.rooms.backrooms">
@@ -238,8 +238,8 @@
 						<ion-grid>
               <ion-row class="ion-padding-bottom"> 
                 <ion-col class="ion-text-center ion-margin-bottom">
-                  <ion-button expand="block" (click)="getPropertyList()" color="thapsblue">
-                    Select Existing Property &nbsp; &nbsp; <ion-icon name="pin-outline" color="light"></ion-icon>
+                  <ion-button (click)="getPropertyList()" color="thapsblue" mode="ios">
+                    Select From List <ion-icon slot="end" name="location-outline" color="light"></ion-icon>
                   </ion-button>
                   <ion-list *ngIf="propertyList.length > 0">
                     <ion-item button class="ion-padding" *ngFor="let prop of propertyList" (click)="selectProperty(prop)">
@@ -259,7 +259,11 @@
                     Loading predictions...
                   </div>
                   <ion-list *ngIf="predictions">
-                    <ion-item button class="ion-padding" *ngFor="let pred of predictions" (click)="selectPlace(pred)">{{pred?.description}}
+                    <ion-item *ngFor="let pred of predictions" (click)="selectPlace(pred)">
+                      <ion-label>
+                        <h3>{{pred.structured_formatting.main_text}}</h3>
+                        <p>{{pred.structured_formatting.secondary_text}}</p>
+                      </ion-label>
                     </ion-item>
                   </ion-list>
 						    </ion-col>

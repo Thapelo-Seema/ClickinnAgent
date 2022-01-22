@@ -81,23 +81,21 @@ export class UploadListingPage implements OnInit {
 
    ngOnInit(){
     //If there's a room id we assume edit mode otherwise upload mode
-    if(this.actRoute.snapshot.params.room_id){
+    if(this.actRoute.snapshot.paramMap.get("room_id")){
       console.log("Edit mode");
       this.mode = "edit";
-      this.room_svc.getRoom(this.actRoute.snapshot.params.room_id)
+      this.room_svc.getRoom(this.actRoute.snapshot.paramMap.get("room_id"))
       .pipe(take(1))
       .subscribe(rm =>{
         this.room = rm;
         this.property = this.room.property;
-      })
-      if(this.actRoute.snapshot.params.uid){
-        this.user.uid = this.actRoute.snapshot.params.uid;
-        this.user_svc.getUser(this.user.uid)
+        this.generateNearbys();
+        this.user_svc.getUser(this.property.uploader_id)
         .pipe(take(1))
         .subscribe(user_obj =>{
           this.user = user_obj;
         })
-      }
+      })
     }else{
       console.log("Upload mode");
       this.mode = "upload";
@@ -134,12 +132,14 @@ export class UploadListingPage implements OnInit {
       .pipe(take(1))
       .subscribe(pptys =>{
         this.propertyList = pptys;
+        console.log(this.propertyList)
       })
     }else{
       this.ppty_svc.getAgentProperties(this.user.uid)
       .pipe(take(1))
       .subscribe(pptys =>{
         this.propertyList = pptys;
+        console.log(this.propertyList)
       })
     }
   }
@@ -184,6 +184,10 @@ export class UploadListingPage implements OnInit {
   cancelSearch(){
     this.predictions = [];
     this.predictionLoading = false;
+  }
+
+  generateNearbys(){
+    this.nearbys = this.location_graph.generateCampusSuggestion(this.property.address.neighbourhood);
   }
 
   /* Select a place from a list of place suggestions */
@@ -322,11 +326,14 @@ export class UploadListingPage implements OnInit {
         description += room.property.nearby_landmarks[i]; 
         description += (i == room.property.nearby_landmarks.length - 1) ? "." : ", "
     }
+    if(room.property.nearby_landmarks.length !> 0) description += "."
+    description += " This room is located in a property where " + room.property.genders_housed + " are accommodated. Check the list of amenities and other details below"
     return description;
   }
 
   //Save and upload the property and room on initial upload
   async saveAndUpload(){
+    this.ionic_component_svc.presentLoading();
     console.log("saving the entire upload...");
     //let updatedCount: number = 0;
     this.showUploadProgressBar = true;
@@ -342,23 +349,36 @@ export class UploadListingPage implements OnInit {
       this.ppty_svc.updateProperty(this.property)
       .catch(err =>{
         console.log(err);
+        this.ionic_component_svc.dismissLoading().catch(err =>{
+          console.log(err)
+        })
       })
       this.room.description = this.generateRoomDescription(this.room);
       this.room_svc.updateRoom(this.room)
       .then(() =>{
+        this.ionic_component_svc.dismissLoading().catch(err =>{
+          console.log(err)
+        })
         this.showUploadProgressBar = false;
-        this.router.navigate(['/room', {room_id: this.room.room_id}]);
+        this.router.navigate(['/room', {room_id: this.room.room_id, agent_id: this.room.property.uploader_id}]);
       })
       .catch(err =>{
         console.log(err);
+        this.ionic_component_svc.dismissLoading().catch(err =>{
+          console.log(err)
+        })
       })
     })
     .catch(err =>{
       console.log(err);
+      this.ionic_component_svc.dismissLoading().catch(err =>{
+        console.log(err)
+      })
     })
   }
 
   saveAndUploadEditted(){
+    this.ionic_component_svc.presentLoading();
     this.updatePropertyInRooms();
     this.room.description = this.generateRoomDescription(this.room);
     console.log("room: ", this.room);
@@ -366,11 +386,17 @@ export class UploadListingPage implements OnInit {
     this.ppty_svc.updateProperty(this.property);
     this.room_svc.updateRoom(this.room)
     .then(() =>{
+      this.ionic_component_svc.dismissLoading().catch(err =>{
+        console.log(err)
+      })
       this.showUploadProgressBar = false;
-      this.router.navigate(['/room', {room_id: this.room.room_id}]);
+      this.router.navigate(['/room', {room_id: this.room.room_id, agent_id: this.room.property.uploader_id}]);
     })
     .catch(err =>{
       console.log(err);
+      this.ionic_component_svc.dismissLoading().catch(err =>{
+        console.log(err)
+      })
     })
   }
 
