@@ -3,7 +3,8 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { User } from '../models/user.model';
 import { UserService } from './user.service';
 //import auth from 'firebase/app';
-import { map, take, filter } from 'rxjs/operators'
+import { map, take, filter } from 'rxjs/operators';
+import { IonicStorageService } from './ionic-storage.service';
 
 
 @Injectable({
@@ -11,11 +12,19 @@ import { map, take, filter } from 'rxjs/operators'
 })
 export class AuthService {
 
-  constructor(private afAuth: AngularFireAuth, private user_svc: UserService) { }
+  constructor(
+    private afAuth: AngularFireAuth, 
+    private user_svc: UserService,
+    private storage_svc: IonicStorageService) { }
 
   //Function that returns a logged in Firebase User
   checkAuthStatus(){
     return this.afAuth.user.pipe(map( (usr) => usr != null))
+  }
+
+  async checkCachedUser(){
+    let user = await this.storage_svc.getUser();
+    return (user && user.uid && user.user_type =="agent") ? true : false;
   }
 
   //Get authenticated user if any otherwise return null
@@ -62,7 +71,8 @@ export class AuthService {
     return this.afAuth.signInAnonymously()
   }
 
-  signOut(){
+  async signOut(){
+    await this.storage_svc.removeUser()
     return this.afAuth.signOut();
   }
 

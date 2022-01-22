@@ -16,26 +16,13 @@ export class AuthGuard implements CanActivate {
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    return this.auth_svc.checkAuthStatus()
-    .pipe(tap(is_authed =>{
-      console.log(is_authed)
-      if(!is_authed){
+    return this.auth_svc.checkCachedUser().then(val =>{
+      if(!val){
         this.router.navigate(['/signin']);
-      }else{
-        this.auth_svc.getAuthenticatedUser()
-        .pipe(tap(usr =>{
-          this.user_svc.getUser(usr.uid)
-          .pipe(tap(user =>{
-            if(user.user_type != "agent"){
-              this.router.navigate(['/signin'])
-              .then(() =>{
-                this.auth_svc.signOut();
-              })
-            }
-          }))
-        }))
+        return false
       }
-    }))
+      return val;
+    })
   }
   
 }

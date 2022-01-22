@@ -8,6 +8,7 @@ import { User } from '../../models/user.model';
 import { ObjectInitService } from '../../services/object-init.service';
 import { AuthService } from '../../services/auth.service';
 import { ValidationService } from '../../services/validation.service';
+import { IonicStorageService } from '../../services/ionic-storage.service';
 
 @Component({
   selector: 'app-signup',
@@ -27,6 +28,7 @@ export class SignupPage implements OnInit {
     private activatedRoute: ActivatedRoute,
     public navController: NavController,
     private ngZone: NgZone,
+    private storage_svc: IonicStorageService,
     private userService:  UserService,
     private ionicComponentService: IonicComponentService,
     private object_init_svc: ObjectInitService,
@@ -74,7 +76,9 @@ export class SignupPage implements OnInit {
           //navigate user to respective home page
           this.ionicComponentService.dismissLoading();
           this.ngZone.run(() =>{
-            this.navController.navigateRoot(['/home', {'uid': data.user.uid}])
+            this.storage_svc.setUser(data.user.uid).then(val =>{
+              this.navController.navigateRoot(['/home', {'uid': data.user.uid}])
+            }).catch(err => console.log(err));
           })
         })
       }, (error) => { 

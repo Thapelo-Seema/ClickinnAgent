@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup ,Validators } from '@angular/forms';
 import { NavController } from '@ionic/angular';
 import { AuthService } from '../../services/auth.service';
 import { IonicComponentService } from '../../services/ionic-component.service';
-import { take } from 'rxjs/operators';
+import { IonicStorageService } from '../../services/ionic-storage.service';
 
 @Component({
   selector: 'app-signin',
@@ -21,6 +21,7 @@ export class SigninPage implements OnInit {
     private navController: NavController,
     private ngZone: NgZone,
     private activatedRoute: ActivatedRoute,
+    private storage_svc: IonicStorageService,
     private authSvc: AuthService,
     private ionicComponentService: IonicComponentService,
     //****** form validation ********//
@@ -70,13 +71,15 @@ export class SigninPage implements OnInit {
       this.authSvc.signInWithEmailAndPassword(this.registerForm.value.username, 
         this.registerForm.value.password)
       .then(data => {
-        this.ionicComponentService.dismissLoading();
+        this.ionicComponentService.dismissLoading().catch(err => console.log(err));
         this.ngZone.run(() =>{
-          this.navController.navigateRoot(['/home', {'uid': data.user.uid}])
+          this.storage_svc.setUser(data.user.uid).then(val =>{
+            this.navController.navigateRoot(['/home', {'uid': data.user.uid}])
+          }).catch(err => console.log(err));
         })
       }, (error) => { 
         var errorMessage: string = error.message;
-        this.ionicComponentService.dismissLoading();
+        this.ionicComponentService.dismissLoading().catch(err => console.log(err));
         this.ionicComponentService.presentAlert(errorMessage);      
       });
     }
