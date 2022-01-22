@@ -333,6 +333,8 @@ export class UploadListingPage implements OnInit {
 
   //Save and upload the property and room on initial upload
   async saveAndUpload(){
+    this.room.time_modified = Date.now();
+    this.room.time_uploaded = Date.now();
     this.ionic_component_svc.presentLoading();
     console.log("saving the entire upload...");
     //let updatedCount: number = 0;
@@ -378,6 +380,7 @@ export class UploadListingPage implements OnInit {
   }
 
   saveAndUploadEditted(){
+    this.room.time_modified = Date.now();
     this.ionic_component_svc.presentLoading();
     this.updatePropertyInRooms();
     this.room.description = this.generateRoomDescription(this.room);

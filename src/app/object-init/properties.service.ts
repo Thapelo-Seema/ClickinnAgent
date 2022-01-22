@@ -67,29 +67,58 @@ export class PropertiesService {
   }
 
   defaultRoom(): Room{
-  	let room: Room = {
-  		available: true,
-  		accredited: false,
-		display_pic_url: "",
-		dp_loaded: false,
-		description: "",
-		pictures: [],
-		video_url: "",
-		video: null,
-		room_id: "",
-		occupants: [],
-		furnished: false,
-		room_type: "",
-		search_rating: 0,  
-		demand_index: 0,   
-		rent: null,
-		deposit: null,
-		room_number: "",
-		sub_rooms: 0,
-		property: this.defaultProperty()
-  	}
-  	return room;
+	let room: Room = {
+		available: true,
+		accredited: false,
+	  display_pic_url: "",
+	  dp_loaded: false,
+	  description: "",
+	  pictures: [],
+	  video_url: "",
+	  video: null,
+	  room_id: "",
+	  occupants: [],
+	  furnished: false,
+	  room_type: "",
+	  search_rating: 0,  
+	  demand_index: 0,   
+	  rent: null,
+	  deposit: null,
+	  room_number: "",
+	  sub_rooms: 0,
+	  property: this.defaultProperty(),
+	  time_modified: 0,
+	  time_uploaded: 0
+	}
+	return room;
+}
+
+copyRoom(_room: Room){
+  let room: Room = {
+	  available: _room.available || true,
+	  accredited: _room.accredited || false,
+	  display_pic_url: _room.display_pic_url || "",
+	  dp_loaded: _room.dp_loaded || false,
+	  description: _room.description || "",
+	  pictures: _room.pictures || [],
+	  video_url: _room.video_url || "",
+	  video: _room.video || null,
+	  room_id: _room.room_id || "",
+	  occupants: _room.occupants || [],
+	  furnished: _room.furnished || false,
+	  room_type: _room.room_type || "",
+	  search_rating: _room.search_rating || 0,  
+	  demand_index: _room.demand_index || 0,   
+	  rent: _room.rent || null,
+	  deposit: _room.deposit || null,
+	  room_number: _room.room_number || "",
+	  sub_rooms: _room.sub_rooms || 0,
+	  property: _room.property || this.defaultProperty(),
+	  time_modified: _room.time_modified || 0,
+	  time_uploaded: _room.time_uploaded || 0
   }
+  return room;
+}
 
   
 
