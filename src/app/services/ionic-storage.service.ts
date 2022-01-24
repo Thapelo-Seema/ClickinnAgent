@@ -14,8 +14,10 @@ export class IonicStorageService {
   }
 
   async init(){
+    console.log("initializing storage...");
     const storage = await this.storage.create();
     this._storage = storage; 
+    console.log("storage set");
   }
 
   public async setUser(agent_uid: string){
@@ -36,8 +38,10 @@ export class IonicStorageService {
   }
 
   async getUser(){
+    console.log("getting user...");
     let uid = await this._storage?.get("agent_uid");
     let user_type = await this._storage?.get("user_type");
+    console.log("returning user...");
     return {'uid': uid, 'user_type': user_type }
   }
 

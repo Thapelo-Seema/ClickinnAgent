@@ -23,7 +23,10 @@ export class AuthService {
   }
 
   async checkCachedUser(){
+    console.log("requesting storage services...")
+    await this.storage_svc.init();
     let user = await this.storage_svc.getUser();
+    console.log(user)
     return (user && user.uid && user.user_type =="agent") ? true : false;
   }
 

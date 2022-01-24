@@ -8,6 +8,7 @@ import { AuthService } from '../../services/auth.service';
 import { IonicComponentService } from '../../services/ionic-component.service';
 import { SearchFeedService } from '../../services/search-feed.service';
 import { RoomSearch } from 'src/app/models/room-search.model';
+import { IonicStorageService } from '../../services/ionic-storage.service';
 //import { getMessaging, getToken } from 'firebase/messaging';
 
 
@@ -29,7 +30,8 @@ export class HomePage implements OnInit {
     private activatedRoute: ActivatedRoute,
     private auth_svc: AuthService,
     private ionic_component_svc: IonicComponentService,
-    private searchfeed_svc: SearchFeedService
+    private searchfeed_svc: SearchFeedService,
+    private storage_svc: IonicStorageService
   ) {
       //User initialised
       this.user = this.user_init_svc.defaultUser();
@@ -37,6 +39,13 @@ export class HomePage implements OnInit {
    }
 
   ngOnInit(){
+    this.storage_svc.getUser()
+    .then(data =>{
+      console.log(data);
+    })
+    .catch(err =>{
+      console.log(err);
+    })
     //If User just signed in or just signed up, this part will run
     if(this.user.uid = this.activatedRoute.snapshot.paramMap.get('uid')){
       this.user_svc.getUser(this.user.uid)
@@ -87,15 +96,16 @@ export class HomePage implements OnInit {
       .subscribe(sch =>{
         if(sch)
         this.search = this.searchfeed_svc.copySearch(sch)
+        console.log(this.search)
         if(sch && sch.agent && (sch.agent.uid == this.user.uid)){
           if(this.user.contacts.indexOf(sch.searcher.uid) != -1){
             let index = this.user.contacts.indexOf(sch.searcher.uid)
             let thread_id = this.user.thread_ids[index];
-            if(instruction != "do not proceed to job")
-            this.router.navigate(['/chat', {'thread_id': thread_id}])
+            //if(instruction != "do not proceed to job")
+            //this.router.navigate(['/chat', {'thread_id': thread_id}])
           }else{
-            if(instruction != "do not proceed to job")
-            this.gotoJob();
+            //if(instruction != "do not proceed to job")
+            //this.gotoJob();
           }
         }
       })

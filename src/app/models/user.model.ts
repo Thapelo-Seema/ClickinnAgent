@@ -12,6 +12,7 @@ export interface User{
 	neighbourhoods?: string[];
 	contracts: any[];
 	current_job: string;
+	busy_with_job?: boolean;
 	display_name: string;
 	dp_loaded: boolean;
 	dob: Date;

@@ -66,18 +66,74 @@ export class JobPage implements OnInit {
 
   acceptJob(){
     this.ionic_component_svc.presentLoading();
+    this.search.time = Date.now();
+    this.user.busy_with_job = true;
     this.search.agent = this.user_init_svc.copyUser(this.user);
     this.searchfeed_svc.updateSearch(this.search)
     .then(() =>{
+      this.user_svc.updateUser(this.user);
       this.ionic_component_svc.dismissLoading().catch(err =>{
         console.log(err);
       })
       this.router.navigate(['/chat', {'search_id': this.search.id}]);
     })
+    .catch(err =>{
+      console.log(err);
+      this.ionic_component_svc.dismissLoading().catch(err => console.log(err))
+    })
+  }
+
+  closeJob(){
+    this.ionic_component_svc.presentLoading();
+    this.search.time = Date.now();
+    this.search.completed = true;
+    this.user.busy_with_job = false;
+    this.user.current_job = "";
+    this.searchfeed_svc.updateSearch(this.search)
+    .then(() =>{
+      this.user_svc.updateUser(this.user);
+      this.ionic_component_svc.dismissLoading().catch(err =>{console.log(err)})
+      this.router.navigate(['/home']);
+    })
+    .catch(err =>{
+      console.log(err);
+      this.ionic_component_svc.dismissLoading().catch(err => console.log(err))
+    })
+  }
+
+  cancelJob(){
+    this.ionic_component_svc.presentLoading();
+    this.search.time = Date.now();
+    this.search.agent = null;
+    this.user.busy_with_job = false;
+    this.user.current_job = "";
+    this.searchfeed_svc.updateSearch(this.search)
+    .then(() =>{
+      this.user_svc.updateUser(this.user);
+      this.ionic_component_svc.dismissLoading().catch(err =>{console.log(err)})
+      this.router.navigate(['/home']);
+    })
+    .catch(err =>{
+      console.log(err);
+      this.ionic_component_svc.dismissLoading().catch(err => console.log(err))
+    })
   }
 
   decline(){
-    this.router.navigate(['/home']);
+    this.ionic_component_svc.presentLoading();
+    this.search.time = Date.now();
+    this.search.agent = null;
+    this.user.current_job = "";
+    this.user_svc.updateUser(this.user)
+    .then(() =>{
+      this.searchfeed_svc.updateSearch(this.search);
+      this.ionic_component_svc.dismissLoading().catch(err => console.log(err))
+      this.router.navigate(['/home']);
+    })
+    .catch(err => {
+      this.ionic_component_svc.dismissLoading().catch(err => console.log(err))
+      console.log(err)
+    })
   }
 
 }

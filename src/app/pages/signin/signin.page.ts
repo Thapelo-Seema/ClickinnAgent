@@ -58,7 +58,15 @@ export class SigninPage implements OnInit {
    }
 
    ngOnInit() {
-   
+   this.storage_svc.getUser()
+   .then(usr =>{
+     console.log(usr)
+   })
+   .catch(err => console.log(err))
+   this.storage_svc.getUID()
+   .then(_uid =>{
+     console.log(_uid);
+   })
   }
 
   

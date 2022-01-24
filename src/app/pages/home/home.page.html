@@ -50,12 +50,27 @@
 <ion-content color="light">
   
   <ion-card tappable (click)="gotoJob()"> 
-    <ion-item>
+    <ion-item *ngIf="search?.institution_address" color="greensea">
       <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
       <ion-label>
-        <h2>Current Job</h2>
-        <p *ngIf="!search?.institution_address">No current job</p>
-        <p *ngIf="search?.institution_address" class="ion-text-wrap">{{search?.room_type}} | {{search?.institution_address?.neighbourhood}} and surroundings</p>
+        <h2 class="main-header5">Current Job</h2>
+        <div>
+          <p *ngIf="search?.funding_type != 'NSFAS funded'" class="ion-text-wrap">
+            {{search?.room_type}} | {{search?.max_price | currency : 'R' }}  |
+            {{search?.institution_address?.neighbourhood}} and surroundings
+          </p>
+          <p *ngIf="search?.funding_type == 'NSFAS funded'" class="ion-text-wrap">
+            {{search?.room_type}} | NSFAS |
+            {{search?.institution_address?.neighbourhood}} and surroundings
+          </p>
+        </div>
+      </ion-label>
+    </ion-item>
+    <ion-item *ngIf="!search?.institution_address">
+      <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
+      <ion-label>
+        <h2 class="main-header5">Current Job</h2>
+        <p >No current job</p>
       </ion-label>
     </ion-item>
   </ion-card>

@@ -143,6 +143,7 @@ export class ChatPage implements OnInit{
     console.log("Sending message...");
     this.new_message.time = Date.now();
     this.new_message.message_id = this.thread.chat_messages.length > 0 ? this.thread.chat_messages.length - 1: 0;
+    this.new_message.from = this.thread.agent.uid;
     this.thread.chat_messages.push(this.new_message);
     this.thread.last_message = this.new_message;
     this.thread.new_messages.push(this.new_message);

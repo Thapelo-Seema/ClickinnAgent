@@ -135,10 +135,12 @@
   <ion-grid>
     <ion-row>
       <ion-col size="6">
-        <ion-button (click)="acceptJob()" >Accept</ion-button>
+        <ion-button *ngIf="!search.agent" (click)="acceptJob()" >Accept</ion-button>
+        <ion-button *ngIf="search.agent" (click)="closeJob()">Completed</ion-button>
       </ion-col>
       <ion-col size="6">
-        <ion-button fill="outline" (click)="decline()" >Decline</ion-button>
+        <ion-button *ngIf="!search.agent" fill="outline" (click)="decline()" >Decline</ion-button>
+        <ion-button *ngIf="search.agent" fill="outline" (click)="cancelJob()">Cancel</ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>
