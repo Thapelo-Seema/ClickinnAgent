@@ -14,6 +14,7 @@ import { format, parseISO, formatDistance } from 'date-fns';
 import { SearchFeedService } from '../../services/search-feed.service';
 import { take } from 'rxjs/operators';
 import { RoomSearch } from 'src/app/models/room-search.model';
+import { IonicComponentService } from '../../services/ionic-component.service';
 
 @Component({
   selector: 'app-chat',
@@ -41,7 +42,8 @@ export class ChatPage implements OnInit{
     private router: Router,
     private user_svc: UserService,
     private searchfeed_svc: SearchFeedService,
-    private user_init_svc: UsersService
+    private user_init_svc: UsersService,
+    private ionic_component_svc: IonicComponentService
   ) { 
     this.thread = this.chat_init_svc.defaultThread();
     this.user = this.user_init_svc.defaultUser();
@@ -54,24 +56,34 @@ export class ChatPage implements OnInit{
   }
 
   ngOnInit(){
-    
+    this.ionic_component_svc.presentLoading();
     if(this.activated_route.snapshot.paramMap.get("thread_id")){
       this.chat_svc.getThread(this.activated_route.snapshot.paramMap.get("thread_id"))
       .subscribe(thd =>{
-        console.log("Thread updated!");
+        this.thread = this.chat_init_svc.copyThread(thd);
+        this.user = this.user_init_svc.copyUser(this.thread.agent);
+        
+        if(this.thread.thread_id == ""){
+          this.thread.thread_id = this.activated_route.snapshot.paramMap.get("thread_id");
+          this.chat_svc.updateThread(this.thread);
+        }
+
         //Prepare the search results for the client's current search
         if(thd.client.current_job != "" && (this.rooms.length == 0)){
           this.searchfeed_svc.getSearch(this.thread.client.current_job)
           .pipe(take(1))
           .subscribe(sch =>{
-            this.prepareSearchResults(sch);
+            if(sch){
+              this.prepareSearchResults(sch);
+              this.ionic_component_svc.dismissLoading().catch(err => console.log(err));
+            }else{
+              this.ionic_component_svc.dismissLoading().catch(err => console.log(err));
+            }
           }) 
+        }else{
+          this.ionic_component_svc.dismissLoading().catch(err => console.log(err));
         }
-        this.thread = this.chat_init_svc.copyThread(thd);
-        if(this.thread.thread_id == ""){
-          this.thread.thread_id = this.activated_route.snapshot.paramMap.get("thread_id");
-          this.chat_svc.updateThread(this.thread);
-        }
+  
       })
     }else if(this.activated_route.snapshot.paramMap.get("search_id")){
       this.searchfeed_svc.getSearch(this.activated_route.snapshot.paramMap.get("search_id"))
@@ -83,15 +95,18 @@ export class ChatPage implements OnInit{
           let index = sch.agent.contacts.indexOf(sch.searcher.uid);
           this.chat_svc.getThread(sch.agent.thread_ids[index])
           .subscribe(thd =>{
-            console.log("Thread updated!");
             this.thread = this.chat_init_svc.copyThread(thd);
+            this.user = this.user_init_svc.copyUser(this.thread.agent);
+            this.ionic_component_svc.dismissLoading().catch(err => console.log(err));
           })
         }else{
-           //if they dont have a chat open, start one
+          //if they dont have a chat open, start one
           this.thread.agent = sch.agent;
           this.thread.client = sch.searcher;
+          this.user = this.user_init_svc.copyUser(this.thread.agent);
           //generate initial message
           this.generateInitialMessage();
+          this.ionic_component_svc.dismissLoading().catch(err => console.log(err));
         }
       })
     }
@@ -119,6 +134,10 @@ export class ChatPage implements OnInit{
 
   cancel(){
     this.datetime.cancel(true);
+  }
+
+  updateMessageRoomPicLoaded(i, j){
+    this.thread.chat_messages[i].rooms[j].dp_loaded = true;
   }
 
   updateAppointment(event){

@@ -128,20 +128,28 @@
   
   <ion-grid>
     <ion-row>
-      <ion-col>
+      <ion-col size="6"> 
         <ion-card tappable (click)="gotoMyUploads()">
+          <div class="ion-text-center ion-padding">
+            <ion-icon name="cloud-upload-outline" style="font-size: x-large;" color="thapsblue"></ion-icon>
+          </div>
           <ion-item>
             <ion-label>
-              <h2>My Uploads</h2>
+              <h2 class="ion-text-wrap ion-text-center"><ion-text color="thapsblue">My</ion-text></h2>
+              <h2 class="ion-text-wrap ion-text-center"><ion-text color="thapsblue">Uploads</ion-text></h2>
             </ion-label>
           </ion-item>
         </ion-card>
       </ion-col>
-      <ion-col>
+      <ion-col size="6">
         <ion-card>
+          <div class="ion-text-center ion-padding">
+            <ion-icon name="person-outline" style="font-size: x-large;" color="thapsblue"></ion-icon>
+          </div>
           <ion-item>
             <ion-label>
-              <h2>My Landlords</h2>
+              <h2 class="ion-text-wrap ion-text-center"><ion-text color="thapsblue">My</ion-text></h2>
+              <h2 class="ion-text-wrap ion-text-center"><ion-text color="thapsblue">Landlords</ion-text></h2>
             </ion-label>
           </ion-item>
         </ion-card>

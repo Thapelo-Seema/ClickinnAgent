@@ -1,7 +1,7 @@
 <ion-header>
 	<ion-toolbar>
 		<ion-buttons slot="start">
-			<ion-back-button></ion-back-button>
+			<ion-back-button defaultHref="home" ></ion-back-button>
 			<ion-button (click)="goHome()">
 				<ion-icon slot="icon-only" name="home-outline"></ion-icon>
 			</ion-button>
@@ -59,7 +59,7 @@
 										<ion-col class="ion-no-padding ion-no-margin">
 											<div class="agent-icon">
 												<ion-avatar mode="ios">
-													<img class="room-img" src="{{room.display_pic_url}}" (load)="updateRoomPicLoaded(i)" [hidden]="!room.dp_loaded">
+													<img class="room-img" src="{{room.display_pic_url}}" (load)="updateMessageRoomPicLoaded(i, j)" [hidden]="!room.dp_loaded">
 													<img class="room-img" src="../../../assets/imgs/plain-gray-background.jpeg" [hidden]="room.dp_loaded">
 												</ion-avatar>
 											</div>
@@ -76,6 +76,7 @@
 							</ion-label>
 						</ion-item>
 						<ion-card-content padding-top style="background: #f5f1e3; width: 100%;">
+							<ion-checkbox mode="ios" (ionChange)="msgHighlight($event, i)"></ion-checkbox>
 							<p>{{msg?.message}}</p>
 							<p class="ion-no-padding ion-no-margin ion-text-right time-font">
 								{{timeAgo(msg?.time)}}
