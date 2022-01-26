@@ -1,10 +1,11 @@
 import { Component, OnInit, NgZone } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup ,Validators } from '@angular/forms';
-import { NavController } from '@ionic/angular';
+import { NavController, ModalController } from '@ionic/angular';
 import { AuthService } from '../../services/auth.service';
 import { IonicComponentService } from '../../services/ionic-component.service';
 import { IonicStorageService } from '../../services/ionic-storage.service';
+import { ForgotPasswordPage } from '../forgot-password/forgot-password.page';
 
 @Component({
   selector: 'app-signin',
@@ -21,6 +22,7 @@ export class SigninPage implements OnInit {
     private navController: NavController,
     private ngZone: NgZone,
     private activatedRoute: ActivatedRoute,
+    private modal_controller: ModalController,
     private storage_svc: IonicStorageService,
     private authSvc: AuthService,
     private ionicComponentService: IonicComponentService,
@@ -69,6 +71,15 @@ export class SigninPage implements OnInit {
    })
   }
 
+  async forgotPassword(){
+    const modal = await this.modal_controller.create({
+      component: ForgotPasswordPage,
+      cssClass: "small-modal",
+      showBackdrop: true
+    });
+    return await modal.present();
+  }
+
   
   /// old way ////
   async signInUser(){
@@ -76,8 +87,7 @@ export class SigninPage implements OnInit {
       this.ionicComponentService.presentAlert("Please ensure that your login details are valid");
     } else {
       this.ionicComponentService.presentLoading();
-      this.authSvc.signInWithEmailAndPassword(this.registerForm.value.username, 
-        this.registerForm.value.password)
+      this.authSvc.signInWithEmailAndPassword(this.registerForm.value.username, this.registerForm.value.password)
       .then(data => {
         this.ionicComponentService.dismissLoading().catch(err => console.log(err));
         this.ngZone.run(() =>{
@@ -85,11 +95,13 @@ export class SigninPage implements OnInit {
             this.navController.navigateRoot(['/home', {'uid': data.user.uid}])
           }).catch(err => console.log(err));
         })
-      }, (error) => { 
-        var errorMessage: string = error.message;
+      },
+      err =>{
+        console.log(err);
         this.ionicComponentService.dismissLoading().catch(err => console.log(err));
-        this.ionicComponentService.presentAlert(errorMessage);      
-      });
+        this.ionicComponentService.presentAlert("Please ensure that your login details are valid");
+      })
+      
     }
   }
 

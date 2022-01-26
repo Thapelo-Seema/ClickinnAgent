@@ -8,6 +8,15 @@
 </ion-header>
 
 <ion-content>
+  <div id="container" *ngIf="my_rooms.length == 0">
+    <ion-icon name="bulb-outline" class="empty-icon-circle icon-large empty-icon-color"></ion-icon>
+    <br>
+    <strong class="capitalize">
+      <ion-text color="lightgray">No Uploads</ion-text>
+    </strong>
+   <!--  <p>Explore <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI
+        Components</a></p> -->
+  </div>
   <ion-item *ngFor="let room of my_rooms; let i = index" (click)="gotoRoom(room.room_id)" class="ion-margin">
     <ion-avatar slot="start">
       <img src="{{room.display_pic_url}}" (load)="updateDisplayPicLoaded(i)" [hidden]="!room.dp_loaded">

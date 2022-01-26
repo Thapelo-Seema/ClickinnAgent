@@ -91,6 +91,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/appointment/appointment.module').then( m => m.AppointmentPageModule),
     canActivate: [AuthGuard]
   },
+  {
+    path: 'forgot-password',
+    loadChildren: () => import('./pages/forgot-password/forgot-password.module').then( m => m.ForgotPasswordPageModule)
+  },
 ];
 
 @NgModule({

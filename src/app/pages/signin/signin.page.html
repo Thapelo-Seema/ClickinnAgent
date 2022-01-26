@@ -1,9 +1,6 @@
 <ion-header class="ion-no-border">
   <ion-toolbar color="thapsblue">
     <ion-title  class="main-header4">SIGN IN</ion-title>
-    <ion-buttons slot="start">
-      <ion-back-button color="orange"></ion-back-button>
-    </ion-buttons>
     <!-- <ion-title slot="start" class="main-header4">SIGNIN</ion-title> -->
   </ion-toolbar>
 </ion-header>
@@ -96,18 +93,18 @@
 
               <ion-text color="danger">
                   <p *ngIf="!registerForm.controls.username.valid && registerForm.controls.username.touched">
-                      <ion-icon name="information-circle-outline"></ion-icon> Username must be e-mail!
+                      <ion-icon name="information-circle-outline"></ion-icon> Username must be a valid e-mail address
                   </p>
               </ion-text>
               <ion-text color="danger">
                   <p *ngIf="!registerForm.controls.password.valid && registerForm.controls.password.touched">
-                      <ion-icon name="information-circle-outline"></ion-icon> Password field must be at least 6 characters
-                      long!
+                      <ion-icon name="information-circle-outline"></ion-icon> 
+                      Password field must be at least 6 characters long!
                   </p>
               </ion-text>
 
               <!-- Submit button -->
-              <span >
+              <span tappable (click)="forgotPassword()">
                 <p class="ion-text-right">Forgot password?</p>
               </span>
               <ion-button mode="ios" color="thapsblue" expand="block" class="ion-margin-top" [disabled]="!registerForm.valid"

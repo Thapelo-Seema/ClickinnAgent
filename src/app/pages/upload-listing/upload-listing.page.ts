@@ -258,26 +258,32 @@ export class UploadListingPage implements OnInit {
 
   //Move to the next page (Need to deal with the logic here)
   nextPage(){
-    this.pageActive++;
-    if(this.mode == "upload"){
-      //if we go to the second page, upload the room
-      if(this.pageActive == 2){
-        if(this.room.room_id == ""){
-          console.log("Creating room on database", this.room);
-          this.room_svc.createRoom(this.room)
-          .then(rm =>{
-            //update the room id
-            this.room.room_id = rm.id;
-            //present room uploaded toast
-            this.ionic_component_svc.presentToast("Room created on database", 2000);
-          })
-          .catch(err =>{
-            //present err modal
-            this.ionic_component_svc.presentToast("Error creating room on database", 2000);
-          })
+    
+    if(this.pageActive == 1 && this.room.pictures.length == 0){
+      this.ionic_component_svc.presentAlert("You need to upload atleast two images of the room");
+    }else{
+      this.pageActive++;
+      if(this.mode == "upload"){
+        //if we go to the second page, upload the room
+        if(this.pageActive == 2){
+          if(this.room.room_id == ""){
+            console.log("Creating room on database", this.room);
+            this.room_svc.createRoom(this.room)
+            .then(rm =>{
+              //update the room id
+              this.room.room_id = rm.id;
+              //present room uploaded toast
+              this.ionic_component_svc.presentToast("Room created on database", 2000);
+            })
+            .catch(err =>{
+              //present err modal
+              this.ionic_component_svc.presentToast("Error creating room on database", 2000);
+            })
+          }
         }
       }
     }
+  
   }
 
   //Move to previous page
@@ -502,6 +508,11 @@ export class UploadListingPage implements OnInit {
     this.property.num_pics_uploaded--;
   }
 
+  selectDp(i){
+    this.room.display_pic_url = this.room.pictures[i].url;
+    this.ionic_component_svc.presentToast("Room display pic selected", 2000);
+  }
+
   deleteRoomVideo(){
     const storageRef = this.afstorage.ref(`${this.room.video.path}/${this.room.video.name}`);
     storageRef.delete();
@@ -601,8 +612,7 @@ export class UploadListingPage implements OnInit {
     this.uploadRoomVideo();
   }
 
-
-    /**Handles updating the backroom object when initial pictures are added and uploading
+  /**Handles updating the backroom object when initial pictures are added and uploading
   the pictures to firebase storage 
   @param event with files in the target
   @return void
@@ -708,6 +718,7 @@ export class UploadListingPage implements OnInit {
         this.room.pictures[i].progress = data;
       })
       uploadTask.snapshotChanges().subscribe(data =>{
+    
       },
       err =>{
         console.log("upload ", i, " failed with error: ", err);
@@ -718,9 +729,9 @@ export class UploadListingPage implements OnInit {
         .pipe(take(1))
         .subscribe(url =>{
           this.room.pictures[i].url = url;
-          console.log(this.room.pictures);
+          //console.log(this.room.pictures);
           if(i == (this.room.pictures.length - 1)){
-            this.room.display_pic_url = url;
+            if(this.room.display_pic_url == "") this.room.display_pic_url = url;
             this.uploading_pictures = false;
           } 
         })

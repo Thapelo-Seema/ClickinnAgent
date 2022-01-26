@@ -1,11 +1,13 @@
 <ion-header>
   <ion-toolbar color="thapsblue">
   	<ion-buttons slot="start">
-      <ion-back-button>
-      </ion-back-button>
+      <ion-back-button defaultHref="#"></ion-back-button>
     </ion-buttons>
 	<!--Copy-->
-    <ion-title>Room Upload</ion-title>
+    <ion-title>
+      <ion-text *ngIf="mode != 'edit'">Room Upload</ion-text>
+      <ion-text *ngIf="mode == 'edit'">Edit Room</ion-text>
+    </ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -83,7 +85,7 @@
               <ion-col>
                 <h2>Monthly Rent *</h2>
                 <ion-item lines="none" color="light">
-                    <ion-input type="number" [(ngModel)]="room.rent">
+                    <ion-input type="number" [(ngModel)]="room.rent" placeholder="e.g. R3000">
                     </ion-input>
                 </ion-item>
               </ion-col>
@@ -92,7 +94,7 @@
               <ion-col>
                 <h2>Deposit *</h2>
                 <ion-item lines="none" color="light">
-                    <ion-input type="number" [(ngModel)]="room.deposit">
+                    <ion-input type="number" [(ngModel)]="room.deposit" placeholder="e.g. R3000">
                     </ion-input>
                 </ion-item>
                 <ion-item  lines="none" color="light">
@@ -120,7 +122,7 @@
                 <ion-item lines="none">
                   <ion-icon color="warning" class="my-icon" name="rocket-outline"></ion-icon>
                   <ion-label style="font-size: 1.4em" color="thapsblue" class="ion-text-wrap ion-padding">
-                    <h2>Upload pictures and 30 second video (optional) of the {{room.room_type}}</h2>
+                    <h2>Upload pictures of the {{room.room_type}}</h2>
                   </ion-label>
                 </ion-item>
               </ion-col>
@@ -150,25 +152,27 @@
                    <input type="file" hidden="hidden" #more_room_pics accept="image/*" (change)="updateMoreRoomPics($event)" multiple="true">
                    <ion-list>
                      <ion-card *ngFor="let pic of room.pictures; let i = index">
-                    <ion-progress-bar value="{{pic?.progress}}">
+                      <ion-progress-bar value="{{pic?.progress}}">
                       </ion-progress-bar>
-                       <ion-item>
-                      <ion-avatar slot="start">
+                      <ion-item>
+                        <ion-avatar slot="start">
                           <img src="{{pic?.url}}" (load)="updateRoomPicsLoaded(i)" 
                           [hidden]="!pic.loaded">
                           <img src="../../../assets/imgs/plain-gray-background.jpeg" [hidden]="pic?.loaded">
                         </ion-avatar>
-                      <h3>{{pic?.name}}</h3>
-                      <ion-button fill="clear" slot="end" 
-                      color="danger" (click)="deleteRoomPic(i)">
-                    <ion-icon slot="icon-only" name="close-outline"></ion-icon>
-                      </ion-button>
-                    </ion-item>
-                  </ion-card>
+                        <h3>{{pic?.name}}</h3>
+                        <ion-button fill="clear" slot="end" color="danger" (click)="selectDp(i)">
+                          <ion-icon slot="icon-only" name="image-outline"></ion-icon>
+                        </ion-button>
+                        <ion-button fill="clear" slot="end" color="danger" (click)="deleteRoomPic(i)">
+                          <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+                        </ion-button>
+                      </ion-item>
+                    </ion-card>
                    </ion-list>
                  </div>
               </ion-col>
-              <ion-col>
+              <!-- <ion-col>
                 <ion-card tappable color="light" *ngIf="room.video == null" (click)="selectRoomVideo()">
                   <ion-card-content>
                     <div class="ion-text-center">
@@ -185,10 +189,10 @@
                    </ion-card-content>
                  </ion-card>
                  <div *ngIf="room.video != null">
-                   <!-- <h1>Room pictures</h1> -->
-                   <!-- <ion-button mode="ios" (click)="addMoreRoomPics()">
+                   <h1>Room pictures</h1>
+                   <ion-button mode="ios" (click)="addMoreRoomPics()">
                      Change Video
-                   </ion-button> -->
+                   </ion-button>
                     <ion-card>
                       <ion-progress-bar value="{{room.video.progress}}">
                       </ion-progress-bar>
@@ -210,7 +214,7 @@
                       </ion-card-content>
                     </ion-card>    
                  </div>
-              </ion-col>
+              </ion-col> -->
             </ion-row>
 					</ion-grid>
           </ion-card-content>
@@ -484,7 +488,7 @@
                     </ion-list>
                   </div>
                 </ion-col>
-                <ion-col size-xs="12" size-md="6">
+                <!-- <ion-col size-xs="12" size-md="6">
                   <ion-card color="light" *ngIf="property.video == null">
                     <ion-card-content>
                       <div class="ion-text-center">
@@ -522,7 +526,7 @@
                        </ion-card-content>
                      </ion-card>    
                   </div>
-                </ion-col>
+                </ion-col> -->
               </ion-row>
 						</ion-grid>
 						<div *ngIf="pageActive == 2" class="ion-text-center">

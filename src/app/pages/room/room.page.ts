@@ -80,7 +80,8 @@ export class RoomPage implements OnInit {
       this.room_svc.getRoom(this.activatedRoute.snapshot.paramMap.get('room_id'))
       .pipe(take(1))
       .subscribe(rm =>{
-        this.room = rm;
+        this.room = this.property_svc.copyRoom(rm);
+        console.log(this.room.display_pic_url)
         this.room.pictures.forEach(p =>{
           this.pictures.push(p);
         });
@@ -93,7 +94,6 @@ export class RoomPage implements OnInit {
         }
       })
     }
-    
   }
 
   ngOnDestroy() {

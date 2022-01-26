@@ -39,6 +39,10 @@ export class AuthService {
     return !!localStorage.getItem('uid');
   }
 
+  forgotPassword(email){
+    return this.afAuth.sendPasswordResetEmail(email, {url: 'https://www.clickinn-agents.web.app'})
+  }
+
   monitorAuthStatus(){
     this.afAuth.onAuthStateChanged(user =>{
        
