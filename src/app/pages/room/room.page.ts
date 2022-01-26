@@ -170,7 +170,7 @@ export class RoomPage implements OnInit {
 		}
 	}
 
-  onScroll($event: CustomEvent) {
+  onScroll($event) {
     if ($event && $event.detail && $event.detail.scrollTop) {
       const scrollTop = $event.detail.scrollTop;
       this.transition = true;

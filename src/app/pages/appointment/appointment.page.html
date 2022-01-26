@@ -8,103 +8,107 @@
 </ion-header>
 
 <ion-content>
-  <ion-slides class="swiper-container ion-border-bottom" pager= false [options]="slideOption" #slidesOne>
-		<ion-slide tappable class="swiper-slide" *ngFor="let room of appointment?.rooms; let i = index" (click)="openRoom(room.room_id)">
-			<ion-grid>
-				<ion-row class="ion-justify-content-center">
-					<ion-col class="ion-no-margin ion-no-padding">
-						<p class="ion-no-margin ion-no-padding">
-							<ion-text class="price-font ion-no-margin ion-no-padding" color="thapsblue">
-								{{room.rent | currency : 'R' : 'symbol' :'1.0-0' }}
-							</ion-text>
-						</p>
-					</ion-col>
-				</ion-row>
-				<ion-row class="ion-justify-content-center">
-					<ion-col class="ion-no-padding ion-no-margin">
-						<div class="agent-icon">
-							<ion-avatar mode="ios">
-								<img class="room-img" src="{{room.display_pic_url}}" (load)="updateRoomPicLoaded(i)" [hidden]="!room.dp_loaded">
-								<img class="room-img" src="../../../assets/imgs/plain-gray-background.jpeg" [hidden]="room.dp_loaded">
-							</ion-avatar>
-							<!-- <ion-icon *ngIf="selected_rooms[i] != null" color="danger" class="my-icon" name="checkmark-circle-outline"></ion-icon> -->
-						</div>
-					</ion-col>
-				</ion-row>
-				
-				<ion-row class="ion-justify-content-center">
-					<ion-col class="ion-no-margin ion-no-padding">
-						<ion-text class="price-font ion-no-margin ion-no-padding" color="thapsblue" style="overflow: hidden;">
-							{{room.room_type}} 
-							<!-- {{room.property.address.place_name}} -->
-						</ion-text>
-					</ion-col>
-				</ion-row>
-			</ion-grid>
-		</ion-slide>
-	</ion-slides>
-  <ion-item lines="none">
-    <h1 class="main-header5">Details</h1>
-  </ion-item>
-  <ion-list>
-    <ion-item lines="none">
-      <ion-icon slot="start" name="person-outline" item-left></ion-icon>
-      <ion-label>
-        <h2>Agent</h2>
-        <p>{{appointment?.agent?.firstname}} {{appointment?.agent?.lastname}}</p>
-      </ion-label>
-    </ion-item>
-    <ion-item lines="none">
-      <ion-icon slot="start" name="people-outline" item-left></ion-icon>
-      <ion-label>
-        <h2>Client</h2>
-        <p>{{appointment.client ?  appointment?.client?.firstname : 'No '}} 
-          {{appointment.client ? appointment?.client?.lastname : 'Client'}}
-        </p>
-      </ion-label>
-    </ion-item>
-    <ion-item lines="none">
-      <ion-icon slot="start" name="pin-outline" item-left></ion-icon>
-      <ion-label>
-        <h2>Location</h2>
-        <p *ngIf="appointment.location" class="ion-text-wrap">{{appointment?.location?.place_name}}</p>
-        <p *ngIf="!appointment.location" class="ion-text-wrap">{{appointment?.rooms[0]?.property.address.place_name}}</p>
-      </ion-label>
-    </ion-item>
-    <ion-item lines="none">
-      <ion-icon slot="start" name="time-outline" item-left></ion-icon>
-      <ion-label>
-        <h2>Date & Time</h2>
-        <p class="ion-text-wrap">{{formatDate(appointment?.date)}}</p>
-      </ion-label>
-    </ion-item>
-  </ion-list>
-  <div *ngIf="!show_datetime" class="ion-text-center">
-    <ion-button *ngIf="!appointment?.date" mode="ios" color="thapsblue"  (click)="showDatePicker()">
-      Set Time
-    </ion-button>
-    <ion-button *ngIf="appointment?.date" mode="ios" color="thapsblue"  (click)="showDatePicker()">
-      Edit Time
-    </ion-button>
-    <ion-button *ngIf="appointment_changed" mode="ios" fill="outline" color="thapsblue" (click)="setAppointment()">
-      Confirm
-    </ion-button>
-    <ion-button color="thapslightblue" mode="ios" (click)="cancelAppointment()">
-      <ion-text color="light">Cancel Appointment</ion-text>
-    </ion-button>
-  </div>
-  <div *ngIf="show_datetime">
-    <ion-datetime (ionChange)="datetimeChanged($event)">
-    </ion-datetime>
-    <ion-buttons slot="buttons">
-      <ion-button color="thapsblue" (click)="confirmDatetime()">   
-        Confirm
-      </ion-button>
-      <ion-button color="danger" (click)="cancelDatetime()">
-        Cancel
-      </ion-button>
-    </ion-buttons>
-  </div>
+  <ion-grid>
+    <ion-row>
+      <ion-col size-xs="0" size-lg="2"></ion-col>
+      <ion-col size-xs="12" size-lg="8">
+        <ion-slides class="swiper-container ion-border-bottom" pager= false [options]="slideOption" #slidesOne>
+          <ion-slide tappable class="swiper-slide" *ngFor="let room of appointment?.rooms; let i = index" (click)="openRoom(room.room_id)">
+            <ion-grid>
+              <ion-row class="ion-justify-content-center">
+                <ion-col class="ion-no-margin ion-no-padding">
+                  <p class="ion-no-margin ion-no-padding">
+                    <ion-text class="price-font ion-no-margin ion-no-padding" color="thapsblue">
+                      {{room.rent | currency : 'R' : 'symbol' :'1.0-0' }}
+                    </ion-text>
+                  </p>
+                </ion-col>
+              </ion-row>
+              <ion-row class="ion-justify-content-center">
+                <ion-col class="ion-no-padding ion-no-margin">
+                  <div class="agent-icon">
+                    <ion-avatar mode="ios">
+                      <img class="room-img" src="{{room.display_pic_url}}" (load)="updateRoomPicLoaded(i)" [hidden]="!room.dp_loaded">
+                      <img class="room-img" src="../../../assets/imgs/plain-gray-background.jpeg" [hidden]="room.dp_loaded">
+                    </ion-avatar>
+                    <!-- <ion-icon *ngIf="selected_rooms[i] != null" color="danger" class="my-icon" name="checkmark-circle-outline"></ion-icon> -->
+                  </div>
+                </ion-col>
+              </ion-row>
+              
+              <ion-row class="ion-justify-content-center">
+                <ion-col class="ion-no-margin ion-no-padding">
+                  <ion-text class="price-font ion-no-margin ion-no-padding" color="thapsblue" style="overflow: hidden;">
+                    {{room.room_type}} 
+                    <!-- {{room.property.address.place_name}} -->
+                  </ion-text>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-slide>
+        </ion-slides>
+        <ion-item lines="none">
+          <h1 class="main-header5">Details</h1>
+        </ion-item>
+        <ion-list class="ion-text-center">
+          <ion-item lines="none" >
+            <ion-icon slot="start" name="person-outline" item-left></ion-icon>
+            <ion-label>
+              <h2>Agent</h2>
+              <p>{{appointment?.agent?.firstname}} {{appointment?.agent?.lastname}}</p>
+            </ion-label>
+          </ion-item>
+          <ion-item lines="none">
+            <ion-icon slot="start" name="people-outline" item-left></ion-icon>
+            <ion-label>
+              <h2>Client</h2>
+              <p>{{appointment.client ?  appointment?.client?.firstname : 'No '}} 
+                {{appointment.client ? appointment?.client?.lastname : 'Client'}}
+              </p>
+            </ion-label>
+          </ion-item>
+          <ion-item lines="none">
+            <ion-icon slot="start" name="navigate-circle-outline" item-left></ion-icon>
+            <ion-label>
+              <h2>Location</h2>
+              <p *ngIf="appointment.location" class="ion-text-wrap">{{appointment?.location?.place_name}}</p>
+              <p *ngIf="!appointment.location" class="ion-text-wrap">{{appointment?.rooms[0]?.property.address.place_name}}</p>
+            </ion-label>
+          </ion-item>
+          <ion-item button (click)="showDatePicker()" color="thapsblue" mode="ios" lines="none" detail>
+            <ion-icon slot="start" name="time-outline" ></ion-icon>
+            <ion-label>
+              <p class="ion-text-wrap">{{formatDate(appointment?.date)}}</p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+        <div *ngIf="!show_datetime" class="ion-text-center">
+          <ion-button mode="ios" fill="clear" color="success" (click)="setAppointment()">
+            <ion-icon name="checkmark-outline" slot="end"></ion-icon>
+            Confirm
+          </ion-button>
+          <ion-button color="danger" mode="ios" fill="clear" (click)="cancelAppointment()">
+            <ion-icon name="close" slot="end"></ion-icon>
+           Cancel
+          </ion-button>
+        </div>
+        <div *ngIf="show_datetime">
+          <ion-datetime (ionChange)="datetimeChanged($event)">
+          </ion-datetime>
+          <ion-buttons slot="buttons">
+            <ion-button color="thapsblue" (click)="confirmDatetime()">   
+              Confirm
+            </ion-button>
+            <ion-button color="danger" (click)="cancelDatetime()">
+              Cancel
+            </ion-button>
+          </ion-buttons>
+        </div>
+      </ion-col>
+      <ion-col size-xs="0" size-lg="2"></ion-col>
+    </ion-row>
+  </ion-grid>
+  
 
   
 

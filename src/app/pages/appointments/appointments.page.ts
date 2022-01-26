@@ -33,8 +33,13 @@ export class AppointmentsPage implements OnInit {
     this.router.navigate(['/appointment', {'appointment_id': appointment_id}]);
   }
 
+
   formatDate(value: string){
-    return format(parseISO(value), 'PPPPpppp');
+    return format(parseISO(value), 'PPPPp');
+  }
+
+  updateRoomPicLoaded(i){
+    this.appointments[i].rooms[0].dp_loaded = true;
   }
 
 }

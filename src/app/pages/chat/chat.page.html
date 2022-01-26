@@ -75,6 +75,21 @@
 								<p class="highlight-font">{{msg?.highlight?.message}}</p>
 							</ion-label>
 						</ion-item>
+						<ion-item tappable *ngIf="msg?.appointment"  color="light" lines="none" (click)="gotoAppointment(msg?.appointment)" >
+							<ion-avatar slot="start">
+								<ion-icon name="calendar-number-outline" color="tertiary"></ion-icon>
+							</ion-avatar>
+							<ion-label>
+							<h3 class="ion-text-wrap">
+								<strong>
+									{{ msg?.appointment?.location?.house_number }} {{ msg?.appointment.location?.street }}, {{ msg?.appointment.location?.neighbourhood }} 
+								</strong>
+							</h3>
+							<p class="ion-text-wrap">
+								{{formatDate(msg?.appointment?.date)}}
+							</p>
+							</ion-label>
+						</ion-item>
 						<ion-card-content padding-top style="background: #f5f1e3; width: 100%;">
 							<ion-checkbox mode="ios" (ionChange)="msgHighlight($event, i)"></ion-checkbox>
 							<p>{{msg?.message}}</p>
@@ -87,6 +102,21 @@
 						<ion-item color="light" *ngIf="msg?.highlight" lines="none">
 							<ion-label>
 								<p class="highlight-font">{{msg?.highlight?.message}}</p>
+							</ion-label>
+						</ion-item>
+						<ion-item tappable *ngIf="msg?.appointment"  color="light" lines="none" (click)="gotoAppointment(msg?.appointment)" >
+							<ion-avatar slot="start">
+								<ion-icon name="calendar-number-outline" color="tertiary"></ion-icon>
+							</ion-avatar>
+							<ion-label>
+							<h3 class="ion-text-wrap">
+								<strong>
+									{{ msg?.appointment?.location?.house_number }} {{ msg?.appointment.location?.street }}, {{ msg?.appointment.location?.neighbourhood }} 
+								</strong>
+							</h3>
+							<p class="ion-text-wrap">
+								{{formatDate(msg?.appointment?.date)}}
+							</p>
 							</ion-label>
 						</ion-item>
 						<ion-card-content padding-top style="background: #f2eff8; width: 100%;">

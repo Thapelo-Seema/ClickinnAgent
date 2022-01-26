@@ -9,6 +9,10 @@ import { take } from 'rxjs/operators';
 import { UsersService } from '../../object-init/users.service';
 import { RoomService } from '../../services/room.service';
 import { IonDatetime} from '@ionic/angular';
+import { ChattService } from '../../services/chatt.service';
+import { ChatService } from '../../object-init/chat.service';
+import { ChatThread } from 'src/app/models/chat-thread.model';
+import { ChatMessage } from 'src/app/models/chat-message.model';
 
 @Component({
   selector: 'app-appointment',
@@ -32,6 +36,8 @@ export class AppointmentPage implements OnInit {
     time_modified: 0,
     seen: false
   }
+  thread: ChatThread;
+  message: ChatMessage;
   slideOption = {
     slidesPerView: 'auto',
     grabCursor: true
@@ -46,7 +52,13 @@ export class AppointmentPage implements OnInit {
     private user_svc: UserService,
     private user_init_svc: UsersService,
     private room_svc: RoomService,
-    private ionic_component_svc: IonicComponentService) { }
+    private chat_svc: ChattService,
+    private chat_init_svc: ChatService,
+    private ionic_component_svc: IonicComponentService) { 
+      this.thread = this.chat_init_svc.defaultThread();
+      this.message = this.chat_init_svc.defaultMessage();
+      this.message.message = "Viewing appointment set";
+    }
 
   ngOnInit(){
 
@@ -57,7 +69,8 @@ export class AppointmentPage implements OnInit {
         .pipe(take(1))
         .subscribe(usr =>{
           this.appointment.agent = this.user_init_svc.copyUser(usr);
-          console.log(this.appointment.agent)
+          this.message.from = usr.uid;
+          //console.log(this.appointment.agent)
         })
       }
   
@@ -66,7 +79,7 @@ export class AppointmentPage implements OnInit {
         .pipe(take(1))
         .subscribe(usr =>{
           this.appointment.client = this.user_init_svc.copyClient(usr);
-          console.log(this.appointment.client)
+          //console.log(this.appointment.client)
         })
       }
   
@@ -80,6 +93,15 @@ export class AppointmentPage implements OnInit {
             this.appointment.landlord_confirmations.push(false);
             this.appointment.landlord_declines.push(false);
           })
+          this.appointment.location = this.appointment.rooms[0].property.address;
+        })
+      }
+
+      if(this.activated_route.snapshot.paramMap.get('thread_id')){
+        this.chat_svc.getThread(this.activated_route.snapshot.paramMap.get('thread_id'))
+        .pipe(take(1))
+        .subscribe(thd =>{
+          this.thread = this.chat_init_svc.copyThread(thd);
         })
       }
 
@@ -105,14 +127,10 @@ export class AppointmentPage implements OnInit {
   }
 
   datetimeChanged(event){
-    if(this.appointment.time_set != 0){
-      this.appointment.time_modified = Date.now();
-    }else{
-      this.appointment.time_set = Date.now();
-      this.appointment.time_modified = Date.now();
-    }
+    this.appointment.date = event.detail.value;
+    this.appointment.time_set = Date.now();
+    this.appointment.time_modified = Date.now();
     this.appointment_changed = true;
-    //console.log(this.appointment);
   }
 
   formatDate(value: string){
@@ -120,23 +138,73 @@ export class AppointmentPage implements OnInit {
   }
 
   setAppointment(){
+    this.ionic_component_svc.presentLoading();
     if(this.appointment.appointment_id != ""){
+      this.addAppointmentToChats("Please confirm the above appointment")
       this.syncAppointment()
+      .then(() =>{
+        this.ionic_component_svc.dismissLoading().catch(err => console.log(err));
+      })
+      .catch(err =>{
+        console.log(err)
+        this.ionic_component_svc.dismissLoading().catch(err => console.log(err));
+      })
     }else{
       this.appointment_svc.createAppointment(this.appointment)
       .then(ref =>{
         this.appointment.appointment_id = ref.id;
-        this.syncAppointment();
+        
+        this.syncAppointment()
+        .then(() =>{
+          this.addAppointmentToChats("Please confirm the above appointment")
+          this.ionic_component_svc.dismissLoading().catch(err => console.log(err));
+        })
+        .catch(err =>{
+          console.log(err)
+          this.ionic_component_svc.dismissLoading().catch(err => console.log(err));
+        })
       })
       .catch(err =>{
+        this.ionic_component_svc.dismissLoading().catch(err => console.log(err));
         this.ionic_component_svc.presentAlert(err.message);
         console.log(err);
       })
     }
   }
 
-  cancelAppointment(){
+  addAppointmentToChats(msg: string){
+    if(this.thread.thread_id != ""){
+      this.message.message = msg;
+      this.message.time = Date.now();
+      this.message.appointment = this.appointment_svc.copyAppointment(this.appointment)
+      this.thread.last_update = Date.now();
+      this.message.message_id = this.thread.chat_messages.length > 0 ? this.thread.chat_messages.length - 1: 0;
+      this.thread.chat_messages.push(this.message)
+      this.thread.new_messages.push(this.message)
+      this.thread.last_message = this.chat_init_svc.copyMessage(this.message);
+      this.chat_svc.updateThread(this.thread);
+    }
+  }
 
+  cancelAppointment(){
+    if(this.appointment.client_cancels == false && this.appointment.appointment_id != ""){
+      this.ionic_component_svc.presentLoading();
+      for(let i = 0; i < this.appointment.landlord_declines.length; i++){
+        this.appointment.landlord_declines[i] = true;
+      }
+      this.appointment_svc.updateAppointment(this.appointment)
+      .then(() =>{
+        this.addAppointmentToChats("I have cancelled this appointment")
+        this.ionic_component_svc.dismissLoading().catch(err => console.log(err));
+        this.ionic_component_svc.presentAlert("Appointment successfully cancelled");
+      })
+      .catch(err =>{
+        this.ionic_component_svc.dismissLoading().catch(err => console.log(err));
+        this.ionic_component_svc.presentAlert("Could not cancel appointment");
+      })
+    }else{
+      this.ionic_component_svc.presentAlert("Could not cancel unconfirmed appointment");
+    }
   }
 
   confirmDatetime(){
@@ -151,7 +219,7 @@ export class AppointmentPage implements OnInit {
 
 
   syncAppointment(){
-    this.appointment_svc.updateAppointment(this.appointment)
+    return this.appointment_svc.updateAppointment(this.appointment)
     .then(() =>{
       this.ionic_component_svc.presentAlert("Appointment successfully set!");
     })

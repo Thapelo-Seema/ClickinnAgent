@@ -15,6 +15,7 @@ import { SearchFeedService } from '../../services/search-feed.service';
 import { take } from 'rxjs/operators';
 import { RoomSearch } from 'src/app/models/room-search.model';
 import { IonicComponentService } from '../../services/ionic-component.service';
+import { Appointment } from 'src/app/models/appointment.model';
 
 @Component({
   selector: 'app-chat',
@@ -70,20 +71,23 @@ export class ChatPage implements OnInit{
 
         //Prepare the search results for the client's current search
         if(thd.client.current_job != "" && (this.rooms.length == 0)){
+          console.log("Client has current job")
           this.searchfeed_svc.getSearch(this.thread.client.current_job)
           .pipe(take(1))
           .subscribe(sch =>{
             if(sch){
+              console.log("chat has search: ", sch)
               this.prepareSearchResults(sch);
               this.ionic_component_svc.dismissLoading().catch(err => console.log(err));
             }else{
+              console.log("chat has no search")
               this.ionic_component_svc.dismissLoading().catch(err => console.log(err));
             }
           }) 
         }else{
+          console.log("client doesnt have current job")
           this.ionic_component_svc.dismissLoading().catch(err => console.log(err));
         }
-  
       })
     }else if(this.activated_route.snapshot.paramMap.get("search_id")){
       this.searchfeed_svc.getSearch(this.activated_route.snapshot.paramMap.get("search_id"))
@@ -117,6 +121,7 @@ export class ChatPage implements OnInit{
     this.searchfeed_svc.getRoomSearchResults(search)
     .pipe(take(1))
     .subscribe(rms =>{
+      console.log("chat has rooms: ", rms)
       this.rooms = rms;
       this.rooms.forEach(rm =>{
         this.selected_rooms.push(null); //initalize all rooms as not selected
@@ -142,10 +147,6 @@ export class ChatPage implements OnInit{
 
   updateAppointment(event){
     this.formatDate(event.detail.value);
-  }
-
-  formatDate(value: string){
-    console.log(format(parseISO(value), 'MMM dd yyyy'));
   }
 
   timeAgo(date){
@@ -220,6 +221,14 @@ export class ChatPage implements OnInit{
     this.router.navigate(['/appointment', {'agent_id': this.user.uid, 
     'client_id': this.thread.client ? this.thread.client.uid : '', 
     'rooms': this.generateSelectedRoomIds(), 'thread_id': this.thread.thread_id}])
+  }
+
+  gotoAppointment(appointment: Appointment){
+    this.router.navigate(['/appointment', {'appointment_id': appointment.appointment_id}])
+  }
+
+  formatDate(value: string){
+    return format(parseISO(value), 'PPPPp');
   }
 
   updateRoomPicLoaded(i){
