@@ -82,7 +82,7 @@
             </ion-label>
           </ion-item>
         </ion-list>
-        <div *ngIf="!show_datetime && (!appointment?.client_confirmed && !appointment?.client_cancelled)" class="ion-text-center">
+        <div *ngIf="!show_datetime && (!appointment?.client_confirmed && !appointment?.client_cancels)" class="ion-text-center">
           <ion-button mode="ios" fill="clear" color="thapsblue" (click)="setAppointment()">
             <ion-icon name="paper-plane-outline" slot="end"></ion-icon>
             Submit
