@@ -12,7 +12,10 @@ export interface Appointment{
     landlord_confirmations: boolean[];
     location: Address;
     landlord_declines: boolean[];
+    agent_confirmed?: boolean;
+    agent_cancelled?: boolean;
     client_cancels: boolean;
+    client_confirmed?: boolean;
     appointment_id: string;
     time_modified: number;
     seen: boolean;

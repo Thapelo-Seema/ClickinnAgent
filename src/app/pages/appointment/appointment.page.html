@@ -82,8 +82,18 @@
             </ion-label>
           </ion-item>
         </ion-list>
-        <div *ngIf="!show_datetime" class="ion-text-center">
-          <ion-button mode="ios" fill="clear" color="success" (click)="setAppointment()">
+        <div *ngIf="!show_datetime && (!appointment?.client_confirmed && !appointment?.client_cancelled)" class="ion-text-center">
+          <ion-button mode="ios" fill="clear" color="thapsblue" (click)="setAppointment()">
+            <ion-icon name="paper-plane-outline" slot="end"></ion-icon>
+            Submit
+          </ion-button>
+          <ion-button color="danger" mode="ios" fill="clear" (click)="cancelAppointment()">
+            <ion-icon name="close" slot="end"></ion-icon>
+           Cancel
+          </ion-button>
+        </div>
+        <div *ngIf="!show_datetime && appointment?.client_confirmed" class="ion-text-center">
+          <ion-button mode="ios" fill="clear" color="thapsblue" (click)="confirmAppointment()">
             <ion-icon name="checkmark-outline" slot="end"></ion-icon>
             Confirm
           </ion-button>

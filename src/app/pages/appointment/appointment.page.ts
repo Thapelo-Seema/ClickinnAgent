@@ -61,57 +61,70 @@ export class AppointmentPage implements OnInit {
     }
 
   ngOnInit(){
-
+    this.ionic_component_svc.presentLoading()
     if(!this.activated_route.snapshot.paramMap.get('appointment_id') ){
-
-      if(this.activated_route.snapshot.paramMap.get('agent_id') ){
-        this.user_svc.getUser(this.activated_route.snapshot.paramMap.get('agent_id'))
-        .pipe(take(1))
-        .subscribe(usr =>{
-          this.appointment.agent = this.user_init_svc.copyUser(usr);
-          this.message.from = usr.uid;
-          //console.log(this.appointment.agent)
-        })
+      this.getThread();
+      this.getRooms();
+      this.getAgent();
+      this.getClient();
+      while(!this.appointment.agent|| !this.appointment.client || !this.appointment.location){
+        //keep loading
       }
-  
-      if(this.activated_route.snapshot.paramMap.get('client_id')){
-        this.user_svc.getClient(this.activated_route.snapshot.paramMap.get('client_id'))
-        .pipe(take(1))
-        .subscribe(usr =>{
-          this.appointment.client = this.user_init_svc.copyClient(usr);
-          //console.log(this.appointment.client)
-        })
-      }
-  
-      if(this.activated_route.snapshot.paramMap.get('rooms')){
-        let room_ids = this.activated_route.snapshot.paramMap.get('rooms').split(',');
-        this.room_svc.getRoomsIn(room_ids)
-        .pipe(take(1))
-        .subscribe(rms =>{
-          this.appointment.rooms = rms;
-          this.appointment.rooms.forEach(rm =>{
-            this.appointment.landlord_confirmations.push(false);
-            this.appointment.landlord_declines.push(false);
-          })
-          this.appointment.location = this.appointment.rooms[0].property.address;
-        })
-      }
-
-      if(this.activated_route.snapshot.paramMap.get('thread_id')){
-        this.chat_svc.getThread(this.activated_route.snapshot.paramMap.get('thread_id'))
-        .pipe(take(1))
-        .subscribe(thd =>{
-          this.thread = this.chat_init_svc.copyThread(thd);
-        })
-      }
-
+      this.ionic_component_svc.dismissLoading().catch(err => console.log(err))
     }else{
       this.appointment_svc.getAppointment(this.activated_route.snapshot.paramMap.get('appointment_id'))
       .subscribe(appt =>{
         this.appointment = this.appointment_svc.copyAppointment(appt);
+        this.ionic_component_svc.dismissLoading().catch(err => console.log(err))
       })
     }
-    
+  }
+
+  getAgent(){
+    if(this.activated_route.snapshot.paramMap.get('agent_id') ){
+      this.user_svc.getUser(this.activated_route.snapshot.paramMap.get('agent_id'))
+      .pipe(take(1))
+      .subscribe(usr =>{
+        this.appointment.agent = this.user_init_svc.copyUser(usr);
+        this.message.from = usr.uid;
+      })
+    }
+  }
+
+  getClient(){
+    if(this.activated_route.snapshot.paramMap.get('client_id')){
+      this.user_svc.getClient(this.activated_route.snapshot.paramMap.get('client_id'))
+      .pipe(take(1))
+      .subscribe(usr =>{
+        this.appointment.client = this.user_init_svc.copyClient(usr);
+      })
+    }
+  }
+
+  getRooms(){
+    if(this.activated_route.snapshot.paramMap.get('rooms')){
+      let room_ids = this.activated_route.snapshot.paramMap.get('rooms').split(',');
+      this.room_svc.getRoomsIn(room_ids)
+      .pipe(take(1))
+      .subscribe(rms =>{
+        this.appointment.rooms = rms;
+        this.appointment.rooms.forEach(rm =>{
+          this.appointment.landlord_confirmations.push(false);
+          this.appointment.landlord_declines.push(false);
+        })
+        this.appointment.location = this.appointment.rooms[0].property.address;
+      })
+    }
+  }
+
+  getThread(){
+    if(this.activated_route.snapshot.paramMap.get('thread_id')){
+      this.chat_svc.getThread(this.activated_route.snapshot.paramMap.get('thread_id'))
+      .pipe(take(1))
+      .subscribe(thd =>{
+        this.thread = this.chat_init_svc.copyThread(thd);
+      })
+    }
   }
 
   showDatePicker(){
@@ -138,6 +151,7 @@ export class AppointmentPage implements OnInit {
   }
 
   setAppointment(){
+    this.appointment.agent_confirmed = true;
     this.ionic_component_svc.presentLoading();
     if(this.appointment.appointment_id != ""){
       this.addAppointmentToChats("Please confirm the above appointment")
@@ -187,11 +201,10 @@ export class AppointmentPage implements OnInit {
   }
 
   cancelAppointment(){
-    if(this.appointment.client_cancels == false && this.appointment.appointment_id != ""){
+    if(this.appointment.agent_cancelled == false && this.appointment.appointment_id != ""){
       this.ionic_component_svc.presentLoading();
-      for(let i = 0; i < this.appointment.landlord_declines.length; i++){
-        this.appointment.landlord_declines[i] = true;
-      }
+      this.appointment.agent_cancelled = true;
+      this.appointment.agent_confirmed = false;
       this.appointment_svc.updateAppointment(this.appointment)
       .then(() =>{
         this.addAppointmentToChats("I have cancelled this appointment")
@@ -204,6 +217,26 @@ export class AppointmentPage implements OnInit {
       })
     }else{
       this.ionic_component_svc.presentAlert("Could not cancel unconfirmed appointment");
+    }
+  }
+
+  confirmAppointment(){
+    if(this.appointment.agent_confirmed == false && this.appointment.appointment_id != ""){
+      this.ionic_component_svc.presentLoading();
+      this.appointment.agent_cancelled = false;
+      this.appointment.agent_confirmed = true;
+      this.appointment_svc.updateAppointment(this.appointment)
+      .then(() =>{
+        this.addAppointmentToChats("I have confirmed this appointment")
+        this.ionic_component_svc.dismissLoading().catch(err => console.log(err));
+        this.ionic_component_svc.presentAlert("Appointment successfully confirmed");
+      })
+      .catch(err =>{
+        this.ionic_component_svc.dismissLoading().catch(err => console.log(err));
+        this.ionic_component_svc.presentAlert("Could not confirm appointment");
+      })
+    }else{
+      this.ionic_component_svc.presentAlert("Could not confirm appointment");
     }
   }
 

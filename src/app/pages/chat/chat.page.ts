@@ -160,7 +160,6 @@ export class ChatPage implements OnInit{
   }
 
   send(){
-    console.log("Sending message...");
     this.new_message.time = Date.now();
     this.new_message.message_id = this.thread.chat_messages.length > 0 ? this.thread.chat_messages.length - 1: 0;
     this.new_message.from = this.thread.agent.uid;
@@ -170,13 +169,10 @@ export class ChatPage implements OnInit{
     this.thread.last_update = Date.now();
     //If thread is not empty, just update the thread else create a new thread on the database 
     if(this.thread.thread_id != ""){
-      console.log("Agent already has client as a contact");
       this.chat_svc.updateThread(this.thread);
     }else{
-      console.log("Agent does not have the client as a contact");
       this.chat_svc.createThread(this.thread)
       .then(td =>{
-        console.log("Just created new thread")
         this.thread.thread_id = td.id;
 
         //update contacts on agent
@@ -187,20 +183,14 @@ export class ChatPage implements OnInit{
         this.thread.client.contacts.push(this.thread.agent.uid);
         this.thread.client.thread_ids.push(this.thread.thread_id);
 
-        console.log("Just updated the agent and clients contact list locally: ", this.thread);
-
         //Update the thread
         this.chat_svc.updateThread(this.thread)
         .then(() =>{
-          console.log("Just synced the thread: ");
           //Sync agent and client profiles
           this.user_svc.updateClient(this.thread.client);
           this.user_svc.updateUser(this.thread.agent);
-          console.log("Just synced the agent and client profiles");
-          console.log("Subscribing to thread...");
           this.chat_svc.getThread(this.thread.thread_id)
           .subscribe(_thd =>{
-            console.log("Thread updated!");
             this.thread = this.chat_init_svc.copyThread(_thd);
           })
         })
