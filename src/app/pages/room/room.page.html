@@ -23,7 +23,8 @@
   <!--******* Image header  *******-->
 
   <!-- <div *ngIf="(itemDetail | async)?.recommended"  class="ribbon pop-in">Best</div> -->
-  <div class="detail-header" style="background-image: url({{room?.display_pic_url}})">
+  <div class="detail-header">
+    <img src="{{room.display_pic_url}}" height="100%" style="position:absolute; left:50%; transform: translateX(-50%);"  (load)="updateRoomDisplayPicLoaded()" [hidden]="!room.dp_loaded">
   </div>
   <ion-grid fixed class="ion-no-padding">
     <div class="travel_space1">

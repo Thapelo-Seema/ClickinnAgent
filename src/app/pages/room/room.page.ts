@@ -186,6 +186,10 @@ export class RoomPage implements OnInit {
     this.ionicComponentService.presentToast(action,3000);
   }
 
+  updateRoomDisplayPicLoaded(){
+    this.room.dp_loaded = true;
+  }
+
   /* async openMap() {
     console.log("openModal");
     const modal = await this.modalController.create({

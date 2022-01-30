@@ -46,7 +46,6 @@ export class HomePage implements OnInit {
       .subscribe(fetched_user =>{
         if(fetched_user){
           this.user = this.user_init_svc.copyUser(fetched_user)
-          console.log(this.user);
           //If user is associated to a job, attend to this job
           this.handleJob();
           this.updateUserFCM();
@@ -60,7 +59,6 @@ export class HomePage implements OnInit {
             .subscribe(fetched_user =>{
               if(fetched_user){
                 this.user = this.user_init_svc.copyUser(fetched_user);
-                console.log(this.user);
                 //If user is associated to a job, attend to this job
                 this.handleJob();
                 this.updateUserFCM();
