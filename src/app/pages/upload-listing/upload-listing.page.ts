@@ -18,6 +18,7 @@ import { ToastController } from '@ionic/angular';
 //import { UploadSuccessPage } from '../../modals/upload-success/upload-success.page';
 import { MapsService } from '../../services/maps.service';
 import { IonicComponentService } from '../../services/ionic-component.service';
+import imageCompression from 'browser-image-compression';
 
 @Component({
   selector: 'app-upload-listing',
@@ -423,61 +424,40 @@ export class UploadListingPage implements OnInit {
     this.property.num_pics_uploaded--;
   }
 
-  /**Handles updating the backroom object when more pictures are added and uploading
-  the pictures to firebase storage 
-  @param event with files in the target
-  @return void
-  */
-  updateMoreSharedAreaPics(event){
-    let length = this.property.shared_area_pics.length;
-    //map the files object into a files array
-    let files = Object.keys(event.target.files).map(ind =>{
-      let file = event.target.files[ind];
-      return file;
-    })
-    //Deals with initial upload but does not take into account multiple attempts, where array keeps growing
-    files.forEach(fl =>{
-      let fileUpload: FileUpload = {
-          file: fl,
-          path: "SharedAreaImages",
-          url: "",
-          name: fl.name,
-          progress: 0,
-          loaded: false
-      }
-      this.property.shared_area_pics.push(fileUpload);
-    })
-    this.uploadSharedAreaPics(length);
-  }
-
   /**Handles updating the backroom object when initial pictures are added and uploading
   the pictures to firebase storage 
   @param event with files in the target
   @return void
   */
   updateSharedAreaPics(event){
-    //clearing backroom pics before update till I find a better way to update
-    
-      this.property.shared_area_pics = [];
-    
     //map the files object into a files array
-    let files = Object.keys(event.target.files).map(ind =>{
-      let file = event.target.files[ind];
-      return file;
-    })
-    //Deals with initial upload but does not take into account multiple attempts, where array keeps growing
-    files.forEach(fl =>{
+     Object.keys(event.target.files).forEach( async (ind) =>{
+      let opts = {
+        maxSizeMB: 1,
+        maxWidthOrHeight: 1920,
+        useWebWorker: true
+      }
+      let file = await imageCompression(event.target.files[ind], opts)
       let fileUpload: FileUpload = {
-          file: fl,
-          path: "SharedAreaImages",
-          url: "",
-          name: fl.name,
-          progress: 0,
-          loaded: false
+        file: file,
+        path: "SharedAreaImages",
+        url: "",
+        name: file.name,
+        progress: 0,
+        loaded: false
       }
       this.property.shared_area_pics.push(fileUpload);
+      this.uploadSharedAreaPics(this.property.shared_area_pics.length - 1);
     })
-    this.uploadSharedAreaPics();
+  }
+
+  /**Handles updating the backroom object when more pictures are added and uploading
+  the pictures to firebase storage 
+  @param event with files in the target
+  @return void
+  */
+  updateMoreSharedAreaPics(event){
+    this.updateSharedAreaPics(event);
   }
 
   /**Handles button click for selecting initial backroom pics and triggers
@@ -527,60 +507,40 @@ export class UploadListingPage implements OnInit {
     this.property.video_url = "";
   }
 
-  /**Handles updating the backroom object when more pictures are added and uploading
-  the pictures to firebase storage 
-  @param event with files in the target
-  @return void
-  */
-  updateMoreRoomPics(event){
-    let length = this.room.pictures.length;
-    //map the files object into a files array
-    let files = Object.keys(event.target.files).map(ind =>{
-      let file = event.target.files[ind];
-      return file;
-    })
-    //Deals with initial upload but does not take into account multiple attempts, where array keeps growing
-    files.forEach(fl =>{
-      let fileUpload: FileUpload = {
-          file: fl,
-          path: "RoomImages",
-          url: "",
-          name: fl.name,
-          progress: 0,
-          loaded: false
-      }
-      this.room.pictures.push(fileUpload);
-    })
-    this.uploadRoomPics(length);
-  }
-
   /**Handles updating the backroom object when initial pictures are added and uploading
   the pictures to firebase storage 
   @param event with files in the target
   @return void
   */
   updateRoomPics(event){
-    //clearing backroom pics before update till I find a better way to update
-    this.room.pictures = [];
-  
-    //map the files object into a files array
-    let files = Object.keys(event.target.files).map(ind =>{
-      let file = event.target.files[ind];
-      return file;
-    })
-    //Deals with initial upload but does not take into account multiple attempts, where array keeps growing
-    files.forEach(fl =>{
+    //compress and upload each file in the files array
+    Object.keys(event.target.files).forEach( async (ind) =>{
+      let opts = {
+        maxSizeMB: 1,
+        maxWidthOrHeight: 1920,
+        useWebWorker: true
+      }
+      let file = await imageCompression(event.target.files[ind], opts)
       let fileUpload: FileUpload = {
-          file: fl,
-          path: "RoomImages",
-          url: "",
-          name: fl.name,
-          progress: 0,
-          loaded: false
+        file: file,
+        path: "RoomImages",
+        url: "",
+        name: file.name,
+        progress: 0,
+        loaded: false
       }
       this.room.pictures.push(fileUpload);
+      this.uploadRoomPics(this.room.pictures.length - 1);
     })
-    this.uploadRoomPics();
+  }
+
+  /**Handles updating the backroom object when more pictures are added and uploading
+  the pictures to firebase storage 
+  @param event with files in the target
+  @return void
+  */
+  updateMoreRoomPics(event){
+    this.updateRoomPics(event)
   }
 
     /**Handles updating the backroom object when initial pictures are added and uploading
@@ -593,9 +553,16 @@ export class UploadListingPage implements OnInit {
     this.room.video = null;
   
     //map the files object into a files array
-    let files = Object.keys(event.target.files).map(ind =>{
-      let file = event.target.files[ind];
-      return file;
+    let files: any[] = []
+    //map the files object into a files array
+     Object.keys(event.target.files).forEach( async (ind) =>{
+      let opts = {
+        maxSizeMB: 0.5,
+        maxWidthOrHeight: 1920,
+        useWebWorker: true
+      }
+      let file = await imageCompression(event.target.files[ind], opts)
+      files.push(file)
     })
     //Deals with initial upload but does not take into account multiple attempts, where array keeps growing
     files.forEach(fl =>{
@@ -622,9 +589,16 @@ export class UploadListingPage implements OnInit {
     this.property.video = null;
     //console.log(event.target.files);
     //map the files object into a files array
-    let files = Object.keys(event.target.files).map(ind =>{
-      let file = event.target.files[ind];
-      return file;
+    let files: any[] = []
+    //map the files object into a files array
+     Object.keys(event.target.files).forEach( async (ind) =>{
+      let opts = {
+        maxSizeMB: 0.5,
+        maxWidthOrHeight: 1920,
+        useWebWorker: true
+      }
+      let file = await imageCompression(event.target.files[ind], opts)
+      files.push(file)
     })
     //Deals with initial upload but does not take into account multiple attempts, where array keeps growing
     files.forEach(fl =>{
@@ -710,20 +684,28 @@ export class UploadListingPage implements OnInit {
   The method also sets the display picture of the backroom
   */
   uploadRoomPics(start_p?: number){
+    this.ionic_component_svc.presentLoading()
     this.uploading_pictures = true;
+    console.log("preparing to upload from index: ", start_p)
+    console.log("File bieng uploaded...", this.room.pictures[start_p])
     for(let i: number = start_p || 0; i < this.room.pictures.length; i++){
       const storageRef = this.afstorage.ref(`${this.room.pictures[i].path}/${this.room.pictures[i].name}`);
+      
       let uploadTask = storageRef.put(this.room.pictures[i].file);
+      console.log("starting upload...")
       uploadTask.percentageChanges().subscribe(data =>{
         this.room.pictures[i].progress = data;
+        console.log(data)
       })
       uploadTask.snapshotChanges().subscribe(data =>{
-    
+        console.log(data)
       },
       err =>{
         console.log("upload ", i, " failed with error: ", err);
+        this.ionic_component_svc.dismissLoading().catch(err => console.log(err))
       },
       () =>{
+        console.log("done")
         this.property.num_pics_uploaded++;
         storageRef.getDownloadURL()
         .pipe(take(1))
@@ -733,6 +715,7 @@ export class UploadListingPage implements OnInit {
           if(i == (this.room.pictures.length - 1)){
             if(this.room.display_pic_url == "") this.room.display_pic_url = url;
             this.uploading_pictures = false;
+            this.ionic_component_svc.dismissLoading().catch(err => console.log(err))
           } 
         })
       })
@@ -804,6 +787,7 @@ export class UploadListingPage implements OnInit {
 }
 
   uploadSharedAreaPics(start_p?: number){
+    this.ionic_component_svc.presentLoading()
     this.uploading_pictures = true;
     for(let i: number = start_p || 0; i < this.property.shared_area_pics.length; i++){
       const storageRef = this.afstorage.ref(`${this.property.shared_area_pics[i].path}/${this.property.shared_area_pics[i].name}`);
@@ -815,9 +799,11 @@ export class UploadListingPage implements OnInit {
       },
       err =>{
         console.log("upload ", i, " failed with error: ", err);
+        this.ionic_component_svc.dismissLoading().catch(err => console.log(err))
       },
       () =>{
         this.property.num_pics_uploaded++;
+        storageRef.listAll()
         storageRef.getDownloadURL()
         .pipe(take(1))
         .subscribe(url =>{
@@ -825,6 +811,7 @@ export class UploadListingPage implements OnInit {
           if(i == (this.property.shared_area_pics.length - 1)){
             this.property.display_pic_url = url;
             this.uploading_pictures = false;
+            this.ionic_component_svc.dismissLoading().catch(err => console.log(err))
           } 
         })
       })

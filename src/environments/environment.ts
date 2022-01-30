@@ -5,12 +5,13 @@
 export const environment = {
   production: false,
   firebaseConfig: {
-    apiKey: "AIzaSyDT6HDi-pzKJDKGIUmBqz75ti-SMVzt0tY",
+    apiKey: "AIzaSyCpJ-f-wGwn2ryQkiMcRcxId-Phhqb329s",
     authDomain: "clickinn-996f0.firebaseapp.com",
     databaseURL: "https://clickinn-996f0.firebaseio.com",
     projectId: "clickinn-996f0",
     storageBucket: "clickinn-996f0.appspot.com",
-    messagingSenderId: "882290923419"
+    messagingSenderId: "882290923419",
+    appId: "1:882290923419:web:4fbae14556bc5ce270f33e"
   }
 };
 

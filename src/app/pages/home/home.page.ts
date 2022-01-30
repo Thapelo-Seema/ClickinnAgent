@@ -3,13 +3,13 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { User } from '../../models/user.model';
 import { UsersService } from '../../object-init/users.service';
 import { UserService } from '../../services/user.service';
-import { take } from 'rxjs/operators';
+import { take, tap } from 'rxjs/operators';
 import { AuthService } from '../../services/auth.service';
 import { IonicComponentService } from '../../services/ionic-component.service';
 import { SearchFeedService } from '../../services/search-feed.service';
 import { RoomSearch } from 'src/app/models/room-search.model';
 import { IonicStorageService } from '../../services/ionic-storage.service';
-//import { getMessaging, getToken } from 'firebase/messaging';
+import { AngularFireMessaging } from '@angular/fire/compat/messaging';
 
 
 @Component({
@@ -22,9 +22,10 @@ export class HomePage implements OnInit {
   user: User;
   search: RoomSearch;
   displayPicLoaded: boolean = false;
-  //messaging = getMessaging();
+
   constructor(
     private router: Router,
+    private af_messaging: AngularFireMessaging,
     private user_init_svc: UsersService,
     private user_svc: UserService,
     private activatedRoute: ActivatedRoute,
@@ -38,77 +39,66 @@ export class HomePage implements OnInit {
       this.search = this.searchfeed_svc.defaultSearch();
    }
 
-  ngOnInit(){
-    this.storage_svc.getUser()
-    .then(data =>{
-      console.log(data);
-    })
-    .catch(err =>{
-      console.log(err);
-    })
-    //If User just signed in or just signed up, this part will run
-    if(this.user.uid = this.activatedRoute.snapshot.paramMap.get('uid')){
+   ionViewWillEnter(){
+     //If User just signed in or just signed up, this part will run
+     if(this.user.uid = this.activatedRoute.snapshot.paramMap.get('uid')){
       this.user_svc.getUser(this.user.uid)
       .subscribe(fetched_user =>{
         if(fetched_user){
           this.user = this.user_init_svc.copyUser(fetched_user)
-          //this.updateUserFCM();
+          console.log(this.user);
           //If user is associated to a job, attend to this job
           this.handleJob();
+          this.updateUserFCM();
         }
       });
-    }else{ //Else if user is already authenticated but just reloading the app this part of the code will run
-      this.auth_svc.getAuthenticatedUser()
-      .pipe(take(1)).subscribe(firebase_user =>{
-        if(firebase_user){
-          this.user_svc.getUser(firebase_user.uid)
-          .subscribe(fetched_user =>{
-            if(fetched_user){
-              this.user = this.user_init_svc.copyUser(fetched_user);
-              //this.updateUserFCM();
-              //If user is associated to a job, attend to this job
-              this.handleJob();
-            }
-          });
+      }else{ //Else if user is already authenticated but just reloading the app this part of the code will run
+        this.auth_svc.getAuthenticatedUser()
+        .pipe(take(1)).subscribe(firebase_user =>{
+          if(firebase_user){
+            this.user_svc.getUser(firebase_user.uid)
+            .subscribe(fetched_user =>{
+              if(fetched_user){
+                this.user = this.user_init_svc.copyUser(fetched_user);
+                console.log(this.user);
+                //If user is associated to a job, attend to this job
+                this.handleJob();
+                this.updateUserFCM();
+              }
+            });
+          }
+        })
+      }
+   }
+
+  ngOnInit(){
+   
+  }
+
+  updateUserFCM(){
+    if(this.user.fcm_token == ""){
+      this.af_messaging.requestToken.pipe(take(1))
+      .subscribe(token =>{
+        if(token){
+          this.user.fcm_token = token;
+          this.user_svc.updateUser(this.user);
         }
+      },
+      err =>{
+        console.log(err);
       })
     }
   }
 
-  /* updateUserFCM(){
-    //Update user fcm token
-    getToken(this.messaging)
-    .then(token =>{
-      this.user.fcm_token = token;
-      this.user_svc.updateUser(this.user);
-      console.log(token);
-    })
-    .catch(err =>{
-      console.log(err)
-    })
-  } */
-
   handleJob(){
-    let instruction = this.activatedRoute.snapshot.paramMap.get("instruction");
     if(this.user.current_job != ""){
       this.searchfeed_svc.getSearch(this.user.current_job)
       .pipe(take(1))
       .subscribe(sch =>{
-        if(sch)
-        this.search = this.searchfeed_svc.copySearch(sch)
-        console.log(this.search)
-        if(sch && sch.agent && (sch.agent.uid == this.user.uid)){
-          if(this.user.contacts.indexOf(sch.searcher.uid) != -1){
-            let index = this.user.contacts.indexOf(sch.searcher.uid)
-            let thread_id = this.user.thread_ids[index];
-            //if(instruction != "do not proceed to job")
-            //this.router.navigate(['/chat', {'thread_id': thread_id}])
-          }else{
-            //if(instruction != "do not proceed to job")
-            //this.gotoJob();
-          }
-        }
+        if(sch) this.search = this.searchfeed_svc.copySearch(sch);
       })
+    }else{
+      this.search = null;
     } 
   }
 
@@ -149,7 +139,11 @@ export class HomePage implements OnInit {
   }
 
   gotoJob(){
-    this.router.navigate(['/job', {'job_id': this.user.current_job, 'uid': this.user.uid}]);
+    if(this.user.current_job != ""){
+      this.router.navigate(['/job', {'job_id': this.user.current_job, 'uid': this.user.uid}]);
+    }else{
+      this.ionic_component_svc.presentAlert("You currently have no job");
+    }
   }
 
   addLandlord(){

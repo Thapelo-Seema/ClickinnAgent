@@ -60,15 +60,6 @@ export class SigninPage implements OnInit {
    }
 
    ngOnInit() {
-   this.storage_svc.getUser()
-   .then(usr =>{
-     console.log(usr)
-   })
-   .catch(err => console.log(err))
-   this.storage_svc.getUID()
-   .then(_uid =>{
-     console.log(_uid);
-   })
   }
 
   async forgotPassword(){
@@ -80,8 +71,6 @@ export class SigninPage implements OnInit {
     return await modal.present();
   }
 
-  
-  /// old way ////
   async signInUser(){
     if (!this.registerForm.valid){
       this.ionicComponentService.presentAlert("Please ensure that your login details are valid");
@@ -109,33 +98,5 @@ export class SigninPage implements OnInit {
   public onPasswordToggle(): void {
     this.showPassword = !this.showPassword;
   }
-
-  //// new way ////
-  // async signupUser(signupForm): Promise<void> {
-  //   const loading = await this.loadingCtrl.create();
-  //   try {
-  //     loading.present();
-  
-  //     const email: string = signupForm.value.email;
-  //     const password: string = signupForm.value.password;
-
-  
-  //     await loading.dismiss();
-      
- 
-  //   } catch (error) {
-  //     await loading.dismiss();
-  //     const alert = await this.alertCtrl.create({
-  //       message: error.message,
-  //       buttons: [
-  //         {
-  //           text: 'OK',
-  //           role: 'cancel',
-  //         },
-  //       ],
-  //     });
-  //     alert.present();
-  //   }
-  // }
 
 }

@@ -6,7 +6,7 @@ const routes: Routes = [
   {
     path: 'home',
     loadChildren: () => import('./pages/home/home.module').then( m => m.HomePageModule),
-    canActivate: [AuthGuard]
+    canLoad: [AuthGuard], canActivate: [AuthGuard]
   },
   {
     path: '',
@@ -79,7 +79,7 @@ const routes: Routes = [
   {
     path: 'view-landlord',
     loadChildren: () => import('./pages/view-landlord/view-landlord.module').then( m => m.ViewLandlordPageModule),
-    canActivate: [AuthGuard]
+     canActivate: [AuthGuard]
   },
   {
     path: 'appointments',

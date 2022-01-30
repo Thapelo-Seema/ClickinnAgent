@@ -23,7 +23,7 @@
   <!--******* Image header  *******-->
 
   <!-- <div *ngIf="(itemDetail | async)?.recommended"  class="ribbon pop-in">Best</div> -->
-  <div class="detail-header" [ngStyle]="{'background-image': 'url(' + room?.display_pic_url + ')'}">
+  <div class="detail-header" style="background-image: url({{room?.display_pic_url}})">
   </div>
   <ion-grid fixed class="ion-no-padding">
     <div class="travel_space1">
