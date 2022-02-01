@@ -35,7 +35,6 @@ export class JobPage implements OnInit {
     let job_id = this.activated_route.snapshot.paramMap.get("job_id");
     if(this.activated_route.snapshot.paramMap.get("uid")){
       this.user_svc.getUser(this.activated_route.snapshot.paramMap.get("uid"))
-      .pipe(take(1))
       .subscribe(usr =>{
         this.user = this.user_init_svc.copyUser(usr);
         if(this.user.current_job != "" && this.user.current_job == job_id){
@@ -51,12 +50,21 @@ export class JobPage implements OnInit {
           this.ionic_component_svc.dismissLoading().catch(err =>{
             console.log(err);
           })
+          this.ionic_component_svc.presentAlert("Job has been revoked")
+          .then(() =>{
+            this.router.navigate(['/home']);
+          })
+          .catch(err =>{
+            console.log(err);
+            this.router.navigate(['/home']);
+          })
         }
       })
     }else{
       this.ionic_component_svc.dismissLoading().catch(err =>{
         console.log(err);
       })
+      this.router.navigate(['/home']);
     }
   }
 
@@ -69,9 +77,9 @@ export class JobPage implements OnInit {
     this.search.time = Date.now();
     this.user.busy_with_job = true;
     this.search.agent = this.user_init_svc.copyUser(this.user);
-    this.searchfeed_svc.updateSearch(this.search)
+    this.searchfeed_svc.updateSearch(this.search) //update the search with the agent details
     .then(() =>{
-      this.user_svc.updateUser(this.user);
+      this.user_svc.updateUser(this.user); //update the user with search details
       this.ionic_component_svc.dismissLoading().catch(err =>{
         console.log(err);
       })
@@ -122,6 +130,7 @@ export class JobPage implements OnInit {
   decline(){
     this.ionic_component_svc.presentLoading();
     this.search.time = Date.now();
+    this.search.agents_cancelled.push(this.user.uid);
     this.search.agent = null;
     this.user.current_job = "";
     this.user_svc.updateUser(this.user)

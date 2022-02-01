@@ -29,6 +29,7 @@ export class ChatPage implements OnInit{
   user: User;
   rooms: Room[] = [];
   thread: ChatThread;
+  search: RoomSearch;
   selected_rooms: number[] = [];
   new_message: ChatMessage;
   slideOption = {
@@ -49,7 +50,7 @@ export class ChatPage implements OnInit{
     this.thread = this.chat_init_svc.defaultThread();
     this.user = this.user_init_svc.defaultUser();
     this.new_message = this.chat_init_svc.defaultMessage();
-    
+    this.search = this.searchfeed_svc.defaultSearch();
   }
 
   ionViewWillEnter(){
@@ -93,6 +94,7 @@ export class ChatPage implements OnInit{
       this.searchfeed_svc.getSearch(this.activated_route.snapshot.paramMap.get("search_id"))
       .pipe(take(1))
       .subscribe(sch =>{
+        this.search = this.searchfeed_svc.copySearch(sch);
         this.prepareSearchResults(sch)
         //check if these two have a chat open already
         if(sch.agent.contacts.indexOf(sch.searcher.uid) != -1){
@@ -183,6 +185,10 @@ export class ChatPage implements OnInit{
         this.thread.client.contacts.push(this.thread.agent.uid);
         this.thread.client.thread_ids.push(this.thread.thread_id);
 
+        //Update the search with the new user states
+        this.search.agent = this.user_init_svc.copyUser(this.thread.agent);
+        this.search.searcher = this.user_init_svc.copyClient(this.thread.client);
+        this.searchfeed_svc.updateSearch(this.search);
         //Update the thread
         this.chat_svc.updateThread(this.thread)
         .then(() =>{

@@ -4,6 +4,7 @@ import { Client } from './client.model';
 
 export interface RoomSearch{
 	agent: User;
+	agents_cancelled: string[];
 	institution_and_campus: string;
 	institution_address: Address;
 	room_type: string;

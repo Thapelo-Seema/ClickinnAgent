@@ -61,16 +61,11 @@ export class AppointmentPage implements OnInit {
     }
 
   ngOnInit(){
-    this.ionic_component_svc.presentLoading()
     if(!this.activated_route.snapshot.paramMap.get('appointment_id') ){
       this.getThread();
       this.getRooms();
       this.getAgent();
       this.getClient();
-      while(!this.appointment.agent|| !this.appointment.client || !this.appointment.location){
-        //keep loading
-      }
-      this.ionic_component_svc.dismissLoading().catch(err => console.log(err))
     }else{
       this.appointment_svc.getAppointment(this.activated_route.snapshot.paramMap.get('appointment_id'))
       .subscribe(appt =>{
@@ -82,32 +77,39 @@ export class AppointmentPage implements OnInit {
 
   getAgent(){
     if(this.activated_route.snapshot.paramMap.get('agent_id') ){
+      this.ionic_component_svc.presentLoading()
       this.user_svc.getUser(this.activated_route.snapshot.paramMap.get('agent_id'))
       .pipe(take(1))
       .subscribe(usr =>{
         this.appointment.agent = this.user_init_svc.copyUser(usr);
         this.message.from = usr.uid;
+        this.ionic_component_svc.dismissLoading().catch(err => console.log(err))
       })
     }
   }
 
   getClient(){
+    
     if(this.activated_route.snapshot.paramMap.get('client_id')){
+      this.ionic_component_svc.presentLoading()
       this.user_svc.getClient(this.activated_route.snapshot.paramMap.get('client_id'))
       .pipe(take(1))
       .subscribe(usr =>{
         this.appointment.client = this.user_init_svc.copyClient(usr);
+        this.ionic_component_svc.dismissLoading().catch(err => console.log(err))
       })
     }
   }
 
   getRooms(){
     if(this.activated_route.snapshot.paramMap.get('rooms')){
+      this.ionic_component_svc.presentLoading()
       let room_ids = this.activated_route.snapshot.paramMap.get('rooms').split(',');
       this.room_svc.getRoomsIn(room_ids)
       .pipe(take(1))
       .subscribe(rms =>{
         this.appointment.rooms = rms;
+        this.ionic_component_svc.dismissLoading().catch(err => console.log(err))
         this.appointment.rooms.forEach(rm =>{
           this.appointment.landlord_confirmations.push(false);
           this.appointment.landlord_declines.push(false);
@@ -119,10 +121,12 @@ export class AppointmentPage implements OnInit {
 
   getThread(){
     if(this.activated_route.snapshot.paramMap.get('thread_id')){
+      this.ionic_component_svc.presentLoading()
       this.chat_svc.getThread(this.activated_route.snapshot.paramMap.get('thread_id'))
       .pipe(take(1))
       .subscribe(thd =>{
         this.thread = this.chat_init_svc.copyThread(thd);
+        this.ionic_component_svc.dismissLoading().catch(err => console.log(err))
       })
     }
   }

@@ -84,7 +84,7 @@ export class SignupPage implements OnInit {
       }, (error) => { 
          var errorMessage: string = error.message;
          this.ionicComponentService.dismissLoading();
-         this.ionicComponentService.presentAlert(errorMessage);      
+         this.ionicComponentService.presentAlert("Error signing you up, you likely already have a Clickinn account, please go sign in");      
       });
     }
   }

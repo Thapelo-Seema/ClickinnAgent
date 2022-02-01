@@ -12,7 +12,9 @@ export class RoomSearchService {
 
   defaultRoomSearch(){
   	let roomSearch: RoomSearch = {
-  		agent: false,
+  		agent: null,
+		agents_cancelled: [],
+		time: 0,
 		institution_and_campus: "",
 		institution_address: this.ppty_svc.defaultAddress(),
 		room_type:"",

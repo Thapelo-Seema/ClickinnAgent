@@ -74,18 +74,18 @@ export class HomePage implements OnInit {
   }
 
   updateUserFCM(){
-    if(this.user.fcm_token == ""){
-      this.af_messaging.requestToken.pipe(take(1))
-      .subscribe(token =>{
-        if(token){
+    this.af_messaging.requestToken.pipe(take(1))
+    .subscribe(token =>{
+      if(token){
+        if(this.user.fcm_token != token){
           this.user.fcm_token = token;
           this.user_svc.updateUser(this.user);
         }
-      },
-      err =>{
-        console.log(err);
-      })
-    }
+      }
+    },
+    err =>{
+      console.log(err);
+    })
   }
 
   handleJob(){
