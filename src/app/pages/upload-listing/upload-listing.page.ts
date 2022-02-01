@@ -430,6 +430,7 @@ export class UploadListingPage implements OnInit {
   @return void
   */
   updateSharedAreaPics(event){
+    this.ionic_component_svc.presentLoading()
     //map the files object into a files array
      Object.keys(event.target.files).forEach( async (ind) =>{
       let opts = {
@@ -447,6 +448,7 @@ export class UploadListingPage implements OnInit {
         loaded: false
       }
       this.property.shared_area_pics.push(fileUpload);
+      this.ionic_component_svc.dismissLoading().catch(err => console.log(err))
       this.uploadSharedAreaPics(this.property.shared_area_pics.length - 1);
     })
   }
@@ -513,6 +515,7 @@ export class UploadListingPage implements OnInit {
   @return void
   */
   updateRoomPics(event){
+    this.ionic_component_svc.presentLoading()
     //compress and upload each file in the files array
     Object.keys(event.target.files).forEach( async (ind) =>{
       let opts = {
@@ -530,6 +533,7 @@ export class UploadListingPage implements OnInit {
         loaded: false
       }
       this.room.pictures.push(fileUpload);
+      this.ionic_component_svc.dismissLoading().catch(err => console.log(err))
       this.uploadRoomPics(this.room.pictures.length - 1);
     })
   }
