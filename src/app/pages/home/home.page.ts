@@ -48,7 +48,7 @@ export class HomePage implements OnInit {
           this.user = this.user_init_svc.copyUser(fetched_user)
           //If user is associated to a job, attend to this job
           this.handleJob();
-          this.updateUserFCM();
+          //this.updateUserFCM();
         }
       });
       }else{ //Else if user is already authenticated but just reloading the app this part of the code will run
@@ -61,7 +61,7 @@ export class HomePage implements OnInit {
                 this.user = this.user_init_svc.copyUser(fetched_user);
                 //If user is associated to a job, attend to this job
                 this.handleJob();
-                this.updateUserFCM();
+                //this.updateUserFCM();
               }
             });
           }
