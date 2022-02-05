@@ -13,6 +13,7 @@ export class UsersService {
   defaultUser(){
     let user: User = {
       agents: [],
+      verified: false,
       agreed_to_terms: false,
       banking_details: this.defaultBankingDetails(),
       business_areas: [],
@@ -54,6 +55,7 @@ export class UsersService {
   copyUser(usr: User){
     let user: User = {
       agents: usr.agents || [],
+      verified: usr.verified || false,
       agreed_to_terms: usr.agreed_to_terms || false,
       banking_details: usr.banking_details || this.defaultBankingDetails(),
       business_areas: usr.business_areas || [],

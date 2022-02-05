@@ -75,12 +75,12 @@
                     </p>
                   </ion-label>
                 </ion-item>
-                
                 <div class="ion-padding">
                   <ion-button *ngIf="!search.agent" expand="block" color="thapslightblue" (click)="takeJob(search)" >
                     <ion-text color="light">Take Job</ion-text> 
                     <ion-icon name="bag-check-outline" slot="end" color="light"></ion-icon>
                   </ion-button>
+                  <a hidden="hidden" #send_whatsApp href="{{generateWhatsAppLink(search)}}"></a>
                   <ion-chip *ngIf="search.agent" color="thapsblue">
                     <p>Currently being attended by an agent</p>
                   </ion-chip>

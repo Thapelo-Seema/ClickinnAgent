@@ -107,5 +107,23 @@ export class ValidationService {
     
   }
 
+  isPhoneNumberValid(phone_number: string){
+    if(phone_number.length > 0){
+      if(phone_number.length > 12 || phone_number.length < 10){
+        return false;
+      }
+      if(phone_number[0] != "0")
+      {
+        return false;
+      }
+      if(phone_number[1] != '6' && phone_number[1] != '7' && phone_number[1] != '8'){
+        return false
+      }
+      return true;
+    }else{
+      return false;
+    }
+  }
+
 
 }

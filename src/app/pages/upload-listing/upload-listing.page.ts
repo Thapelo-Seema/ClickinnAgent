@@ -129,18 +129,20 @@ export class UploadListingPage implements OnInit {
   //Get the list of properties uploaded by this user
   getPropertyList(){
     if(this.user.user_type == "landlord"){
+      this.ionic_component_svc.presentLoading()
       this.ppty_svc.getLandlordProperties(this.user.uid)
       .pipe(take(1))
       .subscribe(pptys =>{
+        this.ionic_component_svc.dismissLoading().catch(err => console.log(err))
         this.propertyList = pptys;
-        console.log(this.propertyList)
       })
     }else{
+      this.ionic_component_svc.presentLoading()
       this.ppty_svc.getAgentProperties(this.user.uid)
       .pipe(take(1))
       .subscribe(pptys =>{
+        this.ionic_component_svc.dismissLoading().catch(err => console.log(err))
         this.propertyList = pptys;
-        console.log(this.propertyList)
       })
     }
   }
@@ -148,8 +150,13 @@ export class UploadListingPage implements OnInit {
   //Select existing property and upload room into the existing property profile
   selectProperty(prop: Property){
     this.property = prop;
+    this.room.property = prop;
     this.addRoomsToProperty();
     this.updatePropertyInRooms();
+    this.propertyList = [];
+  }
+
+  closePropertyList(){
     this.propertyList = [];
   }
 

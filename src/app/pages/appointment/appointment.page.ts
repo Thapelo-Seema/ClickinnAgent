@@ -67,6 +67,7 @@ export class AppointmentPage implements OnInit {
       this.getAgent();
       this.getClient();
     }else{
+      this.ionic_component_svc.presentLoading();
       this.appointment_svc.getAppointment(this.activated_route.snapshot.paramMap.get('appointment_id'))
       .subscribe(appt =>{
         this.appointment = this.appointment_svc.copyAppointment(appt);
@@ -89,7 +90,6 @@ export class AppointmentPage implements OnInit {
   }
 
   getClient(){
-    
     if(this.activated_route.snapshot.paramMap.get('client_id')){
       this.ionic_component_svc.presentLoading()
       this.user_svc.getClient(this.activated_route.snapshot.paramMap.get('client_id'))

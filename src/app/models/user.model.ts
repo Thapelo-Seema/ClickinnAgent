@@ -38,4 +38,5 @@ export interface User{
 	contacts?: string[];
 	thread_ids?: string[];
 	uid: string;
+	verified?: boolean;
 }

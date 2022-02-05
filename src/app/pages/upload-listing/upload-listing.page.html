@@ -245,10 +245,15 @@
                   <ion-button (click)="getPropertyList()" color="thapsblue" mode="ios">
                     Select From List <ion-icon slot="end" name="location-outline" color="light"></ion-icon>
                   </ion-button>
+                  <ion-button (click)="closePropertyList()" color="thapsblue" mode="ios">
+                    Close List <ion-icon slot="end" name="location-outline" color="light"></ion-icon>
+                  </ion-button>
                   <ion-list *ngIf="propertyList.length > 0">
-                    <ion-item button class="ion-padding" *ngFor="let prop of propertyList" (click)="selectProperty(prop)">
-                      {{prop?.address.house_number}} {{prop?.address.street}}, {{prop?.address.neighbourhood}}
-                    </ion-item>
+                    <div *ngFor="let prop of propertyList">
+                      <ion-item *ngIf="prop?.address && prop?.address.house_number" button class="ion-padding" (click)="selectProperty(prop)">
+                        {{prop?.address.house_number}} {{prop?.address.street}}, {{prop?.address.neighbourhood}}
+                      </ion-item>
+                    </div>
                   </ion-list>
                 </ion-col>
               </ion-row>

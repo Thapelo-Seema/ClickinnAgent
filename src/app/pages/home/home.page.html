@@ -34,7 +34,7 @@
       <ion-col>
         <ion-tab-button (click)="gotoSearchfeed()">
           <ion-icon color="thapsblue" name="search-outline"></ion-icon>
-          <ion-label color="thapsblue"><b>Search</b></ion-label>
+          <ion-label color="thapsblue"><b>Feed</b></ion-label>
         </ion-tab-button>
       </ion-col>
       <ion-col>
@@ -48,7 +48,6 @@
 </ion-header>
 
 <ion-content color="light">
-  
   <ion-card tappable (click)="gotoJob()"> 
     <ion-item *ngIf="search?.institution_address" color="greensea">
       <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
