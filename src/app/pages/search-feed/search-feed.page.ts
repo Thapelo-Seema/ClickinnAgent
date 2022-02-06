@@ -107,11 +107,11 @@ export class SearchFeedPage implements OnInit {
     this.searchfeed_svc.updateSearch(_search)
     .then(() =>{
       this.ionic_component_svc.dismissLoading();
-      if(this.user.verified && this.validation_svc.isPhoneNumberValid(search.searcher.phone_number)){
+      /* if(this.user.verified && this.validation_svc.isPhoneNumberValid(search.searcher.phone_number)){
         this.send_whatsapp_handle.nativeElement.click();
       }else{
         this.ionic_component_svc.presentToast("Can't send WhatsApp, Contact Clickinn Admin", 2000);
-      }
+      } */
       //this.router.navigate(['/chat', {'search_id': _search.id}])
     })
     .catch(err =>{
@@ -121,9 +121,18 @@ export class SearchFeedPage implements OnInit {
     //send job id over to chat page
   }
 
+  sendWhatsApp(search){
+    //console.log(search)
+    if(this.validation_svc.isPhoneNumberValid(search.searcher.phone_number)){
+      this.send_whatsapp_handle.nativeElement.click();
+    }else{
+      this.ionic_component_svc.presentToast("Can't send WhatsApp, Contact Clickinn Admin", 2000);
+    }
+  }
+
   urlEncodedMessge(search: RoomSearch): string{
     let msg: string = `Hi my name is ${this.user.firstname}, I'm an agent from Clickinn.\n`;
-    msg +=  "I would like to know if you're still looking for room of this description:" + "\n";
+    msg +=  "I would like to know if you're still looking for a room of this description:" + "\n";
     if(search.funding_type == "NSFAS funded"){
       msg += "NSFAS accredited " + search.room_type  + " | around " + search.institution_and_campus + "\n";
     }else{

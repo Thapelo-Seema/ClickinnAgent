@@ -61,7 +61,7 @@ export class HomePage implements OnInit {
                 this.user = this.user_init_svc.copyUser(fetched_user);
                 //If user is associated to a job, attend to this job
                 this.handleJob();
-                //this.updateUserFCM();
+                //gitthis.updateUserFCM();
               }
             });
           }

@@ -80,7 +80,11 @@
                     <ion-text color="light">Take Job</ion-text> 
                     <ion-icon name="bag-check-outline" slot="end" color="light"></ion-icon>
                   </ion-button>
-                  <a hidden="hidden" #send_whatsApp href="{{generateWhatsAppLink(search)}}"></a>
+                  <ion-button *ngIf="(search.agent && search?.agent?.uid == user?.uid) || user?.uid =='EcSyH79qz1Sz04cIrDcEqlKX4kc2'" expand="block" color="thapslightblue" href="{{generateWhatsAppLink(search)}}" >
+                    <ion-text color="light">Send WhatsApp</ion-text> 
+                    <ion-icon name="logo-whatsapp" slot="end" color="light"></ion-icon>
+                  </ion-button>
+                  <!-- <a hidden="hidden" #send_whatsApp href="{{generateWhatsAppLink(search)}}"></a> -->
                   <ion-chip *ngIf="search.agent" color="thapsblue">
                     <p>Currently being attended by an agent</p>
                   </ion-chip>
