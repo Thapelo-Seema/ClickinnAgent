@@ -4,6 +4,12 @@ ion-menu {
   }
 }
 
+.center-content{
+  position: absolute;
+  left: 50%;
+  translate: (-50%);
+}
+
 ion-menu.md {
   ion-content {
     --padding-start: 8px;

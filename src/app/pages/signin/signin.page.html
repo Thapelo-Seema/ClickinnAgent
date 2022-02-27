@@ -1,29 +1,19 @@
-<ion-header class="ion-no-border">
-  <ion-toolbar color="thapsblue">
-    <ion-title  class="main-header4">SIGN IN</ion-title>
-    <!-- <ion-title slot="start" class="main-header4">SIGNIN</ion-title> -->
-  </ion-toolbar>
-</ion-header>
-
 <ion-content >
   <ion-grid class="ion-no-padding" style="background-color: transparent;">
     
       <div class="register-form ion-margin" style="background-color: transparent;">
-          <ion-text color="dark">
-              <h2 text-center class="ion-margin-bottom main-header7">
+          <ion-text color="thapsblue">
+              <h2 class="ion-margin-bottom main-header7 ion-text-center">
                   Welcome to Clickinn
               </h2>
           </ion-text>
+          <ion-text>
+              <p class="ion-text-center">Login</p>
+          </ion-text>
           <form [formGroup]="registerForm" novalidate>
-  <!--  -->
-            <ion-list class="ion-margin-top ion-padding" style="background-color: transparent;">
-              <!-- ############ -->
-              
-              <!-- ############ -->
-              
-              <!-- ############ -->
-              
 
+            <ion-list class="ion-margin-top ion-padding" style="background-color: transparent;">
+              
               <!-- ############ -->
               <ion-item  class="roundedInput8px margin-bottom-10" style="background-color: transparent;">
                   <ion-label>
@@ -32,8 +22,6 @@
                   <ion-input type="text" formControlName="username" placeholder="Username(email)"></ion-input>
                 </ion-item>
     
-
-
               <!-- ############ -->                              
               <ion-item  class="roundedInput8px margin-bottom-10" style="background-color: transparent;">
 
@@ -43,17 +31,16 @@
 
                 <ion-input type="text" formControlName="password" placeholder="Password" [type]="showPassword ? 'text' : 'password'" clearOnEdit="false"></ion-input>
 
-                    <!-- ### Show/hide password ### -->    
-                    <div (click)="onPasswordToggle()" ion-button fill="clear" size="small" >
-                      <ion-icon  slot="icon-only" color="medium" [name]="showPassword ? 'eye-off' : 'eye'"></ion-icon>
-                    </div>
+                <!-- ### Show/hide password ### -->    
+                <div (click)="onPasswordToggle()" ion-button fill="clear" size="small" >
+                    <ion-icon  slot="icon-only" color="medium" [name]="showPassword ? 'eye-off' : 'eye'"></ion-icon>
+                </div>
 
               </ion-item>
 
             </ion-list>
 
 
-  <!--  -->
 
 
 
@@ -87,10 +74,6 @@
               </ion-list> -->
 
               <!-- Error meassage -->
-              
-              
-             
-
               <ion-text color="danger">
                   <p *ngIf="!registerForm.controls.username.valid && registerForm.controls.username.touched">
                       <ion-icon name="information-circle-outline"></ion-icon> Username must be a valid e-mail address
@@ -102,27 +85,24 @@
                       Password field must be at least 6 characters long!
                   </p>
               </ion-text>
-
               <!-- Submit button -->
               <span tappable (click)="forgotPassword()">
-                <p class="ion-text-right">Forgot password?</p>
+                <p class="ion-text-right" color="lightgrey">Forgot password?</p>
               </span>
               <ion-button mode="ios" color="thapsblue" expand="block" class="ion-margin-top" [disabled]="!registerForm.valid"
                   (click)="signInUser()">
                   Sign In
               </ion-button>
-              <ion-button mode="ios" color="thapsblue" expand="block" fill="outline" class="ion-margin-top"
-                  routerLink="/signup">
+              <ion-button mode="ios" color="thapsblue" expand="block" fill="outline" class="ion-margin-top" (click)="gotoSignup()">
                   Create an Account
               </ion-button>
               <ion-text class="ion-text-center" >
                   <p  class="ion-text-center ion-margin-bottom main-header8">
-                      By clicking Sign in you agree to the following Terms and Conditions without reservation
+                      By clicking <b>Sign In</b> you agree to the following Terms and Conditions without reservation.
                   </p>
               </ion-text>
-              <p class="ion-text-center"><a class="ion-text-center">Clickinn Terms of Service</a></p>
-          </form>
-
-      </div>
+            <p class="ion-text-center"><a class="ion-text-center">Clickinn Terms of Service</a></p>
+        </form>
+    </div>
 </ion-grid>
 </ion-content>

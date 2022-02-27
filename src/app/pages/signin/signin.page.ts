@@ -88,15 +88,18 @@ export class SigninPage implements OnInit {
       err =>{
         console.log(err);
         this.ionicComponentService.dismissLoading().catch(err => console.log(err));
-        this.ionicComponentService.presentAlert("Please ensure that your login details are valid");
+        this.ionicComponentService.presentAlert("Please ensure that your login details are correct");
       })
-      
     }
   }
 
   //####### Show / hide password #######//
   public onPasswordToggle(): void {
     this.showPassword = !this.showPassword;
+  }
+
+  gotoSignup(){
+    this.router.navigate(['/signup'])
   }
 
 }
