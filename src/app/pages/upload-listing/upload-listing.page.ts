@@ -370,6 +370,8 @@ export class UploadListingPage implements OnInit {
         })
       })
       this.room.description = this.generateRoomDescription(this.room);
+      this.room_svc.createPropertyPreview(this.property)
+      this.room_svc.createRoomPreview(this.room)
       this.room_svc.updateRoom(this.room)
       .then(() =>{
         this.ionic_component_svc.dismissLoading().catch(err =>{
@@ -401,6 +403,8 @@ export class UploadListingPage implements OnInit {
     console.log("room: ", this.room);
     console.log("property: ", this.property);
     this.ppty_svc.updateProperty(this.property);
+    this.room_svc.updatePropertyPreview(this.property)
+    this.room_svc.updateRoomPreview(this.room)
     this.room_svc.updateRoom(this.room)
     .then(() =>{
       this.ionic_component_svc.dismissLoading().catch(err =>{

@@ -48,6 +48,14 @@
 </ion-header>
 
 <ion-content color="light">
+  <ion-card *ngIf="!user?.verified">
+    <ion-item color="warning" href="{{sendWhatsAppVerifyLink()}}">
+      <ion-icon name="arrow-redo-circle-outline" slot="end"></ion-icon>
+      <ion-label>
+        Submit Profile For Verification
+      </ion-label>
+    </ion-item>
+  </ion-card>
   <ion-card tappable (click)="gotoJob()"> 
     <ion-item *ngIf="search?.institution_address" color="greensea">
       <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>

@@ -24,18 +24,14 @@
     
               <!-- ############ -->                              
               <ion-item  class="roundedInput8px margin-bottom-10" style="background-color: transparent;">
-
                 <ion-label slot="start" class="margin-right-8">
                   <ion-icon name="lock-closed-outline" color="medium"></ion-icon>
-                  </ion-label>
-
+                </ion-label>
                 <ion-input type="text" formControlName="password" placeholder="Password" [type]="showPassword ? 'text' : 'password'" clearOnEdit="false"></ion-input>
-
                 <!-- ### Show/hide password ### -->    
                 <div (click)="onPasswordToggle()" ion-button fill="clear" size="small" >
                     <ion-icon  slot="icon-only" color="medium" [name]="showPassword ? 'eye-off' : 'eye'"></ion-icon>
                 </div>
-
               </ion-item>
 
             </ion-list>
@@ -76,13 +72,13 @@
               <!-- Error meassage -->
               <ion-text color="danger">
                   <p *ngIf="!registerForm.controls.username.valid && registerForm.controls.username.touched">
-                      <ion-icon name="information-circle-outline"></ion-icon> Username must be a valid e-mail address
+                      <ion-icon name="information-circle-outline"></ion-icon> Invalid email address
                   </p>
               </ion-text>
               <ion-text color="danger">
                   <p *ngIf="!registerForm.controls.password.valid && registerForm.controls.password.touched">
                       <ion-icon name="information-circle-outline"></ion-icon> 
-                      Password field must be at least 6 characters long!
+                      Password too short
                   </p>
               </ion-text>
               <!-- Submit button -->

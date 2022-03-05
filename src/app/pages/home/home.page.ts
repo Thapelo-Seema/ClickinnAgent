@@ -160,4 +160,17 @@ export class HomePage implements OnInit {
     this.router.navigate(['/search-feed', {'uid': this.user.uid, 'locations': locs}]);
   }
 
+  urlEncodedMessge(): string{
+    let msg: string = `Hi my name is ${this.user.firstname}. Please verify my profile.\n`;
+    msg += "https://clickinn-admin-dash.web.app/verify;agent_id=" +this.user.uid;
+    return encodeURI(msg);
+  }
+
+  //Send a follow up
+  sendWhatsAppVerifyLink(): string{
+    //Composing message
+    let msg: string = this.urlEncodedMessge();
+    return `https://wa.me/+27671093186?text=${msg}`;
+  }
+
 }

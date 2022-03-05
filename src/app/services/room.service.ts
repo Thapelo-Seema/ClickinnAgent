@@ -4,6 +4,8 @@ import { Room } from '../models/room.model';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { RoomSearch } from '../models/room-search.model';
+import { RoomPreview } from '../models/room-preview.model';
+import { PropertyPreview } from '../models/property-preview.model';
 //import { SearchFeedService } from './search-feed.service';
 
 @Injectable({
@@ -147,5 +149,21 @@ export class RoomService {
     return this.afs.collection<Room>('Rooms', ref =>
     ref.where('room_id', 'in', room_ids))
     .valueChanges();
+  }
+
+  createRoomPreview(room: RoomPreview){
+    return this.afs.collection<RoomPreview>('Rooms').doc(room.room_id).set(room);
+  }
+
+  createPropertyPreview(property: PropertyPreview){
+    return this.afs.collection<PropertyPreview>('Propertys').doc(property.property_id).set(property);
+  }
+
+  updateRoomPreview(room: RoomPreview){
+    return this.afs.collection<RoomPreview>('Rooms').doc(room.room_id).update(room);
+  }
+
+  updatePropertyPreview(property: PropertyPreview){
+    return this.afs.collection<PropertyPreview>('Propertys').doc(property.property_id).set(property);
   }
 }

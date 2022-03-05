@@ -76,11 +76,11 @@
                   </ion-label>
                 </ion-item>
                 <div class="ion-padding">
-                  <ion-button *ngIf="!search.agent" expand="block" color="thapslightblue" (click)="takeJob(search)" >
+                  <!-- <ion-button *ngIf="!search.agent" expand="block" color="thapslightblue" (click)="takeJob(search)" >
                     <ion-text color="light">Take Job</ion-text> 
                     <ion-icon name="bag-check-outline" slot="end" color="light"></ion-icon>
-                  </ion-button>
-                  <ion-button *ngIf="(search.agent && search?.agent?.uid == user?.uid) || user?.uid =='EcSyH79qz1Sz04cIrDcEqlKX4kc2'" expand="block" color="thapslightblue" href="{{generateWhatsAppLink(search)}}" >
+                  </ion-button> -->
+                  <ion-button *ngIf="user?.verified || user?.uid =='EcSyH79qz1Sz04cIrDcEqlKX4kc2'" expand="block" color="thapslightblue" href="{{generateWhatsAppLink(search)}}" >
                     <ion-text color="light">Send WhatsApp</ion-text> 
                     <ion-icon name="logo-whatsapp" slot="end" color="light"></ion-icon>
                   </ion-button>

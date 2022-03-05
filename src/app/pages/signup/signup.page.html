@@ -2,7 +2,7 @@
   <ion-toolbar color="thapsblue">
     <ion-title lass="main-header4">SIGN UP</ion-title>
     <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
+      <ion-back-button defaultHref="#"></ion-back-button>
     </ion-buttons>
     <!-- <ion-title slot="start" class="main-header4">SIGNIN</ion-title> -->
   </ion-toolbar>
@@ -13,8 +13,8 @@
     
       <div class="register-form ion-margin">
           <ion-text color="dark">
-              <h2 text-center class="ion-margin-bottom main-header7">
-                  Create new account.
+              <h2 class="ion-margin-bottom main-header7 ion-text-center">
+                  Create agent account
               </h2>
           </ion-text>
           <!-- <ion-item class="ion-padding-top ion-padding-bottom margin-top-15">
@@ -68,7 +68,7 @@
 
                 <ion-label>
                   <ion-icon name="lock-closed-outline" color="medium"></ion-icon>
-                  </ion-label>
+                </ion-label>
 
                 <ion-input type="text" formControlName="password" placeholder="Password" [type]="showPassword ? 'text' : 'password'" clearOnEdit="false"></ion-input>
 
@@ -80,11 +80,6 @@
               </ion-item>
 
             </ion-list>
-
-
-  <!--  -->
-
-
 
               <!-- <ion-list lines="none">
 
@@ -130,14 +125,13 @@
               </ion-text>
               <ion-text color="danger">
                   <p *ngIf="!registerForm.controls.phone.valid && registerForm.controls.phone.touched">
-                      <ion-icon name="information-circle-outline"></ion-icon> Phone field must be at least 6 characters
-                      long!
+                      <ion-icon name="information-circle-outline"></ion-icon> Invalid phone number format
                   </p>
               </ion-text>
 
               <ion-text color="danger">
                   <p *ngIf="!registerForm.controls.username.valid && registerForm.controls.username.touched">
-                      <ion-icon name="information-circle-outline"></ion-icon> Username must be e-mail!
+                      <ion-icon name="information-circle-outline"></ion-icon> Invalid e-mail address
                   </p>
               </ion-text>
               <ion-text color="danger">
@@ -152,18 +146,13 @@
                   (click)="registerUser()">
                   Create
               </ion-button>
-              <ion-button mode="ios" color="thapsblue" expand="block" fill="outline" class="ion-margin-top"
-                  routerLink="/signin">
-                  Cancel
-              </ion-button>
               <ion-text color="dark">
                   <p  class="ion-text-center ion-margin-bottom main-header8">
-                      By clicking Create you agree to the following Terms and Conditions without reservation
+                      By clicking <b>Create</b> you agree to the following Terms and Conditions without reservation
                   </p>
               </ion-text>
               <p class="ion-text-center"><a class="ion-text-center">Clickinn Terms of Service</a></p>
           </form>
-
       </div>
 </ion-grid>
 </ion-content>
