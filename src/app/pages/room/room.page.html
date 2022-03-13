@@ -24,7 +24,12 @@
 
   <!-- <div *ngIf="(itemDetail | async)?.recommended"  class="ribbon pop-in">Best</div> -->
   <div class="detail-header">
-    <img src="{{room.display_pic_url}}" height="100%" style="position:absolute; left:50%; transform: translateX(-50%);"  (load)="updateRoomDisplayPicLoaded()" [hidden]="!room.dp_loaded">
+    <ion-slides pager style="height: 100%;" class="ion-no-padding ion-no-margin">
+      <ion-slide *ngFor="let image of  pictures" style="height: 100%;">
+        <img src="{{image.url}}" width="100%" height="100%">
+      </ion-slide>
+    </ion-slides>
+    <!-- <img src="{{room.display_pic_url}}" height="100%" style="position:absolute; left:50%; transform: translateX(-50%);"  (load)="updateRoomDisplayPicLoaded()" [hidden]="!room.dp_loaded"> -->
   </div>
   <ion-grid fixed class="ion-no-padding">
     <div class="travel_space1">
@@ -50,11 +55,17 @@
               <ion-icon name="calendar-outline" slot="start"></ion-icon>
                 Make Appointment
           </ion-button>
-          <ion-button *ngIf="!is_owner" (click)="chat()" color="thapslightblue">
-              <ion-icon slot="icon-only" name="chatbubbles-outline" color="light"></ion-icon>
-          </ion-button>
           <ion-button *ngIf="is_owner" (click)="edit()" color="thapslightblue">
             <ion-icon slot="icon-only" name="create-outline" color="light"></ion-icon>
+          </ion-button>
+          <ion-button color="thapslightblue" href="{{generateWhatsAppLink()}}">
+            <ion-icon slot="icon-only" name="chatbubbles-outline" color="light"></ion-icon>
+          </ion-button>
+          <ion-button color="thapslightblue" fill="clear" href="{{share()}}">
+            <ion-icon slot="icon-only" name="share-social-outline"></ion-icon>
+          </ion-button>
+          <ion-button color="thapslightblue" fill="clear" href="{{secured()}}">
+            <ion-icon slot="icon-only" name="bag-check-outline"></ion-icon>
           </ion-button>
         </div>
         <!--*********** Description ***********-->
@@ -62,13 +73,6 @@
             <p>
                 {{room?.description}}
             </p>
-        </div>
-    
-                <!--*********** Image gallery ***********-->
-        <div class="detail-horizontal-scroll ion-margin-top ion-margin-bottom">
-            <div class="img-gallery margin" *ngFor="let pic of pictures; let i = index" (click)="openPic(i)">
-                <img src="{{pic.url}}" />
-            </div>
         </div>
     
       </ion-col>
@@ -247,6 +251,24 @@
                 </ion-item>
               </ion-col>
             </ion-row>
+
+            <ion-row>
+              <ion-col>
+               <ion-item lines="none">
+                 <h1 class="main-header5">Other rooms in the same property</h1>
+               </ion-item>
+
+               <div class="detail-horizontal-scroll ion-margin-top ion-margin-bottom">
+                 <div class="img-gallery margin" tappable  *ngFor="let rec of rooms | async ; let i = index" (click)="openDetail(rec?.room_id)">
+                     <img src="{{rec?.display_pic_url}}"  />
+                     <div class="main-b-header9">
+                       <p class="ion-text-wrap"><ion-text color="grey">{{rec.rent | currency : 'R'}} | {{rec.room_type}}</ion-text></p>  
+                     </div>
+                 </div>
+               </div>
+         
+              </ion-col>
+            </ion-row> 
                     
             
             <ion-row>

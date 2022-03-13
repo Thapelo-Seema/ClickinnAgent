@@ -9,8 +9,8 @@ import { RoomService } from '../../services/room.service';
 import { Room } from 'src/app/models/room.model';
 import { FileUpload } from 'src/app/models/file-upload.model';
 import { PropertiesService } from '../../object-init/properties.service';
-import { ImageGalleryViewPage } from '../image-gallery-view/image-gallery-view.page';
-//import { PropertiesService } from '../../object-init/properties.service';
+import { User } from 'src/app/models/user.model';
+import { UsersService } from '../../object-init/users.service';
 
 @Component({
   selector: 'app-room',
@@ -19,6 +19,8 @@ import { ImageGalleryViewPage } from '../image-gallery-view/image-gallery-view.p
 })
 export class RoomPage implements OnInit {
 
+  user: User;
+  rooms: Observable<Room[]>;
   slideOption = {
     slidesPerView: 'auto',
     grabCursor: true
@@ -67,31 +69,24 @@ export class RoomPage implements OnInit {
       private activatedRoute: ActivatedRoute,
       private navController: NavController,
       public router: Router,
+      private user_init_svc: UsersService,
       private ionicComponentService: IonicComponentService,
       private modalController: ModalController,
       private room_svc: RoomService,
       private property_svc: PropertiesService
   ) { 
     this.room = this.property_svc.defaultRoom();
+    this.user = this.user_init_svc.defaultUser();
   }
 
   ngOnInit() {
-    if(this.activatedRoute.snapshot.paramMap.get("room_id")){
-      this.room_svc.getRoom(this.activatedRoute.snapshot.paramMap.get('room_id'))
+    this.fetchRoomDetails();
+    if(this.activatedRoute.snapshot.paramMap.get("agent_id")){
+      this.agent_id = this.activatedRoute.snapshot.paramMap.get("agent_id");
+      this.userService.getUser(this.agent_id)
       .pipe(take(1))
-      .subscribe(rm =>{
-        this.room = this.property_svc.copyRoom(rm);
-        console.log(this.room.display_pic_url)
-        this.room.pictures.forEach(p =>{
-          this.pictures.push(p);
-        });
-        this.room.property.pictures.forEach(p =>{
-          this.pictures.push(p);
-        })
-        if(this.activatedRoute.snapshot.paramMap.get("agent_id")){
-          this.agent_id = this.activatedRoute.snapshot.paramMap.get("agent_id");
-          if(this.room.property.uploader_id == this.agent_id) this.is_owner = true;
-        }
+      .subscribe(usr =>{
+        this.user = this.user_init_svc.copyUser(usr);
       })
     }
   }
@@ -104,20 +99,67 @@ export class RoomPage implements OnInit {
     this.uploader_pic_loaded = true;
   }
 
-  openPic(pic){
-    console.log("openImageViewer")
-    // let modal = this.modalCtrl.create(CartPage, { data: this.cart });
-   this.modalController.create({
-     component: ImageGalleryViewPage,
-     cssClass: 'fullscreen-modal',
-     componentProps: {
-       data: this.pictures,
-       index: pic
-     }
-   }).then(modal => {
-     modal.present();
-   });
+  fetchRoomDetails(){
+    if(this.activatedRoute.snapshot.paramMap.get("room_id")){
+      this.room_svc.getRoom(this.activatedRoute.snapshot.paramMap.get('room_id'))
+      .pipe(take(1))
+      .subscribe(rm =>{
+        this.room = rm;
+        this.rooms = this.room_svc.getPropertyRooms(rm.property.address)
+        this.room.pictures.forEach(p =>{
+          this.pictures.push(p);
+        });
+        this.room.property.shared_area_pics.forEach(p =>{
+          this.pictures.push(p);
+        })
+        this.room.property.pictures.forEach(p =>{
+          this.pictures.push(p);
+        })
+        if(this.activatedRoute.snapshot.paramMap.get("agent_id")){
+          this.agent_id = this.activatedRoute.snapshot.paramMap.get("agent_id");
+          if(this.room.property.uploader_id == this.agent_id) this.is_owner = true;
+        }
+      })
+    }
   }
+
+  urlEncodedMessge(): string{
+    let msg: string = `Hi my name is ${this.user.firstname}, I would like to enquire if this room is still available.\n`;
+    msg += "https://clickinn.co.za/room;room_id=" + this.room.room_id;
+    return encodeURI(msg);
+  }
+
+  urlEncodedShareMessge(): string{
+    let msg = "https://clickinn.co.za/room;room_id=" + this.room.room_id;
+    return encodeURI(msg);
+  }
+
+  urlEncodedSecuredRoomMessge(): string{
+    let msg: string = `Hi my name is ${this.user.firstname}, I have secured the ${this.room.room_type} at 
+    ${this.room.property.address.place_name}.\n`;
+    msg += "Room price: " + this.room.accredited ? "NSFAS RATE.\n" : "R" + this.room.rent + "\n"; 
+    msg += "https://clickinn.co.za/room;room_id=" + this.room.room_id;
+    return encodeURI(msg);
+  }
+
+  //Send a follow up
+  generateWhatsAppLink(): string{
+    //Composing message
+    let msg: string = this.urlEncodedMessge();
+    return `https://wa.me/+27671093186?text=${msg}`;
+  }
+
+  share(){
+    let msg: string = this.urlEncodedShareMessge();
+    return `https://wa.me/?text=${msg}`;
+  }
+
+  secured(){
+    let msg: string = this.urlEncodedSecuredRoomMessge();
+    return `https://wa.me/+27671093186?text=${msg}`;
+  }
+
+  
 
   gotoAppointment(){
     this.router.navigate(['/appointment', {'rooms': [this.room.room_id], 
@@ -201,8 +243,9 @@ export class RoomPage implements OnInit {
     });
     return await modal.present();
   } */
-  openDetail(url,itemId){
-    this.router.navigateByUrl('/'+url+'/'+itemId);
+  openDetail(accommodationId) {
+    console.log("Navigating to room: ", accommodationId)
+    this.router.navigate(['/room', {'room_id': accommodationId, 'agent_id': this.agent_id}]);
   }
 
   edit(){

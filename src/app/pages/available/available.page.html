@@ -1,0 +1,127 @@
+<ion-header>
+  <ion-toolbar color="thapsblue">
+    <ion-buttons slot="start">
+      <ion-back-button mode="md" color="light" defaultHref="#"  ></ion-back-button>
+    </ion-buttons>
+    <ion-title>Check Availability</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <div class="apps-card">
+    <ion-item  class="roundedInput8px ion-padding-top ion-padding-bottom margin-top-15 ion-margin-horizontal">
+      <ion-label>
+        <ion-icon name="location-outline" color="medium"></ion-icon>
+      </ion-label>
+      <ion-input type="text" placeholder="Area e.g Auckland Park" [(ngModel)]="businessAddress"  (ionInput)="getBusinessAreaPredictions($event)" ></ion-input>
+    </ion-item>
+    <ion-item *ngFor="let prediction of businessAddressPredictions">
+      <ion-label (click)="businessAddressSelected(prediction)" >
+        <h3>{{prediction.structured_formatting.main_text}}</h3>
+        <p>{{prediction.structured_formatting.secondary_text}}</p>
+      </ion-label>
+    </ion-item>
+      <!-- <ion-item class="ion-padding-bottom ion-margin-horizontal">
+        <ion-label position="stacked">
+          Institution & campus
+        </ion-label>
+        <ion-select placeholder="Select your campus" (ionChange)="locationSelected($event)" class="ion-text-wrap">
+          <ion-select-option value="University of Johannesburg Apk">UJ Kingsway</ion-select-option>
+          <ion-select-option value="University of Johannesburg Apb">UJ Bunting</ion-select-option>
+          <ion-select-option value="University of Johannesburg Dfc">UJ Doornfontein</ion-select-option>
+          <ion-select-option value="University of Johannesburg Swc">UJ Soweto</ion-select-option>
+          <ion-select-option value="Academy of Sound Engineering Auckland Park">
+              Academy of Sound Engineernig
+          </ion-select-option>
+          <ion-select-option value="South African Broadcasting Corporation">SABC</ion-select-option>
+          <ion-select-option value="Helen Joseph Hospital">Helen Joseph Hospital</ion-select-option>
+          <ion-select-option value="Netcare Training Academy Auckland Park">
+            Netcare Nursing College Auckland Park
+          </ion-select-option>
+        </ion-select>
+      </ion-item> -->
+          <ion-item class="ion-padding-bottom ion-margin-horizontal">
+            <ion-label position="stacked">
+              Preffered room type
+            </ion-label>
+            <ion-select placeholder="Select room type" [(ngModel)]="search.room_type" value="Single Room">
+                      <ion-select-option value="Bachelor Apartment">
+                        Bachelor Apartment
+                      </ion-select-option>
+                      <ion-select-option value="Cottage">
+                        Cottage
+                      </ion-select-option>
+                      <ion-select-option value="Ensuite Single Room">
+                        Ensuite Single Room
+                      </ion-select-option>
+                      <ion-select-option value="Single Room">
+                        Single Room
+                      </ion-select-option>
+                      <ion-select-option value="Two Sharing Room">
+                        Two Sharing Room
+                      </ion-select-option>
+                      <ion-select-option value="Ensuite Two Sharing Room">
+                        Ensuite Two Sharing Room
+                      </ion-select-option>
+                      <ion-select-option value="Three Sharing Room">
+                        Three Sharing Room
+                      </ion-select-option>
+                      <ion-select-option value="Ensuite Three Sharing Room">
+                        Ensuite Three Sharing Room
+                      </ion-select-option>
+                      <ion-select-option value="Any Room Type">
+                        Any Room Type
+                      </ion-select-option>
+            </ion-select>
+          </ion-item>
+          <ion-item class="ion-padding-bottom ion-margin-horizontal">
+            <ion-label position="stacked" class="ion-text-wrap">
+              Source of funding
+            </ion-label>
+            <ion-select placeholder="Select funding source" [(ngModel)]="search.funding_type">
+              <ion-select-option value="NSFAS funded">NSFAS funded </ion-select-option>
+                <ion-select-option value="Fundi Bursary funded">
+                  Fundi Bursary funded
+                </ion-select-option>
+                <ion-select-option value="Private Bursary funded">
+                  Private Bursary funded
+                </ion-select-option>
+                <ion-select-option value="Self-Funded">Self-Funded</ion-select-option>
+            </ion-select>
+          </ion-item>
+
+          <!-- ############ -->
+          <ion-item *ngIf="search.funding_type != 'NSFAS funded'" class="roundedInput8px margin-bottom-10 ion-margin-horizontal">
+            <ion-label>
+              <ion-icon name="pricetags-outline" color="medium"></ion-icon>
+            </ion-label>
+            <ion-input  type="number" placeholder="Max rent amount" [(ngModel)]="search.max_price" value="null">
+            </ion-input>
+          </ion-item>
+        
+        
+        <ion-button class="ion-margin" mode="ios" color="thapsblue" expand="block" (click)="submitAgentService()">
+          Submit Search
+          <ion-icon name="arrow-forward-outline" color="light" slot="end"></ion-icon>
+        </ion-button>
+        <!-- <ion-button fill="outline" class="ion-margin" mode="ios" color="thapsblue" expand="block" (click)="submitSelfService()" >
+          Self Service 
+        </ion-button> -->
+
+    </div>
+    <ion-item lines="none" color="darkgray">
+      <h2 class="main-header5" color="light">Available Rooms</h2>
+    </ion-item>
+      <ion-list class="" color="">
+          <ion-item tappable *ngFor="let room of rooms | async" lines="none" class="" (click)="gotoRoom(room.room_id)">
+              <ion-thumbnail name="play-circle-outline" size="large" color="light" slot="start">
+                <img src="{{room.display_pic_url}}"/>
+              </ion-thumbnail>
+              <ion-label>
+                  <h3>{{room.room_type}}</h3>
+                  <p>{{room.property.address.place_name}}</p>
+                  <p>{{ room.rent | currency : 'R' : 'symbol' : '1.0-0' }}</p>
+              </ion-label>
+              <ion-icon *ngIf="room.accredited" name="bookmark-outline" slot="end" color="success"></ion-icon>
+          </ion-item>
+      </ion-list>
+</ion-content>

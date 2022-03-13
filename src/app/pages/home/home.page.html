@@ -56,43 +56,18 @@
       </ion-label>
     </ion-item>
   </ion-card>
-  <ion-card tappable (click)="gotoJob()"> 
-    <ion-item *ngIf="search?.institution_address" color="greensea">
-      <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
-      <ion-label>
-        <h2 class="main-header5">Current Job</h2>
-        <div>
-          <p *ngIf="search?.funding_type != 'NSFAS funded'" class="ion-text-wrap">
-            {{search?.room_type}} | {{search?.max_price | currency : 'R' }}  |
-            {{search?.institution_address?.neighbourhood}} and surroundings
-          </p>
-          <p *ngIf="search?.funding_type == 'NSFAS funded'" class="ion-text-wrap">
-            {{search?.room_type}} | NSFAS |
-            {{search?.institution_address?.neighbourhood}} and surroundings
-          </p>
-        </div>
-      </ion-label>
-    </ion-item>
-    <ion-item *ngIf="!search?.institution_address">
-      <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
-      <ion-label>
-        <h2 class="main-header5">Current Job</h2>
-        <p >No current job</p>
-      </ion-label>
-    </ion-item>
-  </ion-card>
   <ion-card color="thapsblue" class="ion-no-padding">
     <ion-row class="ion-no-padding">
       <ion-col size="2" class="ion-no-padding">
         <ion-item color="thapsblue">
-          <ion-icon name="chatbubbles-outline"></ion-icon>
+          <ion-icon name="bed-outline"></ion-icon>
         </ion-item>
       </ion-col>
       <ion-col size="10" class="ion-no-padding">
-        <ion-item tappable (click)="gotoMyChats()">
+        <ion-item tappable (click)="gotoAvailable()">
           <ion-icon class="card-icon" slot="end" name="chevron-forward-outline"></ion-icon>
           <ion-label>
-            <h2>Chats</h2>
+            <h2>Available Rooms</h2>
           </ion-label>
         </ion-item>
       </ion-col>

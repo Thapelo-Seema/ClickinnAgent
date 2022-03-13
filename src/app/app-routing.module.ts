@@ -14,16 +14,6 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
-    path: 'chats',
-    loadChildren: () => import('./pages/chats/chats.module').then( m => m.ChatsPageModule),
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'chat',
-    loadChildren: () => import('./pages/chat/chat.module').then( m => m.ChatPageModule),
-    canActivate: [AuthGuard]
-  },
-  {
     path: 'signin',
     loadChildren: () => import('./pages/signin/signin.module').then( m => m.SigninPageModule)
   },
@@ -52,11 +42,6 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: 'image-gallery-view',
-    loadChildren: () => import('./pages/image-gallery-view/image-gallery-view.module').then( m => m.ImageGalleryViewPageModule),
-    canActivate: [AuthGuard]
-  },
-  {
     path: 'job',
     loadChildren: () => import('./pages/job/job.module').then( m => m.JobPageModule),
     canActivate: [AuthGuard]
@@ -82,11 +67,6 @@ const routes: Routes = [
      canActivate: [AuthGuard]
   },
   {
-    path: 'appointments',
-    loadChildren: () => import('./pages/appointments/appointments.module').then( m => m.AppointmentsPageModule),
-    canActivate: [AuthGuard]
-  },
-  {
     path: 'appointment',
     loadChildren: () => import('./pages/appointment/appointment.module').then( m => m.AppointmentPageModule),
     canActivate: [AuthGuard]
@@ -94,6 +74,10 @@ const routes: Routes = [
   {
     path: 'forgot-password',
     loadChildren: () => import('./pages/forgot-password/forgot-password.module').then( m => m.ForgotPasswordPageModule)
+  },
+  {
+    path: 'available',
+    loadChildren: () => import('./pages/available/available.module').then( m => m.AvailablePageModule)
   },
 ];
 

@@ -8,8 +8,8 @@ import { AuthService } from '../../services/auth.service';
 import { IonicComponentService } from '../../services/ionic-component.service';
 import { SearchFeedService } from '../../services/search-feed.service';
 import { RoomSearch } from 'src/app/models/room-search.model';
-import { IonicStorageService } from '../../services/ionic-storage.service';
-import { AngularFireMessaging } from '@angular/fire/compat/messaging';
+//import { IonicStorageService } from '../../services/ionic-storage.service';
+//import { AngularFireMessaging } from '@angular/fire/compat/messaging';
 
 
 @Component({
@@ -25,14 +25,14 @@ export class HomePage implements OnInit {
 
   constructor(
     private router: Router,
-    private af_messaging: AngularFireMessaging,
+    //private af_messaging: AngularFireMessaging,
     private user_init_svc: UsersService,
     private user_svc: UserService,
     private activatedRoute: ActivatedRoute,
     private auth_svc: AuthService,
     private ionic_component_svc: IonicComponentService,
     private searchfeed_svc: SearchFeedService,
-    private storage_svc: IonicStorageService
+    //private storage_svc: IonicStorageService
   ) {
       //User initialised
       this.user = this.user_init_svc.defaultUser();
@@ -46,9 +46,6 @@ export class HomePage implements OnInit {
       .subscribe(fetched_user =>{
         if(fetched_user){
           this.user = this.user_init_svc.copyUser(fetched_user)
-          //If user is associated to a job, attend to this job
-          this.handleJob();
-          //this.updateUserFCM();
         }
       });
       }else{ //Else if user is already authenticated but just reloading the app this part of the code will run
@@ -59,9 +56,6 @@ export class HomePage implements OnInit {
             .subscribe(fetched_user =>{
               if(fetched_user){
                 this.user = this.user_init_svc.copyUser(fetched_user);
-                //If user is associated to a job, attend to this job
-                this.handleJob();
-                //gitthis.updateUserFCM();
               }
             });
           }
@@ -73,7 +67,7 @@ export class HomePage implements OnInit {
    
   }
 
-  updateUserFCM(){
+ /*  updateUserFCM(){
     this.af_messaging.requestToken.pipe(take(1))
     .subscribe(token =>{
       if(token){
@@ -87,8 +81,8 @@ export class HomePage implements OnInit {
       console.log(err);
     })
   }
-
-  handleJob(){
+ */
+  /* handleJob(){
     if(this.user.current_job != ""){
       this.searchfeed_svc.getSearch(this.user.current_job)
       .pipe(take(1))
@@ -98,7 +92,7 @@ export class HomePage implements OnInit {
     }else{
       this.search = null;
     } 
-  }
+  } */
 
   gotoUpload(){
     this.router.navigate(['/upload-listing', {'uid': this.user.uid}]);
@@ -132,8 +126,8 @@ export class HomePage implements OnInit {
     this.router.navigate(['/my-uploads', {'uid': this.user.uid}]);
   }
 
-  gotoMyChats(){
-    this.router.navigate(['/chats', {'uid': this.user.uid}]);
+  gotoAvailable(){
+    this.router.navigate(['/available', {'uid': this.user.uid}]);
   }
 
   gotoJob(){
