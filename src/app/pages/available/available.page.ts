@@ -11,6 +11,7 @@ import { Room } from 'src/app/models/room.model';
 import { Observable } from 'rxjs';
 import { RoomService } from '../../services/room.service';
 import { Router } from '@angular/router';
+import { format, parseISO, formatDistance } from 'date-fns';
 
 @Component({
   selector: 'app-available',
@@ -87,6 +88,10 @@ export class AvailablePage implements OnInit {
       this.ion_component_svc.dismissLoading();
       this.ion_component_svc.presentAlert(err.message);
     })
+  }
+
+  timeAgo(date){
+    return formatDistance(date, Date.now(), {addSuffix: true});
   }
 
   getBusinessAreaPredictions(event){

@@ -7,6 +7,7 @@ import { RoomSearch } from '../models/room-search.model';
 import { RoomPreview } from '../models/room-preview.model';
 import { PropertyPreview } from '../models/property-preview.model';
 import { Address } from '../models/address.model';
+import { Placement } from '../models/placement.model';
 //import { SearchFeedService } from './search-feed.service';
 
 @Injectable({
@@ -201,4 +202,13 @@ export class RoomService {
     .limit(30))
     .valueChanges();
   }
+
+  createPlacement(placement: Placement){
+    return this.afs.collection("Placements").add(placement)
+  }
+
+  updatePlacement(placement: Placement){
+    return this.afs.collection("Placements").doc(placement.id).update(placement)
+  }
+
 }

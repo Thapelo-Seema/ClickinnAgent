@@ -135,9 +135,7 @@ export class RoomPage implements OnInit {
   }
 
   urlEncodedSecuredRoomMessge(): string{
-    let msg: string = `Hi my name is ${this.user.firstname}, I have secured the ${this.room.room_type} at 
-    ${this.room.property.address.place_name}.\n`;
-    msg += "Room price: " + this.room.accredited ? "NSFAS RATE.\n" : "R" + this.room.rent + "\n"; 
+    let msg: string = `Hi my name is ${this.user.firstname}, I have placed someone in this room\n`;
     msg += "https://clickinn.co.za/room;room_id=" + this.room.room_id;
     return encodeURI(msg);
   }
@@ -254,6 +252,10 @@ export class RoomPage implements OnInit {
 
   chat(){
     
+  }
+
+  gotoPlacement(){
+    this.router.navigate(['/placement', {"uid": this.user.uid, "room_id": this.room.room_id}])
   }
 
 }

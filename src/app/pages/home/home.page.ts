@@ -22,6 +22,7 @@ export class HomePage implements OnInit {
   user: User;
   search: RoomSearch;
   displayPicLoaded: boolean = false;
+  showVerifyButton: boolean = false;
 
   constructor(
     private router: Router,
@@ -46,6 +47,7 @@ export class HomePage implements OnInit {
       .subscribe(fetched_user =>{
         if(fetched_user){
           this.user = this.user_init_svc.copyUser(fetched_user)
+          this.showVerifyButton = this.user.verified
         }
       });
       }else{ //Else if user is already authenticated but just reloading the app this part of the code will run

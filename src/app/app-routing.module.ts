@@ -79,6 +79,10 @@ const routes: Routes = [
     path: 'available',
     loadChildren: () => import('./pages/available/available.module').then( m => m.AvailablePageModule)
   },
+  {
+    path: 'placement',
+    loadChildren: () => import('./pages/placement/placement.module').then( m => m.PlacementPageModule)
+  },
 ];
 
 @NgModule({

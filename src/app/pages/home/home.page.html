@@ -48,94 +48,101 @@
 </ion-header>
 
 <ion-content color="light">
-  <ion-card *ngIf="!user?.verified">
-    <ion-item color="warning" href="{{sendWhatsAppVerifyLink()}}">
-      <ion-icon name="arrow-redo-circle-outline" slot="end"></ion-icon>
-      <ion-label>
-        Submit Profile For Verification
-      </ion-label>
-    </ion-item>
-  </ion-card>
-  <ion-card color="thapsblue" class="ion-no-padding">
-    <ion-row class="ion-no-padding">
-      <ion-col size="2" class="ion-no-padding">
-        <ion-item color="thapsblue">
-          <ion-icon name="bed-outline"></ion-icon>
-        </ion-item>
-      </ion-col>
-      <ion-col size="10" class="ion-no-padding">
-        <ion-item tappable (click)="gotoAvailable()">
-          <ion-icon class="card-icon" slot="end" name="chevron-forward-outline"></ion-icon>
-          <ion-label>
-            <h2>Available Rooms</h2>
-          </ion-label>
-        </ion-item>
-      </ion-col>
-    </ion-row>
-  </ion-card>
-  <ion-card tappable (click)="gotoProfile()" color="thapslightblue" class="ion-no-padding">
-    <ion-row class="ion-no-padding">
-      <ion-col size="2" class="ion-no-padding">
-        <ion-item color="thapslightblue">
-          <ion-icon class="card-icon" color="light" name="person-outline"></ion-icon>
-        </ion-item>
-      </ion-col>
-      <ion-col size="10" class="ion-no-padding">
-        <ion-item>
-          <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
-          <ion-label>
-            <h2>Profile</h2>
-          </ion-label>
-        </ion-item>
-      </ion-col>
-    </ion-row>
-  </ion-card>
-  <ion-card  tappable color="thapslightblue" class="ion-no-padding" (click)="gotoAppointments()">
-    <ion-row class="ion-no-padding">
-      <ion-col size="2" class="ion-no-padding">
-        <ion-item color="thapslightblue">
-          <ion-icon class="card-icon" color="light" name="hourglass-outline"></ion-icon>
-        </ion-item>
-      </ion-col>
-      <ion-col size="10" class="ion-no-padding">
-        <ion-item>
-          <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
-          <ion-label>
-            <h2>Appointments</h2>
-          </ion-label>
-        </ion-item>
-      </ion-col>
-    </ion-row>
-  </ion-card>
-  
   <ion-grid>
     <ion-row>
-      <ion-col size="6"> 
-        <ion-card tappable (click)="gotoMyUploads()">
-          <div class="ion-text-center ion-padding">
-            <ion-icon name="cloud-upload-outline" style="font-size: x-large;" color="thapsblue"></ion-icon>
-          </div>
-          <ion-item>
+      <ion-col size-xs="0" size-md="2" size-lg="3"></ion-col>
+      <ion-col size-xs="12" size-md="10" size-lg="6">
+        <ion-card *ngIf="showVerifyButton">
+          <ion-item color="warning" href="{{sendWhatsAppVerifyLink()}}">
+            <ion-icon name="arrow-redo-circle-outline" slot="end"></ion-icon>
             <ion-label>
-              <h2 class="ion-text-wrap ion-text-center"><ion-text color="thapsblue">My</ion-text></h2>
-              <h2 class="ion-text-wrap ion-text-center"><ion-text color="thapsblue">Uploads</ion-text></h2>
+              Submit Profile For Verification
             </ion-label>
           </ion-item>
         </ion-card>
-      </ion-col>
-      <ion-col size="6">
-        <ion-card>
-          <div class="ion-text-center ion-padding">
-            <ion-icon name="person-outline" style="font-size: x-large;" color="thapsblue"></ion-icon>
-          </div>
-          <ion-item>
-            <ion-label>
-              <h2 class="ion-text-wrap ion-text-center"><ion-text color="thapsblue">My</ion-text></h2>
-              <h2 class="ion-text-wrap ion-text-center"><ion-text color="thapsblue">Landlords</ion-text></h2>
-            </ion-label>
-          </ion-item>
+        <ion-card color="thapsblue" class="ion-no-padding">
+          <ion-row class="ion-no-padding">
+            <ion-col size="2" class="ion-no-padding">
+              <ion-item color="thapsblue">
+                <ion-icon name="bed-outline"></ion-icon>
+              </ion-item>
+            </ion-col>
+            <ion-col size="10" class="ion-no-padding">
+              <ion-item tappable (click)="gotoAvailable()">
+                <ion-icon class="card-icon" slot="end" name="chevron-forward-outline"></ion-icon>
+                <ion-label>
+                  <h2>Available Rooms</h2>
+                </ion-label>
+              </ion-item>
+            </ion-col>
+          </ion-row>
         </ion-card>
+        <ion-card tappable (click)="gotoProfile()" color="thapslightblue" class="ion-no-padding">
+          <ion-row class="ion-no-padding">
+            <ion-col size="2" class="ion-no-padding">
+              <ion-item color="thapslightblue">
+                <ion-icon class="card-icon" color="light" name="person-outline"></ion-icon>
+              </ion-item>
+            </ion-col>
+            <ion-col size="10" class="ion-no-padding">
+              <ion-item>
+                <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
+                <ion-label>
+                  <h2>Profile</h2>
+                </ion-label>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+        </ion-card>
+        <ion-card  tappable color="thapslightblue" class="ion-no-padding" (click)="gotoAppointments()">
+          <ion-row class="ion-no-padding">
+            <ion-col size="2" class="ion-no-padding">
+              <ion-item color="thapslightblue">
+                <ion-icon class="card-icon" color="light" name="hourglass-outline"></ion-icon>
+              </ion-item>
+            </ion-col>
+            <ion-col size="10" class="ion-no-padding">
+              <ion-item>
+                <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
+                <ion-label>
+                  <h2>Appointments</h2>
+                </ion-label>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+        </ion-card>
+        <ion-grid>
+          <ion-row>
+            <ion-col size="6"> 
+              <ion-card tappable (click)="gotoMyUploads()">
+                <div class="ion-text-center ion-padding">
+                  <ion-icon name="cloud-upload-outline" style="font-size: x-large;" color="thapsblue"></ion-icon>
+                </div>
+                <ion-item>
+                  <ion-label>
+                    <h2 class="ion-text-wrap ion-text-center"><ion-text color="thapsblue">My</ion-text></h2>
+                    <h2 class="ion-text-wrap ion-text-center"><ion-text color="thapsblue">Uploads</ion-text></h2>
+                  </ion-label>
+                </ion-item>
+              </ion-card>
+            </ion-col>
+            <ion-col size="6">
+              <ion-card>
+                <div class="ion-text-center ion-padding">
+                  <ion-icon name="person-outline" style="font-size: x-large;" color="thapsblue"></ion-icon>
+                </div>
+                <ion-item>
+                  <ion-label>
+                    <h2 class="ion-text-wrap ion-text-center"><ion-text color="thapsblue">My</ion-text></h2>
+                    <h2 class="ion-text-wrap ion-text-center"><ion-text color="thapsblue">Landlords</ion-text></h2>
+                  </ion-label>
+                </ion-item>
+              </ion-card>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
       </ion-col>
-    </ion-row>
+      <ion-col size-xs="0" size-md="2" size-lg="3"></ion-col>
+      </ion-row>
   </ion-grid>
 </ion-content>

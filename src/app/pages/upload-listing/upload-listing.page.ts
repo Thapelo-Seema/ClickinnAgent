@@ -9,10 +9,10 @@ import { Property } from '../../models/property.model';
 import { Room } from '../../models/room.model';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { FileUpload } from '../../models/file-upload.model';
-import { AuthService } from '../../services/auth.service';
+//import { AuthService } from '../../services/auth.service';
 import { PropertyService } from '../../services/property.service';
 import { RoomService } from '../../services/room.service';
-import { ModalController } from '@ionic/angular';
+import { ModalController, LoadingController } from '@ionic/angular';
 import { LocationGraphService } from '../../services/location-graph.service';
 import { ToastController } from '@ionic/angular';
 //import { UploadSuccessPage } from '../../modals/upload-success/upload-success.page';
@@ -43,6 +43,7 @@ export class UploadListingPage implements OnInit {
   propertyList: Property[] = [];
   house_number_and_street: string = ""; // to be used as input text for predictions
   showUploadProgressBar: boolean = false;
+  loading_ctrl: any;
 
   uploading_pictures: boolean = false;
 
@@ -54,9 +55,10 @@ export class UploadListingPage implements OnInit {
   //Room types
   room: Room;
 
-  mode: string = "";
+  mode: string = ""; //upload or update
 
   uploadProgressPercentage: number = 0;
+  num_pics_selected: number = 0;
 
   constructor(
     private actRoute: ActivatedRoute,
@@ -65,7 +67,8 @@ export class UploadListingPage implements OnInit {
     private user_svc: UserService,
     private property_init_svc: PropertiesService,
     private afstorage: AngularFireStorage,
-    private auth_svc: AuthService,
+    private loadingController: LoadingController,
+    //private auth_svc: AuthService,
     private location_graph: LocationGraphService,
     private ppty_svc: PropertyService,
     private room_svc: RoomService,
@@ -83,7 +86,7 @@ export class UploadListingPage implements OnInit {
    ngOnInit(){
     //If there's a room id we assume edit mode otherwise upload mode
     if(this.actRoute.snapshot.paramMap.get("room_id")){
-      console.log("Edit mode");
+      //console.log("Edit mode");
       this.mode = "edit";
       this.room_svc.getRoom(this.actRoute.snapshot.paramMap.get("room_id"))
       .pipe(take(1))
@@ -98,7 +101,7 @@ export class UploadListingPage implements OnInit {
         })
       })
     }else{
-      console.log("Upload mode");
+      //console.log("Upload mode");
       this.mode = "upload";
         //get user id from router and update user and property 
       if(this.actRoute.snapshot.params.uid){
@@ -324,7 +327,7 @@ export class UploadListingPage implements OnInit {
       this.updatePropertyInRooms();
       this.presentToast("Property saved!");
     })
-    .catch(err =>{
+    .catch(err =>{ 
       console.log(err);
     })
   }
@@ -350,18 +353,18 @@ export class UploadListingPage implements OnInit {
     this.room.time_modified = Date.now();
     this.room.time_uploaded = Date.now();
     this.ionic_component_svc.presentLoading();
-    console.log("saving the entire upload...");
+    //console.log("saving the entire upload...");
     //let updatedCount: number = 0;
     this.showUploadProgressBar = true;
     this.addRoomsToProperty();
     this.updatePropertyInRooms();
-    console.log("room: ", this.room);
-    console.log("property: ", this.property);
+    //console.log("room: ", this.room);
+    //console.log("property: ", this.property);
     this.ppty_svc.createProperty(this.property)
     .then(ppty =>{
       this.property.property_id = ppty.id;
       this.updatePropertyInRooms();
-      console.log("updating property", this.property);
+      //console.log("updating property", this.property);
       this.ppty_svc.updateProperty(this.property)
       .catch(err =>{
         console.log(err);
@@ -400,8 +403,8 @@ export class UploadListingPage implements OnInit {
     this.ionic_component_svc.presentLoading();
     this.updatePropertyInRooms();
     this.room.description = this.generateRoomDescription(this.room);
-    console.log("room: ", this.room);
-    console.log("property: ", this.property);
+    //console.log("room: ", this.room);
+    //console.log("property: ", this.property);
     this.ppty_svc.updateProperty(this.property);
     this.room_svc.updatePropertyPreview(this.property)
     this.room_svc.updateRoomPreview(this.room)
@@ -439,13 +442,20 @@ export class UploadListingPage implements OnInit {
   the pictures to firebase storage 
   @param event with files in the target
   @return void
-  */
-  updateSharedAreaPics(event){
-    this.ionic_component_svc.presentLoading()
+  */  
+  async updateSharedAreaPics(event){
+    this.num_pics_selected = event.target.files.length;
+    this.uploading_pictures = true;
+    this.loading_ctrl = await this.loadingController.create({
+      spinner: "crescent",
+      translucent: true,
+      cssClass: 'loadingDialog'
+    })
+    this.loading_ctrl.present();
     //map the files object into a files array
-     Object.keys(event.target.files).forEach( async (ind) =>{
+    Object.keys(event.target.files).forEach( async (ind) =>{
       let opts = {
-        maxSizeMB: 1,
+        maxSizeMB: 0.7,
         maxWidthOrHeight: 1920,
         useWebWorker: true
       }
@@ -459,7 +469,7 @@ export class UploadListingPage implements OnInit {
         loaded: false
       }
       this.property.shared_area_pics.push(fileUpload);
-      this.ionic_component_svc.dismissLoading().catch(err => console.log(err))
+      //this.ionic_component_svc.dismissLoading().catch(err => console.log(err))
       this.uploadSharedAreaPics(this.property.shared_area_pics.length - 1);
     })
   }
@@ -525,12 +535,19 @@ export class UploadListingPage implements OnInit {
   @param event with files in the target
   @return void
   */
-  updateRoomPics(event){
-    this.ionic_component_svc.presentLoading()
+  async updateRoomPics(event){
+    this.num_pics_selected = event.target.files.length;
+    this.uploading_pictures = true;
+    this.loading_ctrl = await this.loadingController.create({
+      spinner: "crescent",
+      translucent: true,
+      cssClass: 'loadingDialog'
+    })
+    this.loading_ctrl.present();
     //compress and upload each file in the files array
     Object.keys(event.target.files).forEach( async (ind) =>{
       let opts = {
-        maxSizeMB: 1,
+        maxSizeMB: 0.7,
         maxWidthOrHeight: 1920,
         useWebWorker: true
       }
@@ -544,7 +561,7 @@ export class UploadListingPage implements OnInit {
         loaded: false
       }
       this.room.pictures.push(fileUpload);
-      this.ionic_component_svc.dismissLoading().catch(err => console.log(err))
+      //this.ionic_component_svc.dismissLoading().catch(err => console.log(err))
       this.uploadRoomPics(this.room.pictures.length - 1);
     })
   }
@@ -699,38 +716,38 @@ export class UploadListingPage implements OnInit {
   The method also sets the display picture of the backroom
   */
   uploadRoomPics(start_p?: number){
-    this.ionic_component_svc.presentLoading()
+    //this.ionic_component_svc.presentLoading()
     this.uploading_pictures = true;
-    console.log("preparing to upload from index: ", start_p)
-    console.log("File bieng uploaded...", this.room.pictures[start_p])
+    //console.log("preparing to upload from index: ", start_p)
+    //console.log("File bieng uploaded...", this.room.pictures[start_p])
     for(let i: number = start_p || 0; i < this.room.pictures.length; i++){
       const storageRef = this.afstorage.ref(`${this.room.pictures[i].path}/${this.room.pictures[i].name}`);
-      
       let uploadTask = storageRef.put(this.room.pictures[i].file);
-      console.log("starting upload...")
+      //console.log("starting upload...")
       uploadTask.percentageChanges().subscribe(data =>{
         this.room.pictures[i].progress = data;
         console.log(data)
       })
       uploadTask.snapshotChanges().subscribe(data =>{
-        console.log(data)
+        //console.log(data)
       },
       err =>{
-        console.log("upload ", i, " failed with error: ", err);
+        //console.log("upload ", i, " failed with error: ", err);
         this.ionic_component_svc.dismissLoading().catch(err => console.log(err))
       },
       () =>{
-        console.log("done")
+        //console.log("done")
         this.property.num_pics_uploaded++;
         storageRef.getDownloadURL()
         .pipe(take(1))
         .subscribe(url =>{
           this.room.pictures[i].url = url;
           //console.log(this.room.pictures);
-          if(i == (this.room.pictures.length - 1)){
+          if(i == (this.num_pics_selected - 1)){
             if(this.room.display_pic_url == "") this.room.display_pic_url = url;
             this.uploading_pictures = false;
-            this.ionic_component_svc.dismissLoading().catch(err => console.log(err))
+            this.loading_ctrl.dismiss();
+            //this.ionic_component_svc.dismissLoading().catch(err => console.log(err))
           } 
         })
       })
@@ -748,25 +765,25 @@ export class UploadListingPage implements OnInit {
   The method also sets the display picture of the backroom
   */
   uploadRoomVideo(){
-      const storageRef = this.afstorage.ref(`${this.room.video.path}/${this.room.video.name}`);
-      let uploadTask = storageRef.put(this.room.video.file);
-      uploadTask.percentageChanges().subscribe(data =>{
-        this.room.video.progress = data;
-        console.log(data);
+    const storageRef = this.afstorage.ref(`${this.room.video.path}/${this.room.video.name}`);
+    let uploadTask = storageRef.put(this.room.video.file);
+    uploadTask.percentageChanges().subscribe(data =>{
+      this.room.video.progress = data;
+      console.log(data);
+    })
+    uploadTask.snapshotChanges().subscribe(data =>{
+    },
+    err =>{
+    },
+    () =>{
+      storageRef.getDownloadURL()
+      .pipe(take(1))
+      .subscribe(url =>{
+        this.room.video.url = url;
+        this.room.video_url = url;
+        console.log(url);
       })
-      uploadTask.snapshotChanges().subscribe(data =>{
-      },
-      err =>{
-      },
-      () =>{
-        storageRef.getDownloadURL()
-        .pipe(take(1))
-        .subscribe(url =>{
-          this.room.video.url = url;
-          this.room.video_url = url;
-          console.log(url);
-        })
-      })
+    })
   }
 
   /**Handles uploading of the pictures in the backroom.pictures array
@@ -802,7 +819,7 @@ export class UploadListingPage implements OnInit {
 }
 
   uploadSharedAreaPics(start_p?: number){
-    this.ionic_component_svc.presentLoading()
+    this.ionic_component_svc.presentLoading();
     this.uploading_pictures = true;
     for(let i: number = start_p || 0; i < this.property.shared_area_pics.length; i++){
       const storageRef = this.afstorage.ref(`${this.property.shared_area_pics[i].path}/${this.property.shared_area_pics[i].name}`);
@@ -823,10 +840,10 @@ export class UploadListingPage implements OnInit {
         .pipe(take(1))
         .subscribe(url =>{
           this.property.shared_area_pics[i].url = url;
-          if(i == (this.property.shared_area_pics.length - 1)){
+          if(i == (this.num_pics_selected - 1)){
             this.property.display_pic_url = url;
             this.uploading_pictures = false;
-            this.ionic_component_svc.dismissLoading().catch(err => console.log(err))
+            this.loading_ctrl.dismiss();
           } 
         })
       })
