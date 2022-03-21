@@ -93,6 +93,10 @@ export class PlacementPage implements OnInit {
       cssClass: 'loadingDialog'
     })
     loading_ctrl.present();
+    this.placement.room.sub_rooms--;
+    this.placement.room.occupants.push(this.placement.client);
+    if(this.placement.room.sub_rooms < 0) this.placement.room.available = false;
+    await this.room_svc.updateRoom(this.placement.room)
     this.bindFormToUser();
     this.placement.time = Date.now();
     this.room_svc.createPlacement(this.placement)
